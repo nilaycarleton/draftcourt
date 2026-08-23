@@ -1,0 +1,145 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "playerId": {
+      "type": "string",
+      "format": "uuid",
+      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+    },
+    "rank": {
+      "anyOf": [
+        {
+          "type": "number",
+          "const": 1
+        },
+        {
+          "type": "number",
+          "const": 2
+        },
+        {
+          "type": "number",
+          "const": 3
+        }
+      ]
+    },
+    "draftScore": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "labels": {
+      "minItems": 1,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "BEST_OVERALL",
+          "BEST_FIT",
+          "BEST_VALUE",
+          "HIGHEST_UPSIDE",
+          "SAFEST_PICK"
+        ]
+      }
+    },
+    "explanation": {
+      "type": "string",
+      "minLength": 1
+    },
+    "availabilityNextPick": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "confidence": {
+      "type": "string",
+      "enum": [
+        "LOW",
+        "MEDIUM",
+        "HIGH"
+      ]
+    },
+    "components": {
+      "minItems": 1,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string",
+            "enum": [
+              "production",
+              "scarcity",
+              "rosterNeed",
+              "risk",
+              "consistency",
+              "age",
+              "adpValue",
+              "upside",
+              "role",
+              "nextPickAvailability",
+              "preference",
+              "schedule"
+            ]
+          },
+          "raw": {
+            "type": "number"
+          },
+          "normalized": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          },
+          "weight": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          },
+          "contribution": {
+            "type": "number"
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "key",
+          "raw",
+          "normalized",
+          "weight",
+          "contribution",
+          "reason"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "engineVersion": {
+      "type": "string",
+      "minLength": 1
+    },
+    "projectionRunId": {
+      "type": "string",
+      "format": "uuid",
+      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+    },
+    "inputChecksum": {
+      "type": "string",
+      "minLength": 1
+    }
+  },
+  "required": [
+    "playerId",
+    "rank",
+    "draftScore",
+    "labels",
+    "explanation",
+    "availabilityNextPick",
+    "confidence",
+    "components",
+    "engineVersion",
+    "projectionRunId",
+    "inputChecksum"
+  ],
+  "additionalProperties": false
+}

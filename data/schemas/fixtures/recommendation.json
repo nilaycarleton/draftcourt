@@ -1,0 +1,30 @@
+{
+  "playerId": "5b1b1a2a-6b1a-4c2e-9c3d-2f7a6a9e1a11",
+  "rank": 1,
+  "draftScore": 91.4,
+  "labels": ["BEST_OVERALL", "BEST_FIT"],
+  "explanation": "Elite projected production and fills your open starting guard slot.",
+  "availabilityNextPick": 0.12,
+  "confidence": "HIGH",
+  "components": [
+    {
+      "key": "production",
+      "raw": 118.4,
+      "normalized": 0.83,
+      "weight": 0.27,
+      "contribution": 0.224,
+      "reason": "Top-decile projected fantasy production in this league's scoring format."
+    },
+    {
+      "key": "rosterNeed",
+      "raw": 0.74,
+      "normalized": 0.74,
+      "weight": 0.16,
+      "contribution": 0.118,
+      "reason": "Fills the last open starting guard slot on your roster."
+    }
+  ],
+  "engineVersion": "0.0.0-phase0-placeholder",
+  "projectionRunId": "8f0e6c2a-1c9d-4b3a-9a7e-6d5b4c3a2f10",
+  "inputChecksum": "sha256:0000000000000000000000000000000000000000000000000000000000000"
+}

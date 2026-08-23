@@ -1,0 +1,6 @@
+{
+  "stat": "PTS",
+  "weight": 1.0,
+  "direction": "HIGHER_BETTER",
+  "punt": false
+}

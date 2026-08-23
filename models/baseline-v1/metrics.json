@@ -1,0 +1,139 @@
+{
+  "modelKey": "baseline-weighted-historical",
+  "modelVersion": "1.0.0",
+  "cutoffSeason": "2025-26",
+  "generatedAt": "2026-08-21T19:33:52.390182+00:00",
+  "totalPlayers": 230,
+  "notEvaluableCounts": {
+    "rookie": 0,
+    "unsigned": 0
+  },
+  "subgroups": [
+    {
+      "subgroup": "all",
+      "n": 204,
+      "minutesWeightedMae": {
+        "pts": 1.6181,
+        "reb": 1.379,
+        "ast": 1.1892,
+        "stl": 0.3502,
+        "blk": 0.363,
+        "tov": 0.7423,
+        "fgm": 0.8095,
+        "fga": 2.0105,
+        "ftm": 0.6151,
+        "fta": 0.8569,
+        "threePm": 0.5421
+      },
+      "fantasyPointsMae": 3.5824,
+      "gamesPlayedMae": 8.1618,
+      "spearmanRankCorrelation": 0.9661,
+      "intervalCoverage": 0.4693
+    },
+    {
+      "subgroup": "veteran",
+      "n": 198,
+      "minutesWeightedMae": {
+        "pts": 1.6154,
+        "reb": 1.3793,
+        "ast": 1.1816,
+        "stl": 0.3501,
+        "blk": 0.3609,
+        "tov": 0.7373,
+        "fgm": 0.8088,
+        "fga": 1.9768,
+        "ftm": 0.6036,
+        "fta": 0.8408,
+        "threePm": 0.54
+      },
+      "fantasyPointsMae": 3.5572,
+      "gamesPlayedMae": 7.6162,
+      "spearmanRankCorrelation": 0.9666,
+      "intervalCoverage": 0.4711
+    },
+    {
+      "subgroup": "injured",
+      "n": 6,
+      "minutesWeightedMae": {
+        "pts": 1.7051,
+        "reb": 1.3705,
+        "ast": 1.4331,
+        "stl": 0.3518,
+        "blk": 0.4289,
+        "tov": 0.9002,
+        "fgm": 0.8344,
+        "fga": 3.0925,
+        "ftm": 0.9856,
+        "fta": 1.3754,
+        "threePm": 0.6091
+      },
+      "fantasyPointsMae": 4.4146,
+      "gamesPlayedMae": 26.1667,
+      "spearmanRankCorrelation": 0.9429,
+      "intervalCoverage": 0.4091
+    },
+    {
+      "subgroup": "unsigned",
+      "n": 0,
+      "minutesWeightedMae": {
+        "pts": 0.0,
+        "reb": 0.0,
+        "ast": 0.0,
+        "stl": 0.0,
+        "blk": 0.0,
+        "tov": 0.0,
+        "fgm": 0.0,
+        "fga": 0.0,
+        "ftm": 0.0,
+        "fta": 0.0,
+        "threePm": 0.0
+      },
+      "fantasyPointsMae": 0.0,
+      "gamesPlayedMae": 0.0,
+      "spearmanRankCorrelation": null,
+      "intervalCoverage": 0.0
+    },
+    {
+      "subgroup": "rookie",
+      "n": 0,
+      "minutesWeightedMae": {
+        "pts": 0.0,
+        "reb": 0.0,
+        "ast": 0.0,
+        "stl": 0.0,
+        "blk": 0.0,
+        "tov": 0.0,
+        "fgm": 0.0,
+        "fga": 0.0,
+        "ftm": 0.0,
+        "fta": 0.0,
+        "threePm": 0.0
+      },
+      "fantasyPointsMae": 0.0,
+      "gamesPlayedMae": 0.0,
+      "spearmanRankCorrelation": null,
+      "intervalCoverage": 0.0
+    },
+    {
+      "subgroup": "low_minutes",
+      "n": 19,
+      "minutesWeightedMae": {
+        "pts": 0.8094,
+        "reb": 1.3313,
+        "ast": 1.0329,
+        "stl": 0.3313,
+        "blk": 0.4272,
+        "tov": 0.8076,
+        "fgm": 0.3684,
+        "fga": 0.9224,
+        "ftm": 0.3776,
+        "fta": 0.5054,
+        "threePm": 0.2212
+      },
+      "fantasyPointsMae": 2.5366,
+      "gamesPlayedMae": 8.6316,
+      "spearmanRankCorrelation": 0.9456,
+      "intervalCoverage": 0.4737
+    }
+  ]
+}

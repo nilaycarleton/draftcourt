@@ -1,0 +1,9 @@
+{
+  "extends": "@draftcourt/config-typescript/react-library.json",
+  "compilerOptions": {
+    "outDir": "dist",
+    "rootDir": "."
+  },
+  "include": ["src", ".storybook/**/*.ts", ".storybook/**/*.tsx", "vitest.setup.ts"],
+  "exclude": ["node_modules", "dist"]
+}

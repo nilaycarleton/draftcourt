@@ -1,0 +1,232 @@
+/**
+ * DraftCourt semantic design tokens.
+ * Futuristic NBA analytics aesthetic: deep charcoal/ink surfaces, arena-light
+ * gradients used sparingly, crisp court-line geometry, team colors as
+ * contextual accents only. Light and dark are equal-quality themes, not an
+ * inverted afterthought (BUILD_SPEC.md section 10).
+ *
+ * Theme selection: `data-theme="light" | "dark"` on <html>. Falls back to
+ * `prefers-color-scheme` when unset (see ThemeProvider).
+ */
+
+:root {
+  /* ---- surfaces ---- */
+  --dc-color-canvas: #f5f6f8;
+  --dc-color-surface: #ffffff;
+  --dc-color-surface-elevated: #ffffff;
+  --dc-color-surface-glass: rgb(255 255 255 / 0.72);
+  --dc-color-border: #d9dce2;
+  --dc-color-border-strong: #b7bcc6;
+
+  /* ---- text ---- */
+  --dc-color-text-primary: #12141a;
+  --dc-color-text-secondary: #4a4f5c;
+  /* #767c8a fails WCAG AA text contrast against light surfaces (3.86:1 vs
+   * the required 4.5:1) — found via axe-core E2E runs. */
+  --dc-color-text-muted: #6a6f7c;
+  --dc-color-text-on-accent: #ffffff;
+
+  /* ---- brand / focus ---- */
+  /* #ff6a00 (the dark-theme accent, reused directly here originally)
+   * fails WCAG AA text contrast against light surfaces (2.66:1 vs the
+   * required 4.5:1) — found via axe-core E2E runs. Darkened to the
+   * darkest shade that still reads as "DraftCourt orange" while clearing
+   * 4.5:1 against both --dc-color-canvas and --dc-color-surface, and
+   * white-on-this-background (button labels) still clears 5:1. */
+  --dc-color-accent: #b24a00;
+  --dc-color-accent-strong: #8f3b00;
+  --dc-color-focus-ring: #1d6fff;
+
+  /* ---- feedback ---- */
+  --dc-color-success: #157a4a;
+  /* #a3610b on --dc-color-warning-surface fails WCAG AA text contrast
+   * (4.29:1 vs the required 4.5:1) — found via axe-core E2E runs. */
+  --dc-color-warning: #925709;
+  --dc-color-danger: #c22a3d;
+  --dc-color-success-surface: #e4f5ec;
+  --dc-color-warning-surface: #fbeed9;
+  --dc-color-danger-surface: #fbe4e7;
+
+  /* ---- draft score bands (0-100 recommendation score) ---- */
+  --dc-color-score-elite: #157a4a;
+  /* #4c8a1f fails WCAG AA text contrast against light surfaces (3.91:1 vs
+   * the required 4.5:1) — found via axe-core E2E runs. */
+  --dc-color-score-strong: #447c1b;
+  /* Shared #a3610b with --dc-color-warning before its own fix (only a
+   * fragile 4.55:1 pass) — darkened the same way for the same reason. */
+  --dc-color-score-solid: #925709;
+  --dc-color-score-risky: #c22a3d;
+
+  /* ---- chart series (color-blind-safe, never sole state encoding) ---- */
+  --dc-chart-series-1: #1d6fff;
+  --dc-chart-series-2: #ff6a00;
+  --dc-chart-series-3: #157a4a;
+  --dc-chart-series-4: #8a4fd1;
+  --dc-chart-series-5: #c22a3d;
+  --dc-chart-series-6: #0aa6a6;
+
+  /* ---- arena-light accent gradient (sparing use only) ---- */
+  --dc-gradient-arena: linear-gradient(135deg, #ff6a00 0%, #ffb35c 45%, transparent 100%);
+
+  /* ---- spacing (4px base scale) ---- */
+  --dc-space-1: 0.25rem;
+  --dc-space-2: 0.5rem;
+  --dc-space-3: 0.75rem;
+  --dc-space-4: 1rem;
+  --dc-space-5: 1.5rem;
+  --dc-space-6: 2rem;
+  --dc-space-7: 3rem;
+  --dc-space-8: 4rem;
+
+  /* ---- radius ---- */
+  --dc-radius-sm: 0.25rem;
+  --dc-radius-md: 0.5rem;
+  --dc-radius-lg: 0.875rem;
+  --dc-radius-full: 999px;
+
+  /* ---- elevation / blur ---- */
+  --dc-shadow-sm: 0 1px 2px rgb(18 20 26 / 0.08);
+  --dc-shadow-md: 0 4px 16px rgb(18 20 26 / 0.12);
+  --dc-shadow-lg: 0 12px 32px rgb(18 20 26 / 0.18);
+  --dc-blur-glass: 16px;
+
+  /* ---- type scale ---- */
+  --dc-font-sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --dc-font-tabular-nums: "tnum" 1, "lnum" 1;
+  --dc-font-size-xs: 0.75rem;
+  --dc-font-size-sm: 0.875rem;
+  --dc-font-size-md: 1rem;
+  --dc-font-size-lg: 1.25rem;
+  --dc-font-size-xl: 1.75rem;
+  --dc-font-size-2xl: 2.5rem;
+  --dc-line-height-tight: 1.2;
+  --dc-line-height-normal: 1.5;
+
+  /* ---- motion (see BUILD_SPEC section 10.3) ---- */
+  --dc-motion-duration-fast: 120ms;
+  --dc-motion-duration-default: 320ms;
+  --dc-motion-duration-slow: 480ms;
+  --dc-motion-ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --dc-motion-spring-response: 0.35;
+  --dc-motion-spring-damping: 1;
+
+  /* ---- accessible minimum touch target ---- */
+  --dc-touch-target-min: 44px;
+}
+
+/* ---- dark theme: explicit token set, not a filter/invert ----
+ * Two blocks, deliberately not nested (broadest CSS-engine compatibility):
+ * 1) system default (`prefers-color-scheme: dark`), skipped if the user
+ *    explicitly chose light via `data-theme="light"`;
+ * 2) explicit dark selection, which always wins regardless of system pref. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --dc-color-canvas: #0b0c10;
+    --dc-color-surface: #14161c;
+    --dc-color-surface-elevated: #1b1e26;
+    --dc-color-surface-glass: rgb(20 22 28 / 0.72);
+    --dc-color-border: #2a2e38;
+    --dc-color-border-strong: #3c414f;
+
+    --dc-color-text-primary: #f3f4f7;
+    --dc-color-text-secondary: #c1c5d1;
+    --dc-color-text-muted: #8b90a0;
+    --dc-color-text-on-accent: #12141a;
+
+    --dc-color-accent: #ff8a3d;
+    --dc-color-accent-strong: #ffab6b;
+    --dc-color-focus-ring: #6fa3ff;
+
+    --dc-color-success: #4fd08a;
+    --dc-color-warning: #f0b74a;
+    --dc-color-danger: #ff6b7a;
+    --dc-color-success-surface: #143528;
+    --dc-color-warning-surface: #3a2c11;
+    --dc-color-danger-surface: #3a1820;
+
+    --dc-color-score-elite: #4fd08a;
+    --dc-color-score-strong: #a4d84f;
+    --dc-color-score-solid: #f0b74a;
+    --dc-color-score-risky: #ff6b7a;
+
+    --dc-chart-series-1: #6fa3ff;
+    --dc-chart-series-2: #ff8a3d;
+    --dc-chart-series-3: #4fd08a;
+    --dc-chart-series-4: #b592f0;
+    --dc-chart-series-5: #ff6b7a;
+    --dc-chart-series-6: #4fd6d6;
+
+    --dc-gradient-arena: linear-gradient(135deg, #ff8a3d 0%, #6b3d1f 45%, transparent 100%);
+
+    --dc-shadow-sm: 0 1px 2px rgb(0 0 0 / 0.4);
+    --dc-shadow-md: 0 4px 16px rgb(0 0 0 / 0.45);
+    --dc-shadow-lg: 0 12px 32px rgb(0 0 0 / 0.55);
+  }
+}
+
+:root[data-theme="dark"] {
+  --dc-color-canvas: #0b0c10;
+  --dc-color-surface: #14161c;
+  --dc-color-surface-elevated: #1b1e26;
+  --dc-color-surface-glass: rgb(20 22 28 / 0.72);
+  --dc-color-border: #2a2e38;
+  --dc-color-border-strong: #3c414f;
+
+  --dc-color-text-primary: #f3f4f7;
+  --dc-color-text-secondary: #c1c5d1;
+  --dc-color-text-muted: #8b90a0;
+  --dc-color-text-on-accent: #12141a;
+
+  --dc-color-accent: #ff8a3d;
+  --dc-color-accent-strong: #ffab6b;
+  --dc-color-focus-ring: #6fa3ff;
+
+  --dc-color-success: #4fd08a;
+  --dc-color-warning: #f0b74a;
+  --dc-color-danger: #ff6b7a;
+  --dc-color-success-surface: #143528;
+  --dc-color-warning-surface: #3a2c11;
+  --dc-color-danger-surface: #3a1820;
+
+  --dc-color-score-elite: #4fd08a;
+  --dc-color-score-strong: #a4d84f;
+  --dc-color-score-solid: #f0b74a;
+  --dc-color-score-risky: #ff6b7a;
+
+  --dc-chart-series-1: #6fa3ff;
+  --dc-chart-series-2: #ff8a3d;
+  --dc-chart-series-3: #4fd08a;
+  --dc-chart-series-4: #b592f0;
+  --dc-chart-series-5: #ff6b7a;
+  --dc-chart-series-6: #4fd6d6;
+
+  --dc-gradient-arena: linear-gradient(135deg, #ff8a3d 0%, #6b3d1f 45%, transparent 100%);
+
+  --dc-shadow-sm: 0 1px 2px rgb(0 0 0 / 0.4);
+  --dc-shadow-md: 0 4px 16px rgb(0 0 0 / 0.45);
+  --dc-shadow-lg: 0 12px 32px rgb(0 0 0 / 0.55);
+}
+
+/* ---- reduced transparency: opaque surfaces, no glass blur ---- */
+@media (prefers-reduced-transparency: reduce) {
+  :root {
+    --dc-color-surface-glass: var(--dc-color-surface);
+    --dc-blur-glass: 0px;
+  }
+}
+
+/* ---- high contrast: defined borders instead of relying on shadow alone ---- */
+@media (prefers-contrast: more) {
+  :root {
+    --dc-color-border: var(--dc-color-border-strong);
+  }
+}
+
+/* ---- reduced motion: near-instant, no springs ---- */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dc-motion-duration-fast: 1ms;
+    --dc-motion-duration-default: 1ms;
+    --dc-motion-duration-slow: 1ms;
+  }
+}

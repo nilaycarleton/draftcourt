@@ -1,0 +1,512 @@
+/* Phase 1 page-level layout: player list/profile/compare/data-sources.
+ * Composition only — every color/spacing/radius value comes from
+ * packages/ui's tokens.css; nothing new is introduced here. */
+
+/* Safety net against page-level horizontal scroll: a wide table's own
+ * `.dc-data-table-scroll` container handles its own overflow, but nothing
+ * upstream (a third-party layout wrapper, a future regression) should be
+ * able to widen the actual page past the viewport — confirmed live on
+ * /compare at a 390px mobile viewport, where document.body/html measured
+ * 1400px wide despite every DraftCourt-owned ancestor being correctly
+ * width-constrained; only html/body themselves were left unclipped. */
+html,
+body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+.dc-page {
+  max-width: 88rem;
+  margin: 0 auto;
+  padding: var(--dc-space-6) var(--dc-space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--dc-space-5);
+}
+
+.dc-page-header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--dc-space-2);
+}
+
+.dc-page-header h1 {
+  margin: 0;
+  font-size: var(--dc-font-size-2xl);
+  letter-spacing: -0.01em;
+}
+
+.dc-page-subtitle {
+  margin: 0;
+  color: var(--dc-color-text-secondary);
+  max-width: 48rem;
+}
+
+/* ---- filter form ---- */
+
+.dc-filter-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--dc-space-3);
+  background: var(--dc-color-surface);
+  border: 1px solid var(--dc-color-border);
+  border-radius: var(--dc-radius-lg);
+  padding: var(--dc-space-4);
+}
+
+.dc-filter-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
+  gap: var(--dc-space-3);
+  align-items: end;
+}
+
+.dc-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: var(--dc-font-size-sm);
+  color: var(--dc-color-text-secondary);
+  min-height: var(--dc-touch-target-min);
+  justify-content: center;
+  /* Grid items default to `min-width: auto`, which for a <select> resolves
+   * to its longest <option>'s intrinsic text width — long player names
+   * (e.g. "Giannis Antetokounmpo (MIL)") could otherwise force this grid
+   * track (and the whole page) wider than the viewport on mobile. */
+  min-width: 0;
+}
+
+.dc-field input,
+.dc-field select {
+  min-height: var(--dc-touch-target-min);
+  min-width: 0;
+  width: 100%;
+  padding: 0.375rem 0.5rem;
+  border-radius: var(--dc-radius-sm);
+  border: 1px solid var(--dc-color-border);
+  background: var(--dc-color-canvas);
+  color: var(--dc-color-text-primary);
+  font: inherit;
+}
+
+.dc-field-checkbox {
+  flex-direction: row;
+  align-items: center;
+  gap: var(--dc-space-2);
+}
+
+.dc-field-checkbox input {
+  min-height: unset;
+  width: 20px;
+  height: 20px;
+}
+
+.dc-filter-advanced summary {
+  cursor: pointer;
+  color: var(--dc-color-accent);
+  font-size: var(--dc-font-size-sm);
+  min-height: var(--dc-touch-target-min);
+  display: flex;
+  align-items: center;
+}
+
+.dc-filter-advanced[open] summary {
+  margin-bottom: var(--dc-space-2);
+}
+
+.dc-filter-actions {
+  display: flex;
+  gap: var(--dc-space-3);
+  align-items: center;
+}
+
+.dc-button-primary,
+.dc-button-ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--dc-touch-target-min);
+  padding: 0 var(--dc-space-4);
+  border-radius: var(--dc-radius-md);
+  font-weight: 600;
+  font-size: var(--dc-font-size-sm);
+  cursor: pointer;
+  text-decoration: none;
+  /* NOTE: the background-color transition lives on :hover/:focus-visible,
+   * NOT here on the base rule. Astryx's <Theme> swaps data-theme after
+   * hydration; a base-rule transition animates the swap, and axe scans
+   * landing inside that window see the old background with the new (instant)
+   * text color — a transient contrast violation that made the E2E gate
+   * flaky under parallel load. Hover-only transitions never run on theme
+   * changes. */
+}
+
+.dc-button-primary {
+  background: var(--dc-color-accent);
+  color: var(--dc-color-text-on-accent);
+  border: none;
+}
+
+.dc-button-primary:hover,
+.dc-button-primary:focus-visible {
+  background: var(--dc-color-accent-strong);
+  transition: background-color var(--dc-motion-duration-fast) var(--dc-motion-ease-standard);
+}
+
+.dc-button-ghost {
+  background: transparent;
+  color: var(--dc-color-text-secondary);
+  border: 1px solid var(--dc-color-border);
+}
+
+/* ---- banners ---- */
+
+.dc-demo-banner a,
+.dc-freshness-banner a {
+  color: inherit;
+  text-decoration: underline;
+}
+
+/* ---- results ---- */
+
+.dc-results-summary {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--dc-space-2);
+  color: var(--dc-color-text-secondary);
+  font-size: var(--dc-font-size-sm);
+}
+
+.dc-freshness-note {
+  color: var(--dc-color-text-muted);
+}
+
+.dc-empty-state {
+  display: flex;
+  flex-direction: column;
+  gap: var(--dc-space-2);
+  align-items: flex-start;
+  padding: var(--dc-space-6);
+  border: 1px dashed var(--dc-color-border-strong);
+  border-radius: var(--dc-radius-lg);
+  color: var(--dc-color-text-secondary);
+}
+
+.dc-player-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--dc-space-2);
+  color: inherit;
+  text-decoration: none;
+  min-height: var(--dc-touch-target-min);
+}
+
+.dc-player-link:hover {
+  text-decoration: underline;
+}
+
+.dc-status-tag {
+  display: inline-block;
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: 0.0625rem 0.375rem;
+  border-radius: var(--dc-radius-sm);
+  margin-right: 0.25rem;
+  text-transform: uppercase;
+}
+
+.dc-status-injured {
+  background: var(--dc-color-warning-surface);
+  color: var(--dc-color-warning);
+}
+
+.dc-status-suspended,
+.dc-status-retired {
+  background: var(--dc-color-danger-surface);
+  color: var(--dc-color-danger);
+}
+
+.dc-status-unsigned {
+  background: var(--dc-color-surface-elevated);
+  border: 1px solid var(--dc-color-border-strong);
+  color: var(--dc-color-text-secondary);
+}
+
+.dc-status-rookie {
+  background: var(--dc-color-success-surface);
+  color: var(--dc-color-success);
+}
+
+/* ---- table (desktop) / cards (mobile) toggle ---- */
+
+.dc-players-table-desktop {
+  display: none;
+}
+
+.dc-players-cards-mobile {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--dc-space-3);
+}
+
+@media (min-width: 48rem) {
+  .dc-players-table-desktop {
+    display: block;
+  }
+  .dc-players-cards-mobile {
+    display: none;
+  }
+}
+
+.dc-player-card {
+  border: 1px solid var(--dc-color-border);
+  border-radius: var(--dc-radius-lg);
+  background: var(--dc-color-surface);
+}
+
+.dc-player-card-link {
+  display: flex;
+  flex-direction: column;
+  gap: var(--dc-space-3);
+  padding: var(--dc-space-4);
+  color: inherit;
+  text-decoration: none;
+}
+
+.dc-player-card-header {
+  display: flex;
+  gap: var(--dc-space-3);
+  align-items: center;
+}
+
+.dc-player-card-name {
+  font-weight: 600;
+}
+
+.dc-player-card-meta {
+  font-size: var(--dc-font-size-xs);
+  color: var(--dc-color-text-secondary);
+}
+
+.dc-player-card-stats {
+  display: flex;
+  gap: var(--dc-space-4);
+  align-items: center;
+  flex-wrap: wrap;
+  font-size: var(--dc-font-size-sm);
+  color: var(--dc-color-text-secondary);
+}
+
+/* ---- pagination ---- */
+
+.dc-pagination {
+  display: flex;
+  justify-content: space-between;
+  padding-top: var(--dc-space-3);
+}
+
+.dc-pagination a,
+.dc-pagination-disabled {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--dc-touch-target-min);
+  padding: 0 var(--dc-space-3);
+  color: var(--dc-color-accent);
+  text-decoration: none;
+}
+
+.dc-pagination-disabled {
+  color: var(--dc-color-text-muted);
+  cursor: not-allowed;
+}
+
+/* ---- profile page ---- */
+
+.dc-page-narrow {
+  max-width: 56rem;
+}
+
+.dc-profile-header {
+  display: flex;
+  gap: var(--dc-space-4);
+  align-items: center;
+}
+
+.dc-profile-heading h1 {
+  margin: 0;
+  font-size: var(--dc-font-size-xl);
+  letter-spacing: -0.01em;
+}
+
+.dc-profile-meta {
+  margin: var(--dc-space-1) 0 var(--dc-space-2);
+  color: var(--dc-color-text-secondary);
+  font-size: var(--dc-font-size-sm);
+}
+
+.dc-profile-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--dc-space-3);
+  background: var(--dc-color-surface);
+  border: 1px solid var(--dc-color-border);
+  border-radius: var(--dc-radius-lg);
+  padding: var(--dc-space-4);
+}
+
+.dc-profile-section h2 {
+  margin: 0;
+  font-size: var(--dc-font-size-md);
+}
+
+.dc-profile-note {
+  margin: 0;
+  color: var(--dc-color-text-secondary);
+  font-size: var(--dc-font-size-sm);
+  max-width: 60ch;
+}
+
+.dc-draft-phase-note {
+  padding: var(--dc-space-3);
+  border-radius: var(--dc-radius-md);
+  background: var(--dc-color-surface-elevated);
+  border: 1px dashed var(--dc-color-border-strong);
+  color: var(--dc-color-text-primary);
+}
+
+.dc-interval-note {
+  margin: 0;
+  color: var(--dc-color-text-muted);
+  font-size: var(--dc-font-size-xs);
+}
+
+.dc-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(6.5rem, 1fr));
+  gap: var(--dc-space-3);
+}
+
+.dc-stat-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+  padding: var(--dc-space-2) var(--dc-space-3);
+  border-radius: var(--dc-radius-md);
+  background: var(--dc-color-surface-elevated);
+}
+
+.dc-stat-card-label {
+  font-size: var(--dc-font-size-xs);
+  color: var(--dc-color-text-secondary);
+}
+
+.dc-stat-card-value {
+  font-size: var(--dc-font-size-lg);
+  font-weight: 600;
+}
+
+.dc-stat-card-sub {
+  font-size: var(--dc-font-size-xs);
+  color: var(--dc-color-text-muted);
+}
+
+.dc-score-bar-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
+  gap: var(--dc-space-4);
+}
+
+.dc-trend-row {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.dc-profile-footer {
+  text-align: right;
+}
+
+/* ---- compare page ---- */
+
+.dc-compare-table th[scope="col"] {
+  vertical-align: bottom;
+}
+
+.dc-compare-header-meta {
+  font-weight: 400;
+  font-size: var(--dc-font-size-xs);
+  color: var(--dc-color-text-secondary);
+}
+
+.dc-compare-leader {
+  position: relative;
+  font-weight: 700;
+  color: var(--dc-color-text-primary);
+  background: var(--dc-color-surface-elevated);
+}
+
+.dc-compare-leader::after {
+  content: "";
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  margin-left: var(--dc-space-2);
+  border-radius: var(--dc-radius-full);
+  background: var(--dc-color-accent);
+  vertical-align: middle;
+}
+
+/* ---- data sources page ---- */
+
+.dc-source-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--dc-space-4);
+}
+
+.dc-source-header {
+  display: flex;
+  align-items: center;
+  gap: var(--dc-space-2);
+}
+
+.dc-source-header h2 {
+  margin: 0;
+  font-size: var(--dc-font-size-md);
+}
+
+.dc-source-meta-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
+  gap: var(--dc-space-4);
+}
+
+/* ---- admin ---- */
+
+.dc-admin-nav {
+  display: flex;
+  gap: var(--dc-space-4);
+  padding-bottom: var(--dc-space-2);
+  border-bottom: 1px solid var(--dc-color-border);
+}
+
+.dc-admin-nav a {
+  color: var(--dc-color-text-secondary);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: var(--dc-font-size-sm);
+  min-height: var(--dc-touch-target-min);
+  display: inline-flex;
+  align-items: center;
+}
+
+.dc-admin-nav a:hover {
+  color: var(--dc-color-text-primary);
+}

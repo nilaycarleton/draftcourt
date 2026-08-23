@@ -1,0 +1,65 @@
+name: draftcourt
+
+services:
+  postgres:
+    image: postgres:17.7-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: draftcourt
+      POSTGRES_PASSWORD: draftcourt
+      POSTGRES_DB: draftcourt
+    ports:
+      # Default host port avoids clashing with a native/Homebrew Postgres on
+      # the common 5432/5433 ports. Override with POSTGRES_HOST_PORT if free.
+      - "${POSTGRES_HOST_PORT:-55432}:5432"
+    volumes:
+      - draftcourt-postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U draftcourt -d draftcourt"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:8.2-alpine
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - draftcourt-redis:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  analytics:
+    build:
+      context: ./services/analytics
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      APP_ENV: development
+      DATABASE_URL: postgresql://draftcourt:draftcourt@postgres:5432/draftcourt
+      SERVICE_SECRET: ${ANALYTICS_SERVICE_SECRET:-local-dev-analytics-secret-change-me}
+      SENTRY_DSN: ${SENTRY_DSN:-}
+    ports:
+      - "8000:8000"
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "python",
+          "-c",
+          "import urllib.request; urllib.request.urlopen('http://localhost:8000/health/live', timeout=3)",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  draftcourt-postgres:
+  draftcourt-redis:

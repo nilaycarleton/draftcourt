@@ -1,0 +1,4542 @@
+[
+  {
+    "adp": 1.0,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0204",
+    "rank": 1,
+    "sampleSize": 1393,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 4.0,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0204",
+    "rank": 4,
+    "sampleSize": 1187,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 4.9,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0148",
+    "rank": 5,
+    "sampleSize": 1152,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 3.3,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0148",
+    "rank": 3,
+    "sampleSize": 1596,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 4.1,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0176",
+    "rank": 4,
+    "sampleSize": 1144,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 4.7,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0176",
+    "rank": 5,
+    "sampleSize": 1528,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 6.5,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0190",
+    "rank": 6,
+    "sampleSize": 1213,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 4.6,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0190",
+    "rank": 5,
+    "sampleSize": 933,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 1.2,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0183",
+    "rank": 1,
+    "sampleSize": 1208,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 4.0,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0183",
+    "rank": 4,
+    "sampleSize": 1375,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 4.3,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0045",
+    "rank": 4,
+    "sampleSize": 1235,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 7.5,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0045",
+    "rank": 8,
+    "sampleSize": 974,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 7.3,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0023",
+    "rank": 7,
+    "sampleSize": 1845,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 9.2,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0023",
+    "rank": 9,
+    "sampleSize": 947,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 7.6,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0162",
+    "rank": 8,
+    "sampleSize": 1162,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 6.7,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0162",
+    "rank": 7,
+    "sampleSize": 1007,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 8.5,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0043",
+    "rank": 9,
+    "sampleSize": 1993,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 7.0,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0043",
+    "rank": 7,
+    "sampleSize": 1575,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 7.6,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0092",
+    "rank": 8,
+    "sampleSize": 1738,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 8.3,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0092",
+    "rank": 8,
+    "sampleSize": 1792,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 14.9,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0057",
+    "rank": 15,
+    "sampleSize": 1673,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 8.4,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0057",
+    "rank": 8,
+    "sampleSize": 955,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 9.3,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0071",
+    "rank": 9,
+    "sampleSize": 1547,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 11.2,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0071",
+    "rank": 11,
+    "sampleSize": 1764,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 9.9,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0134",
+    "rank": 10,
+    "sampleSize": 923,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 13.2,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0134",
+    "rank": 13,
+    "sampleSize": 1453,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 16.8,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0106",
+    "rank": 17,
+    "sampleSize": 1863,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 13.7,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0106",
+    "rank": 14,
+    "sampleSize": 1231,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 13.6,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0197",
+    "rank": 14,
+    "sampleSize": 1585,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 12.0,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0197",
+    "rank": 12,
+    "sampleSize": 1201,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 19.1,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0141",
+    "rank": 19,
+    "sampleSize": 1381,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 17.5,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0141",
+    "rank": 18,
+    "sampleSize": 1739,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 15.9,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0029",
+    "rank": 16,
+    "sampleSize": 1772,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 14.2,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0029",
+    "rank": 14,
+    "sampleSize": 1221,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 14.5,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0015",
+    "rank": 14,
+    "sampleSize": 1054,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 21.2,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0015",
+    "rank": 21,
+    "sampleSize": 1942,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 16.2,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0121",
+    "rank": 16,
+    "sampleSize": 1755,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 19.5,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0121",
+    "rank": 20,
+    "sampleSize": 1912,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 18.8,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0191",
+    "rank": 19,
+    "sampleSize": 1598,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 23.1,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0191",
+    "rank": 23,
+    "sampleSize": 1255,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 17.6,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0022",
+    "rank": 18,
+    "sampleSize": 1013,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 23.7,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0022",
+    "rank": 24,
+    "sampleSize": 1419,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 18.1,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0122",
+    "rank": 18,
+    "sampleSize": 956,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 20.6,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0122",
+    "rank": 21,
+    "sampleSize": 1565,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 24.8,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0156",
+    "rank": 25,
+    "sampleSize": 1687,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 22.2,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0156",
+    "rank": 22,
+    "sampleSize": 1317,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 28.0,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0078",
+    "rank": 28,
+    "sampleSize": 1456,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 25.9,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0078",
+    "rank": 26,
+    "sampleSize": 1246,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 23.5,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0002",
+    "rank": 24,
+    "sampleSize": 1441,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 21.7,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0002",
+    "rank": 22,
+    "sampleSize": 1497,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 24.7,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0113",
+    "rank": 25,
+    "sampleSize": 1372,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 23.3,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0113",
+    "rank": 23,
+    "sampleSize": 1145,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 29.7,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0086",
+    "rank": 30,
+    "sampleSize": 1191,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 29.7,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0086",
+    "rank": 30,
+    "sampleSize": 903,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 31.8,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0149",
+    "rank": 32,
+    "sampleSize": 1175,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 29.5,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0149",
+    "rank": 30,
+    "sampleSize": 1421,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 28.0,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0050",
+    "rank": 28,
+    "sampleSize": 1832,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 28.8,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0050",
+    "rank": 29,
+    "sampleSize": 1463,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 32.4,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0107",
+    "rank": 32,
+    "sampleSize": 1481,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 26.1,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0107",
+    "rank": 26,
+    "sampleSize": 1094,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 28.3,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0120",
+    "rank": 28,
+    "sampleSize": 872,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 34.3,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0120",
+    "rank": 34,
+    "sampleSize": 1915,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 32.0,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0058",
+    "rank": 32,
+    "sampleSize": 1620,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 33.0,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0058",
+    "rank": 33,
+    "sampleSize": 1477,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 29.5,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0205",
+    "rank": 30,
+    "sampleSize": 889,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 36.2,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0205",
+    "rank": 36,
+    "sampleSize": 846,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 33.7,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0016",
+    "rank": 34,
+    "sampleSize": 1407,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 35.6,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0016",
+    "rank": 36,
+    "sampleSize": 1207,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 37.7,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0144",
+    "rank": 38,
+    "sampleSize": 1289,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 31.3,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0144",
+    "rank": 31,
+    "sampleSize": 1876,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 32.3,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0085",
+    "rank": 32,
+    "sampleSize": 1427,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 36.2,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0085",
+    "rank": 36,
+    "sampleSize": 1565,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 38.1,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0064",
+    "rank": 38,
+    "sampleSize": 1219,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 38.7,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0064",
+    "rank": 39,
+    "sampleSize": 1911,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 37.4,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0169",
+    "rank": 37,
+    "sampleSize": 1425,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 41.2,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0169",
+    "rank": 41,
+    "sampleSize": 1633,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 36.2,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0093",
+    "rank": 36,
+    "sampleSize": 1618,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 38.7,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0093",
+    "rank": 39,
+    "sampleSize": 1581,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 38.6,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0001",
+    "rank": 39,
+    "sampleSize": 1403,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 43.5,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0001",
+    "rank": 43,
+    "sampleSize": 1789,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 40.1,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0164",
+    "rank": 40,
+    "sampleSize": 1059,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 40.0,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0164",
+    "rank": 40,
+    "sampleSize": 1728,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 42.2,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0099",
+    "rank": 42,
+    "sampleSize": 1927,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 45.6,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0099",
+    "rank": 46,
+    "sampleSize": 1750,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 46.5,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0034",
+    "rank": 47,
+    "sampleSize": 1124,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 45.0,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0034",
+    "rank": 45,
+    "sampleSize": 826,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 46.5,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0110",
+    "rank": 47,
+    "sampleSize": 1127,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 47.9,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0110",
+    "rank": 48,
+    "sampleSize": 1088,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 45.3,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0079",
+    "rank": 45,
+    "sampleSize": 864,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 48.7,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0079",
+    "rank": 49,
+    "sampleSize": 1089,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 47.9,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0157",
+    "rank": 48,
+    "sampleSize": 856,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 49.3,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0157",
+    "rank": 49,
+    "sampleSize": 1171,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 50.9,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0184",
+    "rank": 51,
+    "sampleSize": 1425,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 46.6,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0184",
+    "rank": 47,
+    "sampleSize": 1439,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 45.6,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0040",
+    "rank": 46,
+    "sampleSize": 1928,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 47.4,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0040",
+    "rank": 47,
+    "sampleSize": 1352,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 46.8,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0206",
+    "rank": 47,
+    "sampleSize": 1682,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 52.7,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0206",
+    "rank": 53,
+    "sampleSize": 1574,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 48.0,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0072",
+    "rank": 48,
+    "sampleSize": 1904,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 48.9,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0072",
+    "rank": 49,
+    "sampleSize": 870,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 48.4,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0199",
+    "rank": 48,
+    "sampleSize": 837,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 49.7,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0199",
+    "rank": 50,
+    "sampleSize": 1356,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 53.6,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0143",
+    "rank": 54,
+    "sampleSize": 885,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 54.7,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0143",
+    "rank": 55,
+    "sampleSize": 937,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 52.1,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0053",
+    "rank": 52,
+    "sampleSize": 1754,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 54.7,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0053",
+    "rank": 55,
+    "sampleSize": 1292,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 55.9,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0127",
+    "rank": 56,
+    "sampleSize": 817,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 52.2,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0127",
+    "rank": 52,
+    "sampleSize": 1966,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 55.8,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0194",
+    "rank": 56,
+    "sampleSize": 1085,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 53.2,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0194",
+    "rank": 53,
+    "sampleSize": 832,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 53.5,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0008",
+    "rank": 54,
+    "sampleSize": 1254,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 55.9,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0008",
+    "rank": 56,
+    "sampleSize": 1433,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 55.8,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0115",
+    "rank": 56,
+    "sampleSize": 1761,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 57.2,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0115",
+    "rank": 57,
+    "sampleSize": 835,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 61.1,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0186",
+    "rank": 61,
+    "sampleSize": 1277,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 59.4,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0186",
+    "rank": 59,
+    "sampleSize": 1528,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 57.1,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0031",
+    "rank": 57,
+    "sampleSize": 1604,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 60.9,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0031",
+    "rank": 61,
+    "sampleSize": 1797,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 60.5,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0030",
+    "rank": 60,
+    "sampleSize": 1253,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 62.9,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0030",
+    "rank": 63,
+    "sampleSize": 1251,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 60.0,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0018",
+    "rank": 60,
+    "sampleSize": 1761,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 64.2,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0018",
+    "rank": 64,
+    "sampleSize": 1363,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 59.3,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0087",
+    "rank": 59,
+    "sampleSize": 1583,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 59.2,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0087",
+    "rank": 59,
+    "sampleSize": 1041,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 64.7,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0010",
+    "rank": 65,
+    "sampleSize": 1259,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 63.1,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0010",
+    "rank": 63,
+    "sampleSize": 1885,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 64.8,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0003",
+    "rank": 65,
+    "sampleSize": 1127,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 67.7,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0003",
+    "rank": 68,
+    "sampleSize": 1714,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 62.9,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0180",
+    "rank": 63,
+    "sampleSize": 1563,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 67.2,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0180",
+    "rank": 67,
+    "sampleSize": 1265,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 69.8,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0123",
+    "rank": 70,
+    "sampleSize": 1048,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 64.7,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0123",
+    "rank": 65,
+    "sampleSize": 1384,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 65.4,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0142",
+    "rank": 65,
+    "sampleSize": 1395,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 64.8,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0142",
+    "rank": 65,
+    "sampleSize": 1575,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 68.7,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0097",
+    "rank": 69,
+    "sampleSize": 1127,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 69.8,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0097",
+    "rank": 70,
+    "sampleSize": 1577,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 67.9,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0179",
+    "rank": 68,
+    "sampleSize": 1112,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 71.6,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0179",
+    "rank": 72,
+    "sampleSize": 1006,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 72.0,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0038",
+    "rank": 72,
+    "sampleSize": 1700,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 67.3,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0038",
+    "rank": 67,
+    "sampleSize": 1176,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 73.6,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0017",
+    "rank": 74,
+    "sampleSize": 1025,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 71.8,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0017",
+    "rank": 72,
+    "sampleSize": 1933,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 68.3,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0073",
+    "rank": 68,
+    "sampleSize": 1303,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 70.9,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0073",
+    "rank": 71,
+    "sampleSize": 1003,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 69.4,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0170",
+    "rank": 69,
+    "sampleSize": 1381,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 74.9,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0170",
+    "rank": 75,
+    "sampleSize": 1310,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 70.8,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0074",
+    "rank": 71,
+    "sampleSize": 1543,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 72.3,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0074",
+    "rank": 72,
+    "sampleSize": 1983,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 72.9,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0004",
+    "rank": 73,
+    "sampleSize": 937,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 75.4,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0004",
+    "rank": 75,
+    "sampleSize": 1001,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 74.0,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0081",
+    "rank": 74,
+    "sampleSize": 1442,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 77.6,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0081",
+    "rank": 78,
+    "sampleSize": 948,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 76.5,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0116",
+    "rank": 77,
+    "sampleSize": 1358,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 73.9,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0116",
+    "rank": 74,
+    "sampleSize": 1148,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 79.3,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0135",
+    "rank": 79,
+    "sampleSize": 846,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 74.7,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0135",
+    "rank": 75,
+    "sampleSize": 928,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 75.2,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0075",
+    "rank": 75,
+    "sampleSize": 1709,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 75.7,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0075",
+    "rank": 76,
+    "sampleSize": 1332,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 77.2,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0005",
+    "rank": 77,
+    "sampleSize": 1499,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 77.3,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0005",
+    "rank": 77,
+    "sampleSize": 1614,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 78.5,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0192",
+    "rank": 78,
+    "sampleSize": 1211,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 77.1,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0192",
+    "rank": 77,
+    "sampleSize": 884,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 83.2,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0109",
+    "rank": 83,
+    "sampleSize": 1800,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 85.5,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0109",
+    "rank": 86,
+    "sampleSize": 1348,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 79.7,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0101",
+    "rank": 80,
+    "sampleSize": 842,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 83.2,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0101",
+    "rank": 83,
+    "sampleSize": 1536,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 84.5,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0095",
+    "rank": 85,
+    "sampleSize": 1727,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 84.1,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0095",
+    "rank": 84,
+    "sampleSize": 1776,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 87.0,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0044",
+    "rank": 87,
+    "sampleSize": 1973,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 82.7,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0044",
+    "rank": 83,
+    "sampleSize": 916,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 87.9,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0172",
+    "rank": 88,
+    "sampleSize": 1890,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 83.0,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0172",
+    "rank": 83,
+    "sampleSize": 813,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 86.2,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0059",
+    "rank": 86,
+    "sampleSize": 1251,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 85.3,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0059",
+    "rank": 85,
+    "sampleSize": 1020,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 85.6,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0094",
+    "rank": 86,
+    "sampleSize": 1284,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 90.4,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0094",
+    "rank": 90,
+    "sampleSize": 1928,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 91.0,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0136",
+    "rank": 91,
+    "sampleSize": 1684,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 87.5,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0136",
+    "rank": 88,
+    "sampleSize": 1586,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 90.0,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0100",
+    "rank": 90,
+    "sampleSize": 1798,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 91.1,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0100",
+    "rank": 91,
+    "sampleSize": 1061,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 92.6,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0198",
+    "rank": 93,
+    "sampleSize": 1871,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 93.6,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0198",
+    "rank": 94,
+    "sampleSize": 834,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 93.7,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0060",
+    "rank": 94,
+    "sampleSize": 1137,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 91.6,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0060",
+    "rank": 92,
+    "sampleSize": 1193,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 89.1,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0124",
+    "rank": 89,
+    "sampleSize": 1753,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 94.9,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0124",
+    "rank": 95,
+    "sampleSize": 939,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 94.3,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0128",
+    "rank": 94,
+    "sampleSize": 1961,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 90.4,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0128",
+    "rank": 90,
+    "sampleSize": 1624,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 91.0,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0150",
+    "rank": 91,
+    "sampleSize": 1754,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 99.0,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0150",
+    "rank": 99,
+    "sampleSize": 1407,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 95.1,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0066",
+    "rank": 95,
+    "sampleSize": 1318,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 99.4,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0066",
+    "rank": 99,
+    "sampleSize": 1680,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 99.6,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0131",
+    "rank": 100,
+    "sampleSize": 918,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 99.5,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0131",
+    "rank": 100,
+    "sampleSize": 1430,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 98.6,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0080",
+    "rank": 99,
+    "sampleSize": 1128,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 98.1,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0080",
+    "rank": 98,
+    "sampleSize": 1635,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 99.2,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0037",
+    "rank": 99,
+    "sampleSize": 893,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 95.9,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0037",
+    "rank": 96,
+    "sampleSize": 1377,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 101.6,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0207",
+    "rank": 102,
+    "sampleSize": 1022,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 101.0,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0207",
+    "rank": 101,
+    "sampleSize": 1826,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 103.6,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0036",
+    "rank": 104,
+    "sampleSize": 1168,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 98.8,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0036",
+    "rank": 99,
+    "sampleSize": 1360,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 102.1,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0088",
+    "rank": 102,
+    "sampleSize": 978,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 100.8,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0088",
+    "rank": 101,
+    "sampleSize": 1226,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 103.8,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0108",
+    "rank": 104,
+    "sampleSize": 827,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 99.6,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0108",
+    "rank": 100,
+    "sampleSize": 921,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 107.0,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0129",
+    "rank": 107,
+    "sampleSize": 1592,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 103.0,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0129",
+    "rank": 103,
+    "sampleSize": 1708,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 102.9,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0185",
+    "rank": 103,
+    "sampleSize": 1549,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 108.4,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0185",
+    "rank": 108,
+    "sampleSize": 1137,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 105.3,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0114",
+    "rank": 105,
+    "sampleSize": 1745,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 108.2,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0114",
+    "rank": 108,
+    "sampleSize": 1324,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 108.3,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0009",
+    "rank": 108,
+    "sampleSize": 1909,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 105.9,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0009",
+    "rank": 106,
+    "sampleSize": 1959,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 111.8,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0052",
+    "rank": 112,
+    "sampleSize": 1739,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 105.8,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0052",
+    "rank": 106,
+    "sampleSize": 855,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 106.1,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0046",
+    "rank": 106,
+    "sampleSize": 1749,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 108.4,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0046",
+    "rank": 108,
+    "sampleSize": 1752,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 113.5,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0051",
+    "rank": 114,
+    "sampleSize": 1161,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 112.2,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0051",
+    "rank": 112,
+    "sampleSize": 1171,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 112.3,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0032",
+    "rank": 112,
+    "sampleSize": 1861,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 110.1,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0032",
+    "rank": 110,
+    "sampleSize": 1630,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 109.9,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0019",
+    "rank": 110,
+    "sampleSize": 1357,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 115.0,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0019",
+    "rank": 115,
+    "sampleSize": 1187,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 115.7,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0130",
+    "rank": 116,
+    "sampleSize": 1708,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 111.3,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0130",
+    "rank": 111,
+    "sampleSize": 1032,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 117.9,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0151",
+    "rank": 118,
+    "sampleSize": 1768,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 112.9,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0151",
+    "rank": 113,
+    "sampleSize": 1865,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 117.7,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0171",
+    "rank": 118,
+    "sampleSize": 860,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 112.5,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0171",
+    "rank": 113,
+    "sampleSize": 1550,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 119.2,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0177",
+    "rank": 119,
+    "sampleSize": 1765,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 113.9,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0177",
+    "rank": 114,
+    "sampleSize": 922,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 116.3,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0065",
+    "rank": 116,
+    "sampleSize": 923,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 114.3,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0065",
+    "rank": 114,
+    "sampleSize": 1197,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 120.4,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0155",
+    "rank": 120,
+    "sampleSize": 1613,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 114.0,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0155",
+    "rank": 114,
+    "sampleSize": 1931,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 117.2,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0011",
+    "rank": 117,
+    "sampleSize": 1336,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 119.4,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0011",
+    "rank": 119,
+    "sampleSize": 1915,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 116.0,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0163",
+    "rank": 116,
+    "sampleSize": 1733,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 117.4,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0163",
+    "rank": 117,
+    "sampleSize": 1094,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 122.6,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0102",
+    "rank": 123,
+    "sampleSize": 1282,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 119.2,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0102",
+    "rank": 119,
+    "sampleSize": 1948,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 125.0,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0024",
+    "rank": 125,
+    "sampleSize": 1760,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 125.0,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0024",
+    "rank": 125,
+    "sampleSize": 1508,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 126.1,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0178",
+    "rank": 126,
+    "sampleSize": 1050,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 120.4,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0178",
+    "rank": 120,
+    "sampleSize": 1352,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 121.5,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0096",
+    "rank": 121,
+    "sampleSize": 1112,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 120.8,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0096",
+    "rank": 121,
+    "sampleSize": 1458,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 127.1,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0201",
+    "rank": 127,
+    "sampleSize": 1676,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 128.3,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0201",
+    "rank": 128,
+    "sampleSize": 1859,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 125.4,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0049",
+    "rank": 125,
+    "sampleSize": 1195,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 126.1,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0049",
+    "rank": 126,
+    "sampleSize": 1244,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 123.1,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0200",
+    "rank": 123,
+    "sampleSize": 918,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 123.5,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0200",
+    "rank": 124,
+    "sampleSize": 869,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 130.6,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0039",
+    "rank": 131,
+    "sampleSize": 880,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 127.9,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0039",
+    "rank": 128,
+    "sampleSize": 979,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 131.8,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0189",
+    "rank": 132,
+    "sampleSize": 1836,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 129.9,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0189",
+    "rank": 130,
+    "sampleSize": 1578,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 126.3,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0027",
+    "rank": 126,
+    "sampleSize": 1868,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 127.4,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0027",
+    "rank": 127,
+    "sampleSize": 1577,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 131.3,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0118",
+    "rank": 131,
+    "sampleSize": 984,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 129.6,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0118",
+    "rank": 130,
+    "sampleSize": 822,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 135.4,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0054",
+    "rank": 135,
+    "sampleSize": 1666,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 131.0,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0054",
+    "rank": 131,
+    "sampleSize": 1352,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 129.7,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0159",
+    "rank": 130,
+    "sampleSize": 1336,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 129.7,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0159",
+    "rank": 130,
+    "sampleSize": 1312,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 133.1,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0196",
+    "rank": 133,
+    "sampleSize": 843,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 131.4,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0196",
+    "rank": 131,
+    "sampleSize": 1132,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 137.1,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0083",
+    "rank": 137,
+    "sampleSize": 1466,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 138.4,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0083",
+    "rank": 138,
+    "sampleSize": 1931,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 139.8,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0161",
+    "rank": 140,
+    "sampleSize": 1308,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 133.4,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0161",
+    "rank": 133,
+    "sampleSize": 959,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 134.8,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0125",
+    "rank": 135,
+    "sampleSize": 1037,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 134.3,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0125",
+    "rank": 134,
+    "sampleSize": 1019,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 139.9,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0117",
+    "rank": 140,
+    "sampleSize": 1529,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 134.5,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0117",
+    "rank": 135,
+    "sampleSize": 874,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 135.6,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0174",
+    "rank": 136,
+    "sampleSize": 1844,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 142.8,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0174",
+    "rank": 143,
+    "sampleSize": 1499,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 138.2,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0165",
+    "rank": 138,
+    "sampleSize": 1178,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 139.5,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0165",
+    "rank": 140,
+    "sampleSize": 1280,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 139.4,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0077",
+    "rank": 139,
+    "sampleSize": 845,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 141.8,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0077",
+    "rank": 142,
+    "sampleSize": 1684,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 141.4,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0035",
+    "rank": 141,
+    "sampleSize": 1613,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 139.4,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0035",
+    "rank": 139,
+    "sampleSize": 819,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 139.6,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0168",
+    "rank": 140,
+    "sampleSize": 1387,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 141.2,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0168",
+    "rank": 141,
+    "sampleSize": 1111,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 148.0,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0126",
+    "rank": 148,
+    "sampleSize": 1023,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 146.5,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0126",
+    "rank": 146,
+    "sampleSize": 1507,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 144.9,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0112",
+    "rank": 145,
+    "sampleSize": 960,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 145.6,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0112",
+    "rank": 146,
+    "sampleSize": 1694,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 147.7,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0041",
+    "rank": 148,
+    "sampleSize": 986,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 146.6,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0041",
+    "rank": 147,
+    "sampleSize": 1409,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 148.3,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0146",
+    "rank": 148,
+    "sampleSize": 1192,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 146.0,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0146",
+    "rank": 146,
+    "sampleSize": 958,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 144.2,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0021",
+    "rank": 144,
+    "sampleSize": 880,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 150.4,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0021",
+    "rank": 150,
+    "sampleSize": 1465,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 145.6,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0047",
+    "rank": 146,
+    "sampleSize": 1978,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 147.7,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0047",
+    "rank": 148,
+    "sampleSize": 1329,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 150.3,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0153",
+    "rank": 150,
+    "sampleSize": 1657,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 153.8,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0153",
+    "rank": 154,
+    "sampleSize": 1326,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 150.9,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0098",
+    "rank": 151,
+    "sampleSize": 1648,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 153.9,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0098",
+    "rank": 154,
+    "sampleSize": 1441,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 155.7,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0084",
+    "rank": 156,
+    "sampleSize": 954,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 153.0,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0084",
+    "rank": 153,
+    "sampleSize": 1324,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 156.9,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0209",
+    "rank": 157,
+    "sampleSize": 866,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 151.5,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0209",
+    "rank": 151,
+    "sampleSize": 1235,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 152.6,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0195",
+    "rank": 153,
+    "sampleSize": 1713,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 156.2,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0195",
+    "rank": 156,
+    "sampleSize": 1316,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 158.9,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0055",
+    "rank": 159,
+    "sampleSize": 1024,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 158.8,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0055",
+    "rank": 159,
+    "sampleSize": 1156,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 159.9,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0013",
+    "rank": 160,
+    "sampleSize": 940,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 159.4,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0013",
+    "rank": 159,
+    "sampleSize": 1982,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 153.5,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0068",
+    "rank": 153,
+    "sampleSize": 1871,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 153.2,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0068",
+    "rank": 153,
+    "sampleSize": 1782,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 157.1,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0132",
+    "rank": 157,
+    "sampleSize": 1386,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 156.4,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0132",
+    "rank": 156,
+    "sampleSize": 848,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 159.2,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0014",
+    "rank": 159,
+    "sampleSize": 1247,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 161.4,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0014",
+    "rank": 161,
+    "sampleSize": 1931,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 156.1,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0012",
+    "rank": 156,
+    "sampleSize": 941,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 158.7,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0012",
+    "rank": 159,
+    "sampleSize": 1767,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 158.7,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0193",
+    "rank": 159,
+    "sampleSize": 986,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 162.3,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0193",
+    "rank": 162,
+    "sampleSize": 1326,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 161.2,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0042",
+    "rank": 161,
+    "sampleSize": 902,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 158.5,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0042",
+    "rank": 159,
+    "sampleSize": 1369,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 165.0,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0007",
+    "rank": 165,
+    "sampleSize": 1926,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 161.2,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0007",
+    "rank": 161,
+    "sampleSize": 1009,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 166.2,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0069",
+    "rank": 166,
+    "sampleSize": 1658,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 165.7,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0069",
+    "rank": 166,
+    "sampleSize": 870,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 168.7,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0056",
+    "rank": 169,
+    "sampleSize": 1613,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 167.6,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0056",
+    "rank": 168,
+    "sampleSize": 1885,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 165.9,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0138",
+    "rank": 166,
+    "sampleSize": 868,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 166.5,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0138",
+    "rank": 166,
+    "sampleSize": 816,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 164.1,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0140",
+    "rank": 164,
+    "sampleSize": 1583,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 166.4,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0140",
+    "rank": 166,
+    "sampleSize": 1567,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 164.7,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0133",
+    "rank": 165,
+    "sampleSize": 1751,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 165.1,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0133",
+    "rank": 165,
+    "sampleSize": 1804,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 166.3,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0111",
+    "rank": 166,
+    "sampleSize": 1073,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 172.3,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0111",
+    "rank": 172,
+    "sampleSize": 1292,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 170.4,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0147",
+    "rank": 170,
+    "sampleSize": 1956,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 173.9,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0147",
+    "rank": 174,
+    "sampleSize": 1969,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 169.5,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0139",
+    "rank": 169,
+    "sampleSize": 1771,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 169.4,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0139",
+    "rank": 169,
+    "sampleSize": 1110,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 171.3,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0208",
+    "rank": 171,
+    "sampleSize": 1873,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 174.7,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0208",
+    "rank": 175,
+    "sampleSize": 1680,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 176.3,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0028",
+    "rank": 176,
+    "sampleSize": 1650,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 174.1,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0028",
+    "rank": 174,
+    "sampleSize": 1893,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 176.8,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0063",
+    "rank": 177,
+    "sampleSize": 1792,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 174.6,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0063",
+    "rank": 175,
+    "sampleSize": 1562,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 173.2,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0061",
+    "rank": 173,
+    "sampleSize": 1870,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 174.8,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0061",
+    "rank": 175,
+    "sampleSize": 804,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 172.4,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0048",
+    "rank": 172,
+    "sampleSize": 1656,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 178.8,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0048",
+    "rank": 179,
+    "sampleSize": 1563,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 176.2,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0089",
+    "rank": 176,
+    "sampleSize": 1030,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 175.2,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0089",
+    "rank": 175,
+    "sampleSize": 1841,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 181.2,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0160",
+    "rank": 181,
+    "sampleSize": 1301,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 177.1,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0160",
+    "rank": 177,
+    "sampleSize": 1851,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 180.2,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0188",
+    "rank": 180,
+    "sampleSize": 1201,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 177.6,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0188",
+    "rank": 178,
+    "sampleSize": 1747,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 176.7,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0119",
+    "rank": 177,
+    "sampleSize": 1193,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 179.8,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0119",
+    "rank": 180,
+    "sampleSize": 1976,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 184.0,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0033",
+    "rank": 184,
+    "sampleSize": 1446,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 180.4,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0033",
+    "rank": 180,
+    "sampleSize": 1829,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 185.2,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0082",
+    "rank": 185,
+    "sampleSize": 1225,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 185.8,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0082",
+    "rank": 186,
+    "sampleSize": 1107,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 186.3,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0067",
+    "rank": 186,
+    "sampleSize": 841,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 179.4,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0067",
+    "rank": 179,
+    "sampleSize": 1641,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 181.0,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0091",
+    "rank": 181,
+    "sampleSize": 1245,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 185.6,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0091",
+    "rank": 186,
+    "sampleSize": 1830,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 186.5,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0152",
+    "rank": 187,
+    "sampleSize": 1107,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 186.0,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0152",
+    "rank": 186,
+    "sampleSize": 848,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 188.0,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0145",
+    "rank": 188,
+    "sampleSize": 939,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 189.0,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0145",
+    "rank": 189,
+    "sampleSize": 1309,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 187.2,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0076",
+    "rank": 187,
+    "sampleSize": 964,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 187.8,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0076",
+    "rank": 188,
+    "sampleSize": 1801,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 186.2,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0187",
+    "rank": 186,
+    "sampleSize": 1723,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 185.5,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0187",
+    "rank": 185,
+    "sampleSize": 1755,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 189.9,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0006",
+    "rank": 190,
+    "sampleSize": 998,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 187.9,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0006",
+    "rank": 188,
+    "sampleSize": 1865,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 190.3,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0182",
+    "rank": 190,
+    "sampleSize": 889,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 192.6,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0182",
+    "rank": 193,
+    "sampleSize": 1330,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 191.8,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0173",
+    "rank": 192,
+    "sampleSize": 949,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 192.7,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0173",
+    "rank": 193,
+    "sampleSize": 1684,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 191.8,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0103",
+    "rank": 192,
+    "sampleSize": 1712,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 194.9,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0103",
+    "rank": 195,
+    "sampleSize": 1442,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 195.6,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0090",
+    "rank": 196,
+    "sampleSize": 1770,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 190.7,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0090",
+    "rank": 191,
+    "sampleSize": 1428,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 193.1,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0104",
+    "rank": 193,
+    "sampleSize": 1176,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 197.9,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0104",
+    "rank": 198,
+    "sampleSize": 1111,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 195.8,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0167",
+    "rank": 196,
+    "sampleSize": 1648,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 194.0,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0167",
+    "rank": 194,
+    "sampleSize": 1586,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 196.8,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0202",
+    "rank": 197,
+    "sampleSize": 1729,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 193.4,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0202",
+    "rank": 193,
+    "sampleSize": 1803,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 196.1,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0154",
+    "rank": 196,
+    "sampleSize": 1290,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 195.8,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0154",
+    "rank": 196,
+    "sampleSize": 1175,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 201.3,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0166",
+    "rank": 201,
+    "sampleSize": 1797,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 201.8,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0166",
+    "rank": 202,
+    "sampleSize": 1689,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 201.0,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0158",
+    "rank": 201,
+    "sampleSize": 1782,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 199.7,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0158",
+    "rank": 200,
+    "sampleSize": 1791,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 203.5,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0175",
+    "rank": 204,
+    "sampleSize": 1012,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 198.3,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0175",
+    "rank": 198,
+    "sampleSize": 1893,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 204.5,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0062",
+    "rank": 204,
+    "sampleSize": 947,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 199.2,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0062",
+    "rank": 199,
+    "sampleSize": 814,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 203.0,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0070",
+    "rank": 203,
+    "sampleSize": 925,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 204.2,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0070",
+    "rank": 204,
+    "sampleSize": 1522,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 205.4,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0020",
+    "rank": 205,
+    "sampleSize": 1115,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 201.4,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0020",
+    "rank": 201,
+    "sampleSize": 1595,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 205.0,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0026",
+    "rank": 205,
+    "sampleSize": 971,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 200.2,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0026",
+    "rank": 200,
+    "sampleSize": 1534,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 207.2,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0105",
+    "rank": 207,
+    "sampleSize": 1922,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 206.5,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0105",
+    "rank": 206,
+    "sampleSize": 1460,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 209.4,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0025",
+    "rank": 209,
+    "sampleSize": 1703,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 203.9,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0025",
+    "rank": 204,
+    "sampleSize": 1958,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 204.8,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0210",
+    "rank": 205,
+    "sampleSize": 1621,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 210.5,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0210",
+    "rank": 211,
+    "sampleSize": 1834,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 207.1,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0181",
+    "rank": 207,
+    "sampleSize": 1757,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 204.1,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0181",
+    "rank": 204,
+    "sampleSize": 1308,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 205.3,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0203",
+    "rank": 205,
+    "sampleSize": 1195,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 211.5,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0203",
+    "rank": 211,
+    "sampleSize": 806,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 210.3,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0137",
+    "rank": 210,
+    "sampleSize": 1828,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 211.8,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0137",
+    "rank": 212,
+    "sampleSize": 1197,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 212.7,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0216",
+    "rank": 213,
+    "sampleSize": 1459,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 208.3,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0216",
+    "rank": 208,
+    "sampleSize": 1994,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 210.9,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0219",
+    "rank": 211,
+    "sampleSize": 1293,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 213.5,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0219",
+    "rank": 214,
+    "sampleSize": 1654,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 215.3,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0226",
+    "rank": 215,
+    "sampleSize": 869,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 215.1,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0226",
+    "rank": 215,
+    "sampleSize": 1911,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 216.5,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0222",
+    "rank": 216,
+    "sampleSize": 1746,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 216.5,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0222",
+    "rank": 217,
+    "sampleSize": 1013,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 213.8,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0225",
+    "rank": 214,
+    "sampleSize": 1274,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 215.1,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0225",
+    "rank": 215,
+    "sampleSize": 1550,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 217.2,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0211",
+    "rank": 217,
+    "sampleSize": 1231,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 212.8,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0211",
+    "rank": 213,
+    "sampleSize": 984,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 214.1,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0229",
+    "rank": 214,
+    "sampleSize": 1753,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 217.4,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0229",
+    "rank": 217,
+    "sampleSize": 1023,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 220.6,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0227",
+    "rank": 221,
+    "sampleSize": 832,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 217.9,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0227",
+    "rank": 218,
+    "sampleSize": 927,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 223.0,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0224",
+    "rank": 223,
+    "sampleSize": 1423,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 221.0,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0224",
+    "rank": 221,
+    "sampleSize": 934,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 222.6,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0212",
+    "rank": 223,
+    "sampleSize": 1829,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 218.9,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0212",
+    "rank": 219,
+    "sampleSize": 816,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 217.1,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0223",
+    "rank": 217,
+    "sampleSize": 1379,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 218.6,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0223",
+    "rank": 219,
+    "sampleSize": 1745,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 224.2,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0228",
+    "rank": 224,
+    "sampleSize": 1917,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 224.3,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0228",
+    "rank": 224,
+    "sampleSize": 807,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 225.3,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0218",
+    "rank": 225,
+    "sampleSize": 1499,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 224.8,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0218",
+    "rank": 225,
+    "sampleSize": 1735,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 221.4,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0217",
+    "rank": 221,
+    "sampleSize": 1651,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 220.8,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0217",
+    "rank": 221,
+    "sampleSize": 1674,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 223.9,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0230",
+    "rank": 224,
+    "sampleSize": 1243,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 228.4,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0230",
+    "rank": 228,
+    "sampleSize": 1569,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 225.9,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0221",
+    "rank": 226,
+    "sampleSize": 1109,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 223.3,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0221",
+    "rank": 223,
+    "sampleSize": 1443,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  },
+  {
+    "adp": 228.5,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0220",
+    "rank": 228,
+    "sampleSize": 1356,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-a"
+  },
+  {
+    "adp": 224.9,
+    "capturedAt": "2026-08-15T00:00:00Z",
+    "format": "OVERALL",
+    "playerExternalKey": "demo-player-0220",
+    "rank": 225,
+    "sampleSize": 1152,
+    "season": "2026-27",
+    "sourceExternalKey": "demo-adp-source-b"
+  }
+]

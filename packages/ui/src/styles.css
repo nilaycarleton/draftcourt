@@ -1,0 +1,24 @@
+/**
+ * Single stylesheet entry point for consuming apps (import once, e.g. in the
+ * Next.js root layout). Ships Astryx's prebuilt reset/base CSS first, then
+ * layers DraftCourt's semantic tokens on top via CSS custom properties —
+ * consumers never need Astryx's own theming API directly.
+ */
+@import "@astryxdesign/core/reset.css";
+@import "@astryxdesign/core/astryx.css";
+@import "@astryxdesign/theme-neutral/theme.css";
+@import "./tokens.css";
+@import "./player-components.css";
+
+html,
+body {
+  background-color: var(--dc-color-canvas);
+  color: var(--dc-color-text-primary);
+  font-family: var(--dc-font-sans);
+  font-feature-settings: var(--dc-font-tabular-nums);
+}
+
+:focus-visible {
+  outline: 2px solid var(--dc-color-focus-ring);
+  outline-offset: 2px;
+}

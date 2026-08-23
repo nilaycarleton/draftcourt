@@ -1,0 +1,4 @@
+@import "tailwindcss";
+@import "@draftcourt/ui/styles.css";
+@import "./phase1.css";
+@import "./phase2.css";

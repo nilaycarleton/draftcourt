@@ -1,0 +1,9 @@
+{
+  "extends": "@draftcourt/config-typescript/node-library.json",
+  "compilerOptions": {
+    "outDir": "dist",
+    "rootDir": "."
+  },
+  "include": ["src", "prisma/seed.ts", "generated"],
+  "exclude": ["node_modules", "dist"]
+}

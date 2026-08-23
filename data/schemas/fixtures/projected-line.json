@@ -1,0 +1,22 @@
+{
+  "playerId": "5b1b1a2a-6b1a-4c2e-9c3d-2f7a6a9e1a11",
+  "games": 72,
+  "minutesPerGame": 33.5,
+  "pts": 24.1,
+  "reb": 6.8,
+  "ast": 5.2,
+  "stl": 1.1,
+  "blk": 0.6,
+  "tov": 2.4,
+  "fgm": 8.7,
+  "fga": 17.9,
+  "ftm": 4.6,
+  "fta": 5.5,
+  "threePm": 2.1,
+  "lower80": { "pts": 20.2, "reb": 5.4, "ast": 4.1 },
+  "upper80": { "pts": 28.0, "reb": 8.2, "ast": 6.3 },
+  "injuryRisk": 0.18,
+  "consistency": 0.72,
+  "upside": 0.61,
+  "roleSecurity": 0.88
+}

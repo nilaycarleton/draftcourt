@@ -1,0 +1,22 @@
+{
+  "date": "2026-08-23T00:23:37.008Z",
+  "fixture": "demo dataset, 12 teams x 16 rounds, categories (9-cat), measured at picks 12/60/120",
+  "engineVersion": "phase2-deterministic-1.0.0",
+  "poolSize": 110,
+  "cold": {
+    "p50": 86,
+    "p95": 156,
+    "p99": 163,
+    "n": 21
+  },
+  "warm": {
+    "p50": 6,
+    "p95": 9,
+    "p99": 9,
+    "n": 21
+  },
+  "targets": {
+    "coldP95UnderMs": 800,
+    "warmP95UnderMs": 300
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "datasetVersion": "2026.1",
+  "disclaimer": "DEMO \u2014 SYNTHETIC DATA. Player, team, and position information reflects real, public NBA facts as of this generator's knowledge cutoff (~January 2026) and may not match every roster transaction since then. Every statistic, projection, ADP value, injury/role signal, and override in this dataset is entirely fabricated for demonstration purposes and must never be treated as a real 2026-27 NBA fantasy projection. A small number of bench-depth entries use generic placeholder names instead of real players (see data/attribution/demo-dataset.md). No real player or team photos are used anywhere in DraftCourt.",
+  "files": {
+    "adp_observations.json": "42fd4761f2fd861b1cc6be1f88cedbf6269d20b42e18d9a0be806fd868a12bb2",
+    "news_signals.json": "afe3dae56ad99b1fbf40aa72ecc2ff2f5074607ebdf6bbdc7d37ae2ff52e0bc5",
+    "player_season_stats.json": "838b3cc1eb9640cefac867ce1e842663e91365c8547df829c2333bf94b519727",
+    "players.json": "06faf79297d66829f4554b8c05543cd62decee31155596a3238ca01fbc3162f8",
+    "projection_overrides_seed.json": "4f827b75299b67947ea2e8ec80e04abb4c31b0f64a051c4aba39cbd5b5083a8a",
+    "teams.json": "eb3e29916f4fe7055da68383c38e7ab2f9d8a55dffe8f6444f4d7798dc767cde"
+  },
+  "generatedAt": "2026-08-20T00:00:00Z",
+  "seed": 20260820
+}

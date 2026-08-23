@@ -1,0 +1,52 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "key": {
+      "type": "string",
+      "enum": [
+        "production",
+        "scarcity",
+        "rosterNeed",
+        "risk",
+        "consistency",
+        "age",
+        "adpValue",
+        "upside",
+        "role",
+        "nextPickAvailability",
+        "preference",
+        "schedule"
+      ]
+    },
+    "raw": {
+      "type": "number"
+    },
+    "normalized": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "weight": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "contribution": {
+      "type": "number"
+    },
+    "reason": {
+      "type": "string",
+      "minLength": 1
+    }
+  },
+  "required": [
+    "key",
+    "raw",
+    "normalized",
+    "weight",
+    "contribution",
+    "reason"
+  ],
+  "additionalProperties": false
+}

@@ -1,0 +1,96 @@
+name: ML validation
+
+# Distinct from the general analytics CI job (which runs the full pytest
+# suite): this workflow specifically re-verifies the baseline projection
+# model's core guarantees on every push — determinism, backtest leakage
+# prevention, and that `evaluate` actually runs end-to-end and produces a
+# report — so a regression here is visible as its own check, not buried in
+# a broader "unit tests" pass.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+env:
+  PYTHON_VERSION: "3.12.5"
+
+jobs:
+  ml-validation:
+    name: Baseline model determinism, leakage, and evaluation
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17.7-alpine
+        env:
+          POSTGRES_USER: draftcourt
+          POSTGRES_PASSWORD: draftcourt
+          POSTGRES_DB: draftcourt
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U draftcourt -d draftcourt"
+          --health-interval 5s --health-timeout 5s --health-retries 10
+    defaults:
+      run:
+        working-directory: services/analytics
+    env:
+      DATABASE_URL: postgresql://draftcourt:draftcourt@localhost:5432/draftcourt
+      SERVICE_SECRET: ci-analytics-secret
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: astral-sh/setup-uv@v10
+        with:
+          version: "0.12.5"
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Install dependencies (frozen lockfile)
+        run: uv sync --frozen
+
+      - name: Determinism, fallback, and adjustment-formula unit tests
+        run: uv run pytest tests/pipelines/test_baseline.py tests/pipelines/test_adjustments.py -v
+
+      - name: Time-ordered-split leakage and reproducibility integration tests
+        run: uv run pytest tests/pipelines/test_run_integration.py tests/pipelines/test_evaluation.py -v
+
+      - uses: pnpm/action-setup@v6
+        with:
+          version: "11.22.0"
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: "24.18.0"
+          cache: pnpm
+
+      - name: Install JS dependencies and migrate/seed the database
+        working-directory: .
+        env:
+          DIRECT_DATABASE_URL: postgresql://draftcourt:draftcourt@localhost:5432/draftcourt
+          ANALYTICS_BASE_URL: http://localhost:8000
+          ANALYTICS_SERVICE_SECRET: ci-analytics-secret
+          NEXT_PUBLIC_APP_URL: http://localhost:3100
+        run: |
+          pnpm install --frozen-lockfile
+          pnpm --filter @draftcourt/db run generate
+          pnpm db:migrate
+          pnpm db:seed
+
+      - name: Ingest demo data
+        run: uv run python -m app.ingestion.cli
+
+      - name: Publish a baseline run, then evaluate it end-to-end
+        run: |
+          uv run python -m app.pipelines.cli publish
+          uv run python -m app.pipelines.cli evaluate
+
+      - name: Fail if the evaluation report wasn't actually regenerated
+        # report.py resolves its output path from `__file__`, not cwd —
+        # always repo-root `models/baseline-v1/`, regardless of the job's
+        # `services/analytics` default working directory.
+        working-directory: .
+        run: |
+          test -s models/baseline-v1/evaluation-report.md
+          test -s models/baseline-v1/metrics.json

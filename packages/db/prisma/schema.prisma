@@ -1,0 +1,897 @@
+// Prisma is the sole database migration owner (BUILD_SPEC.md section 3.1).
+// The connection string lives in prisma.config.ts, not here — see that file.
+//
+// Phase 0 shipped only the User table (Clerk profile mirror). Phase 1 adds
+// the player-data / ingestion / baseline-projection / admin-override model
+// per BUILD_SPEC.md section 4.2 and docs/adr/0005-phase1-data-model.md.
+// Phase 1 tables follow the same "@@map to snake_case table, camelCase
+// quoted columns" convention the Phase 0 `User` -> `users` table already
+// established (see the generated migration.sql) — column names are NOT
+// individually @map'd. Phase 1 DateTime columns are explicit
+// `@db.Timestamptz` (BUILD_SPEC.md section 4 requires UTC timestamptz;
+// Phase 0's untyped `DateTime` defaulted to `timestamp(3)` without a zone,
+// which was in scope only for the minimal Clerk-mirror table and is left
+// as-is rather than touched by an unrelated Phase 1 migration).
+//
+// A few constraints Prisma's schema DSL cannot express (partial unique
+// indexes, CHECK constraints) are added by hand-editing the generated
+// migration.sql immediately after `prisma migrate dev` scaffolds it — see
+// the comments on ProjectionRun.isCurrent and ProjectionOverride below,
+// and docs/adr/0005-phase1-data-model.md for the full list.
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/client"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum UserRole {
+  USER
+  ADMIN
+}
+
+model User {
+  id          String   @id @default(uuid(7)) @db.Uuid
+  clerkUserId String   @unique
+  role        UserRole @default(USER)
+  plan        String   @default("free")
+  locale      String   @default("en-US")
+  timezone    String   @default("UTC")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  reviewedIdentities PlayerExternalIdentity[] @relation("IdentityReviewedBy")
+  createdSignals     PlayerNewsSignal[]       @relation("SignalCreatedBy")
+  createdOverrides   ProjectionOverride[]     @relation("OverrideCreatedBy")
+  auditLogEntries    AuditLog[]               @relation("AuditActor")
+  leagues            League[]                 @relation("LeagueOwner")
+  drafts             Draft[]                  @relation("DraftOwner")
+
+  @@map("users")
+}
+
+// ---------------------------------------------------------------------------
+// Phase 1 enums (BUILD_SPEC.md section 4.1 + Phase 1 additions)
+// ---------------------------------------------------------------------------
+
+/// Reuses the exact member set of packages/domain/src/enums.ts `Availability`.
+enum Availability {
+  ACTIVE
+  INJURED
+  SUSPENDED
+  UNSIGNED
+  RETIRED
+}
+
+/// Narrower than the roster-slot `Position` type later phases use (which also
+/// has UTIL/BENCH) — a player is only ever *eligible* at a real position.
+enum EligiblePosition {
+  PG
+  SG
+  SF
+  PF
+  C
+  G
+  F
+}
+
+enum StatScope {
+  NBA
+  COLLEGE
+  INTERNATIONAL
+}
+
+enum SourceAdapterType {
+  FILE
+  API
+}
+
+enum IngestionRunStatus {
+  PENDING
+  RUNNING
+  SUCCEEDED
+  FAILED
+  PARTIAL
+}
+
+enum RawRecordStatus {
+  PENDING
+  VALIDATED
+  QUARANTINED
+  PUBLISHED
+}
+
+enum IdentityMatchStatus {
+  CONFIRMED
+  CANDIDATE
+  REJECTED
+}
+
+enum IdentityMatchMethod {
+  PROVIDER_ID
+  NAME_DOB
+  MANUAL
+}
+
+enum SignalType {
+  INJURY
+  TRADE
+  STARTER_CHANGE
+  ROLE_UP
+  ROLE_DOWN
+}
+
+enum OverrideStatus {
+  ACTIVE
+  EXPIRED
+  SUPERSEDED
+  REVOKED
+}
+
+enum ProjectionModelStatus {
+  DRAFT
+  ACTIVE
+  DEPRECATED
+  ARCHIVED
+}
+
+enum ProjectionRunStatus {
+  PENDING
+  RUNNING
+  SUCCEEDED
+  FAILED
+}
+
+// ---------------------------------------------------------------------------
+// Teams and players
+// ---------------------------------------------------------------------------
+
+model NbaTeam {
+  id             String   @id @default(uuid(7)) @db.Uuid
+  nbaProviderId  String   @unique
+  abbreviation   String   @unique
+  name           String
+  city           String
+  conference     String
+  division       String
+  colorPrimary   String
+  colorSecondary String
+  createdAt      DateTime @default(now()) @db.Timestamptz
+  updatedAt      DateTime @updatedAt @db.Timestamptz
+
+  players Player[]
+
+  @@map("nba_teams")
+}
+
+model Player {
+  id            String       @id @default(uuid(7)) @db.Uuid
+  slug          String       @unique
+  displayName   String
+  legalName     String
+  dob           DateTime?    @db.Timestamptz
+  heightInches  Int?
+  weightLbs     Int?
+  status        Availability @default(ACTIVE)
+  unsigned      Boolean      @default(false)
+  rookie        Boolean      @default(false)
+  draftYear     Int?
+  birthCountry  String?
+  imageUrl      String?
+  currentTeamId String?      @db.Uuid
+  createdAt     DateTime     @default(now()) @db.Timestamptz
+  updatedAt     DateTime     @updatedAt @db.Timestamptz
+
+  currentTeam         NbaTeam?                 @relation(fields: [currentTeamId], references: [id])
+  externalIdentities  PlayerExternalIdentity[]
+  eligibilities       PlayerEligibility[]
+  seasonStats         PlayerSeasonStat[]
+  newsSignals         PlayerNewsSignal[]
+  adpObservations     AdpObservation[]
+  adpConsensusEntries AdpConsensusPlayer[]
+  projections         PlayerProjection[]
+  overrides           ProjectionOverride[]
+
+  @@index([currentTeamId])
+  @@map("players")
+}
+
+/// Reconciled + reviewable provider-identity mapping (BUILD_SPEC.md section
+/// 7.2's identity reconciliation requirements — not a named table in section
+/// 4.2, added per docs/adr/0005-phase1-data-model.md). `playerId` stays null
+/// while status = CANDIDATE ("reviewable unresolved state"); `candidateName`
+/// preserves the raw source-observed name as an alias even after resolution.
+model PlayerExternalIdentity {
+  id              String               @id @default(uuid(7)) @db.Uuid
+  sourceId        String               @db.Uuid
+  externalId      String
+  playerId        String?              @db.Uuid
+  candidateName   String
+  candidateDob    DateTime?            @db.Timestamptz
+  matchConfidence Float?
+  matchMethod     IdentityMatchMethod?
+  status          IdentityMatchStatus  @default(CANDIDATE)
+  reviewedById    String?              @db.Uuid
+  reviewedAt      DateTime?            @db.Timestamptz
+  createdAt       DateTime             @default(now()) @db.Timestamptz
+  updatedAt       DateTime             @updatedAt @db.Timestamptz
+
+  source     DataSource @relation(fields: [sourceId], references: [id])
+  player     Player?    @relation(fields: [playerId], references: [id])
+  reviewedBy User?      @relation("IdentityReviewedBy", fields: [reviewedById], references: [id])
+
+  @@unique([sourceId, externalId])
+  @@index([status])
+  @@map("player_external_identities")
+}
+
+model PlayerEligibility {
+  id       String           @id @default(uuid(7)) @db.Uuid
+  playerId String           @db.Uuid
+  season   String
+  position EligiblePosition
+
+  player Player @relation(fields: [playerId], references: [id])
+
+  @@unique([playerId, season, position])
+  @@map("player_eligibilities")
+}
+
+/// Season totals (never per-game or shooting-percentage columns — those are
+/// always derived at read/projection time from these totals, per
+/// BUILD_SPEC.md section 7.1's "never average percentage columns" rule).
+model PlayerSeasonStat {
+  id             String    @id @default(uuid(7)) @db.Uuid
+  playerId       String    @db.Uuid
+  season         String
+  scope          StatScope
+  gamesPlayed    Int
+  minutesTotal   Float
+  pts            Float
+  reb            Float
+  ast            Float
+  stl            Float
+  blk            Float
+  tov            Float
+  fgm            Float
+  fga            Float
+  ftm            Float
+  fta            Float
+  threePm        Float
+  sourceId       String?   @db.Uuid
+  sourceRecordId String?   @db.Uuid
+  createdAt      DateTime  @default(now()) @db.Timestamptz
+  updatedAt      DateTime  @updatedAt @db.Timestamptz
+
+  player       Player           @relation(fields: [playerId], references: [id])
+  source       DataSource?      @relation(fields: [sourceId], references: [id])
+  sourceRecord RawSourceRecord? @relation(fields: [sourceRecordId], references: [id])
+
+  @@unique([playerId, season, scope])
+  @@index([playerId, season])
+  @@map("player_season_stats")
+}
+
+// ---------------------------------------------------------------------------
+// Source lineage and ingestion
+// ---------------------------------------------------------------------------
+
+model DataSource {
+  id                     String            @id @default(uuid(7)) @db.Uuid
+  name                   String            @unique
+  adapterType            SourceAdapterType
+  enabled                Boolean           @default(true)
+  termsUrl               String?
+  attribution            String
+  permittedUses          String[]
+  rateLimitPerMinute     Int?
+  lastComplianceReviewAt DateTime?         @db.Timestamptz
+  createdAt              DateTime          @default(now()) @db.Timestamptz
+  updatedAt              DateTime          @updatedAt @db.Timestamptz
+
+  ingestionRuns      IngestionRun[]
+  rawRecords         RawSourceRecord[]
+  seasonStats        PlayerSeasonStat[]
+  newsSignals        PlayerNewsSignal[]
+  adpObservations    AdpObservation[]
+  externalIdentities PlayerExternalIdentity[]
+
+  @@map("data_sources")
+}
+
+model IngestionRun {
+  id                 String             @id @default(uuid(7)) @db.Uuid
+  sourceId           String             @db.Uuid
+  jobType            String             @default("FULL_PIPELINE")
+  status             IngestionRunStatus @default(PENDING)
+  recordsExtracted   Int                @default(0)
+  recordsValidated   Int                @default(0)
+  recordsQuarantined Int                @default(0)
+  recordsPublished   Int                @default(0)
+  checksum           String?
+  traceId            String
+  startedAt          DateTime           @db.Timestamptz
+  finishedAt         DateTime?          @db.Timestamptz
+  createdAt          DateTime           @default(now()) @db.Timestamptz
+
+  source     DataSource        @relation(fields: [sourceId], references: [id])
+  rawRecords RawSourceRecord[]
+
+  @@index([sourceId, startedAt(sort: Desc)])
+  @@map("ingestion_runs")
+}
+
+/// Immutable raw payload, checksum-addressed for dedup (BUILD_SPEC.md
+/// section 7.2: "Raw records are immutable and checksum-addressed").
+model RawSourceRecord {
+  id               String          @id @default(uuid(7)) @db.Uuid
+  sourceId         String          @db.Uuid
+  ingestionRunId   String          @db.Uuid
+  externalKey      String
+  schemaVersion    String
+  checksum         String
+  payload          Json
+  status           RawRecordStatus @default(PENDING)
+  validationErrors Json?
+  fetchedAt        DateTime        @db.Timestamptz
+  createdAt        DateTime        @default(now()) @db.Timestamptz
+
+  source       DataSource         @relation(fields: [sourceId], references: [id])
+  ingestionRun IngestionRun       @relation(fields: [ingestionRunId], references: [id])
+  seasonStats  PlayerSeasonStat[]
+
+  @@unique([sourceId, checksum])
+  @@index([status])
+  @@map("raw_source_records")
+}
+
+// ---------------------------------------------------------------------------
+// Signals, ADP
+// ---------------------------------------------------------------------------
+
+model PlayerNewsSignal {
+  id            String     @id @default(uuid(7)) @db.Uuid
+  playerId      String     @db.Uuid
+  type          SignalType
+  impact        Float
+  confidence    Float
+  rationale     String?
+  adminApproved Boolean    @default(false)
+  sourceId      String?    @db.Uuid
+  createdById   String?    @db.Uuid
+  effectiveAt   DateTime   @db.Timestamptz
+  expiresAt     DateTime?  @db.Timestamptz
+  createdAt     DateTime   @default(now()) @db.Timestamptz
+  updatedAt     DateTime   @updatedAt @db.Timestamptz
+
+  player    Player      @relation(fields: [playerId], references: [id])
+  source    DataSource? @relation(fields: [sourceId], references: [id])
+  createdBy User?       @relation("SignalCreatedBy", fields: [createdById], references: [id])
+
+  @@index([playerId, effectiveAt(sort: Desc)])
+  @@index([playerId, expiresAt])
+  @@map("player_news_signals")
+}
+
+model AdpObservation {
+  id         String   @id @default(uuid(7)) @db.Uuid
+  playerId   String   @db.Uuid
+  sourceId   String   @db.Uuid
+  format     String
+  season     String
+  sampleSize Int
+  adp        Decimal  @db.Decimal(6, 2)
+  rank       Int
+  capturedAt DateTime @db.Timestamptz
+
+  player Player     @relation(fields: [playerId], references: [id])
+  source DataSource @relation(fields: [sourceId], references: [id])
+
+  @@index([season, format, capturedAt(sort: Desc), playerId])
+  @@map("adp_observations")
+}
+
+model AdpConsensusSnapshot {
+  id                 String   @id @default(uuid(7)) @db.Uuid
+  season             String
+  format             String
+  methodologyVersion String
+  capturedAt         DateTime @db.Timestamptz
+
+  players AdpConsensusPlayer[]
+
+  @@index([season, format, capturedAt(sort: Desc)])
+  @@map("adp_consensus_snapshots")
+}
+
+model AdpConsensusPlayer {
+  id              String  @id @default(uuid(7)) @db.Uuid
+  snapshotId      String  @db.Uuid
+  playerId        String  @db.Uuid
+  consensusAdp    Decimal @db.Decimal(6, 2)
+  dispersion      Decimal @db.Decimal(6, 2)
+  sourcesCount    Int
+  valueConfidence Float
+
+  snapshot AdpConsensusSnapshot @relation(fields: [snapshotId], references: [id])
+  player   Player               @relation(fields: [playerId], references: [id])
+
+  @@unique([snapshotId, playerId])
+  @@map("adp_consensus_players")
+}
+
+// ---------------------------------------------------------------------------
+// Projections
+// ---------------------------------------------------------------------------
+
+model ProjectionModel {
+  id                        String                @id @default(uuid(7)) @db.Uuid
+  modelKey                  String
+  version                   String
+  algorithm                 String
+  featureSchemaChecksum     String
+  trainingWindowStartSeason String
+  trainingWindowEndSeason   String
+  metrics                   Json?
+  artifactUri               String?
+  artifactChecksum          String?
+  status                    ProjectionModelStatus @default(DRAFT)
+  createdAt                 DateTime              @default(now()) @db.Timestamptz
+  updatedAt                 DateTime              @updatedAt @db.Timestamptz
+
+  runs ProjectionRun[]
+
+  @@unique([modelKey, version])
+  @@map("projection_models")
+}
+
+/// `isCurrent` is the atomic-publish pointer: exactly one run per season may
+/// have isCurrent = true, enforced by a hand-added partial unique index
+/// (see migration.sql) since Prisma's schema DSL cannot express a filtered
+/// unique index. Publish flips old -> false, new -> true, inside one
+/// transaction, so readers always see a fully-published run.
+model ProjectionRun {
+  id            String              @id @default(uuid(7)) @db.Uuid
+  modelId       String              @db.Uuid
+  season        String
+  dataCutoff    DateTime            @db.Timestamptz
+  reason        String
+  status        ProjectionRunStatus @default(PENDING)
+  isCurrent     Boolean             @default(false)
+  inputChecksum String?
+  startedAt     DateTime            @db.Timestamptz
+  finishedAt    DateTime?           @db.Timestamptz
+  publishedAt   DateTime?           @db.Timestamptz
+  createdAt     DateTime            @default(now()) @db.Timestamptz
+
+  model       ProjectionModel      @relation(fields: [modelId], references: [id])
+  projections PlayerProjection[]
+  overrides   ProjectionOverride[]
+
+  @@index([season, isCurrent])
+  @@map("projection_runs")
+}
+
+model PlayerProjection {
+  id             String   @id @default(uuid(7)) @db.Uuid
+  runId          String   @db.Uuid
+  playerId       String   @db.Uuid
+  games          Float
+  minutesPerGame Float
+  pts            Float
+  reb            Float
+  ast            Float
+  stl            Float
+  blk            Float
+  tov            Float
+  fgm            Float
+  fga            Float
+  ftm            Float
+  fta            Float
+  threePm        Float
+  lower80        Json
+  upper80        Json
+  injuryRisk     Float
+  consistency    Float
+  upside         Float
+  roleSecurity   Float
+  overallRank    Int
+  /// Standard 9-cat points-league scoring (see
+  /// app/pipelines/scoring.py::fantasy_points, computed at publish time so
+  /// the API can filter/sort by it directly) — not any specific real
+  /// league's settings; a documented benchmark figure like `overallRank`.
+  fantasyPoints  Float    @default(0)
+  createdAt      DateTime @default(now()) @db.Timestamptz
+
+  run    ProjectionRun @relation(fields: [runId], references: [id])
+  player Player        @relation(fields: [playerId], references: [id])
+
+  @@unique([runId, playerId])
+  @@index([runId, overallRank])
+  @@index([runId, fantasyPoints])
+  @@map("player_projections")
+}
+
+/// Exactly one of deltaValue/replacementValue must be set (hand-added CHECK
+/// constraint in migration.sql — see docs/adr/0005-phase1-data-model.md).
+model ProjectionOverride {
+  id               String         @id @default(uuid(7)) @db.Uuid
+  projectionRunId  String?        @db.Uuid
+  adminId          String         @db.Uuid
+  playerId         String         @db.Uuid
+  season           String
+  stat             String
+  deltaValue       Decimal?       @db.Decimal(10, 3)
+  replacementValue Decimal?       @db.Decimal(10, 3)
+  rationale        String
+  status           OverrideStatus @default(ACTIVE)
+  supersedesId     String?        @db.Uuid
+  effectiveAt      DateTime       @db.Timestamptz
+  expiresAt        DateTime?      @db.Timestamptz
+  createdAt        DateTime       @default(now()) @db.Timestamptz
+  updatedAt        DateTime       @updatedAt @db.Timestamptz
+
+  admin         User                 @relation("OverrideCreatedBy", fields: [adminId], references: [id])
+  player        Player               @relation(fields: [playerId], references: [id])
+  projectionRun ProjectionRun?       @relation(fields: [projectionRunId], references: [id])
+  supersedes    ProjectionOverride?  @relation("OverrideHistory", fields: [supersedesId], references: [id])
+  supersededBy  ProjectionOverride[] @relation("OverrideHistory")
+
+  @@index([playerId, status])
+  @@map("projection_overrides")
+}
+
+// ---------------------------------------------------------------------------
+// Internal analytics job state (ADR 0008)
+// ---------------------------------------------------------------------------
+
+/// Lifecycle of one `/internal/v1/*` request handled by the analytics
+/// service. The row is the machine-readable job state behind
+/// `GET /internal/v1/jobs/:id` and the idempotency record for duplicate
+/// deliveries (`(kind, idempotencyKey)` is unique; NULL keys are exempt,
+/// matching PostgreSQL's default NULLS DISTINCT semantics).
+enum AnalyticsJobStatus {
+  PENDING
+  RUNNING
+  SUCCEEDED
+  FAILED
+  TIMEOUT
+}
+
+model AnalyticsJob {
+  id             String             @id @default(uuid(7)) @db.Uuid
+  kind           String
+  status         AnalyticsJobStatus @default(PENDING)
+  idempotencyKey String?
+  /// Redacted request summary (never secrets/headers) so a completed job's
+  /// duplicate delivery returns the recorded outcome without re-running.
+  request        Json?
+  result         Json?
+  errorCode      String?
+  traceId        String
+  startedAt      DateTime           @db.Timestamptz
+  finishedAt     DateTime?          @db.Timestamptz
+  createdAt      DateTime           @default(now()) @db.Timestamptz
+
+  @@unique([kind, idempotencyKey])
+  @@index([status, createdAt(sort: Desc)])
+  @@map("analytics_jobs")
+}
+
+// ---------------------------------------------------------------------------
+// Phase 2 — leagues and settings versions (BUILD_SPEC.md section 4.2)
+// ---------------------------------------------------------------------------
+
+enum LeagueType {
+  POINTS
+  CATEGORIES
+}
+
+enum LeagueHorizon {
+  REDRAFT
+  KEEPER
+  DYNASTY
+}
+
+/// Full roster-slot vocabulary including UTIL/BENCH (superset of the player
+/// `EligiblePosition` enum — players are never "eligible at BENCH").
+enum RosterPosition {
+  PG
+  SG
+  SF
+  PF
+  C
+  G
+  F
+  UTIL
+  BENCH
+}
+
+enum Direction {
+  HIGHER_BETTER
+  LOWER_BETTER
+}
+
+model League {
+  id                      String        @id @default(uuid(7)) @db.Uuid
+  ownerId                 String        @db.Uuid
+  name                    String
+  season                  String
+  type                    LeagueType
+  horizon                 LeagueHorizon @default(REDRAFT)
+  teamCount               Int
+  userDraftSlot           Int
+  rounds                  Int
+  playoffWeeks            Int?
+  isPrivate               Boolean       @default(true)
+  activeSettingsVersionId String?       @unique @db.Uuid
+  createdAt               DateTime      @default(now()) @db.Timestamptz
+  updatedAt               DateTime      @updatedAt @db.Timestamptz
+
+  owner                 User                    @relation("LeagueOwner", fields: [ownerId], references: [id])
+  activeSettingsVersion LeagueSettingsVersion?  @relation("LeagueActiveSettings", fields: [activeSettingsVersionId], references: [id])
+  settingsVersions      LeagueSettingsVersion[] @relation("LeagueSettingsVersions")
+  teams                 LeagueTeam[]
+  drafts                Draft[]
+
+  @@index([ownerId, updatedAt(sort: Desc)])
+  @@map("leagues")
+}
+
+/// Immutable once created — editing a league's rules creates a NEW version
+/// row and repoints League.activeSettingsVersionId. Nothing ever updates a
+/// version's rules after creation.
+model LeagueSettingsVersion {
+  id            String   @id @default(uuid(7)) @db.Uuid
+  leagueId      String   @db.Uuid
+  versionNumber Int
+  createdAt     DateTime @default(now()) @db.Timestamptz
+
+  league          League           @relation("LeagueSettingsVersions", fields: [leagueId], references: [id])
+  scoringRules    ScoringRule[]
+  rosterSlots     RosterSlotRule[]
+  activeForLeague League?          @relation("LeagueActiveSettings")
+
+  @@unique([leagueId, versionNumber])
+  @@index([leagueId])
+  @@map("league_settings_versions")
+}
+
+model LeagueTeam {
+  id          String   @id @default(uuid(7)) @db.Uuid
+  leagueId    String   @db.Uuid
+  slot        Int
+  displayName String
+  isUserTeam  Boolean  @default(false)
+  createdAt   DateTime @default(now()) @db.Timestamptz
+  updatedAt   DateTime @updatedAt @db.Timestamptz
+
+  league League @relation(fields: [leagueId], references: [id])
+
+  @@unique([leagueId, slot])
+  @@map("league_teams")
+}
+
+model RosterSlotRule {
+  id                String         @id @default(uuid(7)) @db.Uuid
+  settingsVersionId String         @db.Uuid
+  position          RosterPosition
+  count             Int
+  isStarter         Boolean
+
+  settingsVersion LeagueSettingsVersion @relation(fields: [settingsVersionId], references: [id])
+
+  @@unique([settingsVersionId, position])
+  @@map("roster_slot_rules")
+}
+
+model ScoringRule {
+  id                String    @id @default(uuid(7)) @db.Uuid
+  settingsVersionId String    @db.Uuid
+  statKey           String
+  weight            Decimal   @db.Decimal(10, 3)
+  direction         Direction
+  enabled           Boolean   @default(true)
+  punt              Boolean   @default(false)
+
+  settingsVersion LeagueSettingsVersion @relation(fields: [settingsVersionId], references: [id])
+
+  @@unique([settingsVersionId, statKey])
+  @@map("scoring_rules")
+}
+
+// ---------------------------------------------------------------------------
+// Phase 2 — event-sourced draft core (BUILD_SPEC.md sections 4.2, 4.4)
+// ---------------------------------------------------------------------------
+
+enum DraftType {
+  REAL
+  MOCK
+  DEMO
+}
+
+enum DraftStatus {
+  SETUP
+  ACTIVE
+  PAUSED
+  COMPLETED
+  ABANDONED
+}
+
+enum DraftEventType {
+  DRAFT_STARTED
+  PLAYER_DRAFTED
+  PICK_UNDONE
+  DRAFT_PAUSED
+  DRAFT_RESUMED
+  DRAFT_COMPLETED
+}
+
+model Draft {
+  id               String      @id @default(uuid(7)) @db.Uuid
+  ownerId          String      @db.Uuid
+  leagueId         String      @db.Uuid
+  type             DraftType   @default(REAL)
+  status           DraftStatus @default(SETUP)
+  /// Monotonic count of appended events; equals the latest event's sequence.
+  currentSequence  Int         @default(0)
+  /// 1-based absolute overall pick of the next selection.
+  nextOverallPick  Int         @default(1)
+  /// Optimistic-concurrency version — every mutation increments this inside
+  /// the append transaction; mutations require If-Match on the client.
+  version          Int         @default(0)
+  /// Denormalized immutable snapshot of the league config + expanded rules +
+  /// team list at creation. LeagueSettingsVersion rows are also immutable,
+  /// but the JSON copy keeps replay self-contained per BUILD_SPEC 4.4.
+  settingsSnapshot Json
+  engineVersion    String
+  projectionRunId  String?     @db.Uuid
+  adpSnapshotId    String?     @db.Uuid
+  shareTokenHash   String?
+  createdAt        DateTime    @default(now()) @db.Timestamptz
+  updatedAt        DateTime    @updatedAt @db.Timestamptz
+
+  owner       User                     @relation("DraftOwner", fields: [ownerId], references: [id])
+  league      League                   @relation(fields: [leagueId], references: [id])
+  teams       DraftTeam[]
+  events      DraftEvent[]
+  assignments DraftRosterAssignment[]
+  snapshots   RecommendationSnapshot[]
+  outbox      DraftOutbox[]
+
+  @@index([ownerId, updatedAt(sort: Desc)])
+  @@index([leagueId])
+  @@map("drafts")
+}
+
+/// Immutable copy of a LeagueTeam for replay (BUILD_SPEC.md section 4.2).
+model DraftTeam {
+  id          String  @id @default(uuid(7)) @db.Uuid
+  draftId     String  @db.Uuid
+  slot        Int
+  displayName String
+  isUserTeam  Boolean @default(false)
+  cpuStrategy String?
+
+  draft Draft @relation(fields: [draftId], references: [id])
+
+  @@unique([draftId, slot])
+  @@map("draft_teams")
+}
+
+/// Append-only event log. Never deleted or rewritten; undo is a compensating
+/// PICK_UNDONE whose causationEventId references the PLAYER_DRAFTED event it
+/// reverses. Unique (draftId, sequence) gives the monotonic order; unique
+/// (draftId, idempotencyKey) makes redeliveries safe.
+model DraftEvent {
+  id               String         @id @default(uuid(7)) @db.Uuid
+  draftId          String         @db.Uuid
+  sequence         Int
+  eventType        DraftEventType
+  actorUserId      String?        @db.Uuid
+  teamSlot         Int?
+  playerId         String?        @db.Uuid
+  round            Int?
+  pickInRound      Int?
+  causationEventId String?        @db.Uuid
+  idempotencyKey   String?
+  payload          Json?
+  createdAt        DateTime       @default(now()) @db.Timestamptz
+
+  draft            Draft                  @relation(fields: [draftId], references: [id])
+  causationEvent   DraftEvent?            @relation("EventCausation", fields: [causationEventId], references: [id])
+  causedEvents     DraftEvent[]           @relation("EventCausation")
+  rosterAssignment DraftRosterAssignment?
+
+  @@unique([draftId, sequence])
+  @@unique([draftId, idempotencyKey])
+  @@map("draft_events")
+}
+
+/// Materialized read model rebuilt purely from events by replay. One row per
+/// (draft, player) effective assignment — undone picks delete their row in
+/// the same transaction that appends PICK_UNDONE, and replay reproduces that
+/// state exactly (deterministic rebuild test enforces it).
+model DraftRosterAssignment {
+  id           String         @id @default(uuid(7)) @db.Uuid
+  draftId      String         @db.Uuid
+  eventId      String         @unique @db.Uuid
+  teamSlot     Int
+  playerId     String         @db.Uuid
+  /// The named roster slot the player occupies (multi-position maximum-weight
+  /// match resolved at pick time among still-open starter slots).
+  slotPosition RosterPosition
+  isBench      Boolean        @default(false)
+  isKeeper     Boolean        @default(false)
+  assignedAt   DateTime       @db.Timestamptz
+
+  draft Draft      @relation(fields: [draftId], references: [id])
+  event DraftEvent @relation(fields: [eventId], references: [id])
+
+  @@unique([draftId, playerId])
+  @@index([draftId, teamSlot])
+  @@map("draft_roster_assignments")
+}
+
+/// Immutable per-(sequence, checksum) recommendation output (BUILD_SPEC 4.2).
+model RecommendationSnapshot {
+  id            String   @id @default(uuid(7)) @db.Uuid
+  draftId       String   @db.Uuid
+  sequence      Int
+  userTeamSlot  Int
+  engineVersion String
+  inputChecksum String
+  latencyMs     Int?
+  payload       Json
+  requestedAt   DateTime @default(now()) @db.Timestamptz
+
+  draft Draft @relation(fields: [draftId], references: [id])
+
+  @@unique([draftId, sequence, inputChecksum])
+  @@index([draftId, sequence(sort: Desc)])
+  @@map("recommendation_snapshots")
+}
+
+/// Transactional outbox (ADR 0010): recommendation work requests are written
+/// in the SAME transaction as the pick event; a worker (on-demand read or
+/// scheduled sweep) processes rows and stamps processedAt. Never deleted.
+model DraftOutbox {
+  id          String    @id @default(uuid(7)) @db.Uuid
+  draftId     String    @db.Uuid
+  kind        String
+  sequence    Int
+  payload     Json?
+  processedAt DateTime? @db.Timestamptz
+  createdAt   DateTime  @default(now()) @db.Timestamptz
+
+  draft Draft @relation(fields: [draftId], references: [id])
+
+  @@index([processedAt, createdAt(sort: Desc)])
+  @@index([draftId, sequence(sort: Desc)])
+  @@map("draft_outbox")
+}
+
+// ---------------------------------------------------------------------------
+// Audit
+// ---------------------------------------------------------------------------
+
+model AuditLog {
+  id         String   @id @default(uuid(7)) @db.Uuid
+  actorId    String?  @db.Uuid
+  action     String
+  entityType String
+  entityId   String
+  beforeJson Json?
+  afterJson  Json?
+  traceId    String
+  createdAt  DateTime @default(now()) @db.Timestamptz
+
+  actor User? @relation("AuditActor", fields: [actorId], references: [id])
+
+  @@index([entityType, entityId])
+  @@index([actorId, createdAt(sort: Desc)])
+  @@map("audit_log")
+}

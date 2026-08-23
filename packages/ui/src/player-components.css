@@ -1,0 +1,147 @@
+/* DraftCourt player-experience component styles (Phase 1). Plain CSS
+ * classes keyed off the semantic tokens in tokens.css — no new tokens
+ * introduced here, only composition. */
+
+.dc-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.dc-tabular {
+  font-feature-settings: var(--dc-font-tabular-nums);
+  font-variant-numeric: tabular-nums;
+}
+
+.dc-avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--dc-radius-full);
+  font-weight: 600;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.dc-delta-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.125rem 0.5rem;
+  border-radius: var(--dc-radius-full);
+  border: 1px solid currentColor;
+  font-size: var(--dc-font-size-xs);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.dc-score-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 8rem;
+}
+
+.dc-score-bar-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--dc-font-size-xs);
+  color: var(--dc-color-text-secondary);
+}
+
+.dc-score-bar-track {
+  height: 6px;
+  border-radius: var(--dc-radius-full);
+  background: var(--dc-color-border);
+  overflow: hidden;
+}
+
+.dc-score-bar-fill {
+  height: 100%;
+  border-radius: var(--dc-radius-full);
+  transition: width var(--dc-motion-duration-default) var(--dc-motion-ease-standard);
+}
+
+.dc-sparkline {
+  display: block;
+}
+
+.dc-data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--dc-font-size-sm);
+}
+
+.dc-data-table caption {
+  text-align: left;
+  color: var(--dc-color-text-secondary);
+  font-size: var(--dc-font-size-xs);
+  margin-bottom: var(--dc-space-2);
+}
+
+.dc-data-table th,
+.dc-data-table td {
+  padding: var(--dc-space-2) var(--dc-space-3);
+  text-align: left;
+  border-bottom: 1px solid var(--dc-color-border);
+}
+
+.dc-data-table th {
+  color: var(--dc-color-text-secondary);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.dc-data-table td.dc-numeric,
+.dc-data-table th.dc-numeric {
+  text-align: right;
+  font-feature-settings: var(--dc-font-tabular-nums);
+  font-variant-numeric: tabular-nums;
+}
+
+.dc-data-table-scroll {
+  overflow-x: auto;
+  max-width: 100%;
+  /* As a flex item of `.dc-page` (flex-direction: column), this would
+   * otherwise default to `min-width: auto` — its content's (a wide table)
+   * intrinsic min-width — and force the whole page wider than the
+   * viewport instead of scrolling internally. */
+  min-width: 0;
+}
+
+.dc-badge-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--dc-space-2);
+  align-items: center;
+}
+
+.dc-freshness-banner {
+  display: flex;
+  align-items: center;
+  gap: var(--dc-space-2);
+  padding: var(--dc-space-2) var(--dc-space-4);
+  border-radius: var(--dc-radius-md);
+  background: var(--dc-color-warning-surface);
+  color: var(--dc-color-warning);
+  font-size: var(--dc-font-size-sm);
+  border: 1px solid var(--dc-color-warning);
+}
+
+.dc-demo-banner {
+  display: flex;
+  align-items: center;
+  gap: var(--dc-space-2);
+  padding: var(--dc-space-2) var(--dc-space-4);
+  border-radius: var(--dc-radius-md);
+  background: var(--dc-color-surface-elevated);
+  border: 1px dashed var(--dc-color-border-strong);
+  color: var(--dc-color-text-secondary);
+  font-size: var(--dc-font-size-sm);
+}

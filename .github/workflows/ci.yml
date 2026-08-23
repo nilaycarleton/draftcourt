@@ -1,0 +1,214 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+env:
+  NODE_VERSION: "24.18.0"
+  PNPM_VERSION: "11.22.0"
+  PYTHON_VERSION: "3.12.5"
+
+jobs:
+  web:
+    name: Web/TS (format, lint, typecheck, unit, contracts, build)
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17.7-alpine
+        env:
+          POSTGRES_USER: draftcourt
+          POSTGRES_PASSWORD: draftcourt
+          POSTGRES_DB: draftcourt
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U draftcourt -d draftcourt"
+          --health-interval 5s --health-timeout 5s --health-retries 10
+    env:
+      DATABASE_URL: postgresql://draftcourt:draftcourt@localhost:5432/draftcourt
+      DIRECT_DATABASE_URL: postgresql://draftcourt:draftcourt@localhost:5432/draftcourt
+      ANALYTICS_BASE_URL: http://localhost:8000
+      ANALYTICS_SERVICE_SECRET: ci-analytics-secret
+      # Plain (non-ANALYTICS_-prefixed) name services/analytics's own
+      # Settings class reads — see services/analytics/app/core/config.py.
+      SERVICE_SECRET: ci-analytics-secret
+      NEXT_PUBLIC_APP_URL: http://localhost:3100
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: pnpm/action-setup@v6
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+
+      - uses: astral-sh/setup-uv@v10
+        with:
+          version: "0.12.5"
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Install dependencies (frozen lockfile)
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Python dependencies (frozen lockfile)
+        working-directory: services/analytics
+        run: uv sync --frozen
+
+      - name: Format check
+        run: pnpm format
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Typecheck
+        run: pnpm typecheck
+
+      - name: Generate Prisma client
+        run: pnpm --filter @draftcourt/db run generate
+
+      - name: Apply migrations
+        run: pnpm db:migrate
+
+      - name: Seed deterministic demo data
+        run: pnpm db:seed
+
+      # tests/unit/admin-*.test.ts, freshness-check.test.ts, and every
+      # Playwright E2E spec assert against real published player/
+      # projection data — not mocked — so this must run before both.
+      - name: Ingest demo data and publish a baseline projection run
+        run: pnpm demo:ingest
+
+      - name: Unit tests
+        run: pnpm test
+
+      - name: Contract fixtures (TS side)
+        run: pnpm --filter @draftcourt/domain run schemas:generate
+
+      - name: Production build (apps/web)
+        run: pnpm --filter web run build
+
+      - name: Build Storybook (packages/ui)
+        run: pnpm --filter @draftcourt/ui run build-storybook
+
+      - name: Install Playwright browsers
+        run: pnpm --filter web exec playwright install --with-deps chromium
+
+      - name: Playwright E2E smoke
+        run: pnpm --filter web run e2e
+
+  analytics:
+    name: Analytics/Python (format, lint, typecheck, unit, build)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: services/analytics
+    # tests/api/test_internal_api.py exercises the /internal/v1 job
+    # orchestration against a real, migrated Postgres (same policy as the
+    # web job's database-backed unit tests).
+    services:
+      postgres:
+        image: postgres:17.7-alpine
+        env:
+          POSTGRES_USER: draftcourt
+          POSTGRES_PASSWORD: draftcourt
+          POSTGRES_DB: draftcourt
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U draftcourt -d draftcourt"
+          --health-interval 5s --health-timeout 5s --health-retries 10
+    env:
+      DATABASE_URL: postgresql://draftcourt:draftcourt@localhost:5432/draftcourt
+      SERVICE_SECRET: ci-analytics-secret
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Install psql client
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq postgresql-client
+
+      # Python never creates migrations (ADR 0002); the committed Prisma
+      # migration SQL is applied in filename order, exactly as
+      # `prisma migrate deploy` would.
+      - name: Apply committed migrations
+        run: |
+          for f in ../../packages/db/prisma/migrations/*/migration.sql; do
+            psql "$DATABASE_URL" -v ON_ERROR_STOP=1 -q -f "$f"
+          done
+
+      - uses: astral-sh/setup-uv@v10
+        with:
+          version: "0.12.5"
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Install dependencies (frozen lockfile)
+        run: uv sync --frozen
+
+      - name: Format check
+        run: uv run ruff format --check .
+
+      - name: Lint
+        run: uv run ruff check .
+
+      - name: Typecheck (mypy --strict)
+        run: uv run mypy .
+
+      - name: Unit tests (with coverage)
+        run: uv run pytest
+
+      - name: Build container image
+        run: docker build -t draftcourt-analytics:ci .
+
+      - name: Health-check container image
+        run: |
+          docker run -d --name analytics-ci \
+            -e DATABASE_URL="postgresql://draftcourt:draftcourt@localhost:5432/draftcourt" \
+            -e SERVICE_SECRET="ci-analytics-secret" \
+            -p 8000:8000 draftcourt-analytics:ci
+          for _ in $(seq 1 15); do
+            if curl -sf http://localhost:8000/health/live > /dev/null; then exit 0; fi
+            sleep 2
+          done
+          echo "analytics container failed to become healthy"
+          docker logs analytics-ci
+          exit 1
+
+  contracts:
+    name: Shared TS/Python contract compatibility
+    runs-on: ubuntu-latest
+    needs: [web, analytics]
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: pnpm/action-setup@v6
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+
+      - uses: astral-sh/setup-uv@v10
+        with:
+          version: "0.12.5"
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter @draftcourt/domain run schemas:generate
+      - run: pnpm --filter @draftcourt/domain run test
+      - working-directory: services/analytics
+        run: uv sync --frozen
+      - working-directory: services/analytics
+        run: uv run pytest tests/test_contracts.py

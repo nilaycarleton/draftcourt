@@ -1,0 +1,35 @@
+node_modules
+.next
+.turbo
+dist
+build
+coverage
+storybook-static
+playwright-report
+test-results
+pnpm-lock.yaml
+services/analytics/.venv
+services/analytics/**/__pycache__
+packages/db/generated
+data/schemas/*.schema.json
+sources
+output
+tmp
+*.pdf
+*.tex
+
+# Generated Graphify knowledge-graph artifacts (graph.html, graph.json,
+# report, caches) — regenerated on demand, never hand-edited.
+graphify-out
+
+# Vendored Impeccable skill assets (installed via npx impeccable install).
+.opencode
+
+# Unrelated ChatGPT-project files sharing this directory — never reformat.
+AGENTS.md
+kpmg_batch_strategy.md
+build_kpmg_packages.py
+PHASE_2_OPENCODE_PROMPT.md
+
+# Source-of-truth spec, authored outside this task — checklist edits only.
+BUILD_SPEC.md

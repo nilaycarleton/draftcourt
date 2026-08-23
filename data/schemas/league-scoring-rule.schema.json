@@ -1,0 +1,31 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "stat": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 64
+    },
+    "weight": {
+      "type": "number"
+    },
+    "direction": {
+      "type": "string",
+      "enum": [
+        "HIGHER_BETTER",
+        "LOWER_BETTER"
+      ]
+    },
+    "punt": {
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "stat",
+    "weight",
+    "direction",
+    "punt"
+  ],
+  "additionalProperties": false
+}

@@ -1,0 +1,70 @@
+# DraftCourt monorepo ignores.
+# NOTE: this repo shares a directory with unrelated ChatGPT-project files
+# (sources/, output/, tmp/, build_kpmg_packages.py, kpmg_batch_strategy.md).
+# Those are intentionally left untouched — this file only ignores DraftCourt build artifacts.
+
+# Node / pnpm
+node_modules/
+.pnpm-store/
+dist/
+build/
+.turbo/
+*.tsbuildinfo
+coverage/
+.next/
+out/
+storybook-static/
+playwright-report/
+test-results/
+blob-report/
+
+# Env
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# Python
+services/analytics/.venv/
+services/analytics/__pycache__/
+services/analytics/**/__pycache__/
+services/analytics/.mypy_cache/
+services/analytics/.ruff_cache/
+services/analytics/.pytest_cache/
+services/analytics/htmlcov/
+*.pyc
+
+# Prisma
+packages/db/generated/
+
+# Generated Graphify knowledge-graph artifacts (regenerated on demand).
+graphify-out/
+
+# Editor / OS
+.DS_Store
+.vscode/*
+!.vscode/extensions.json
+.idea/
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# Sentry
+.sentryclirc
+
+# ---- Unrelated ChatGPT-project mirror files (personal; never commit).
+# Kept on disk, kept out of Git — see AGENTS.md and .prettierignore notes.
+/sources/
+/output/
+/tmp/
+/kpmg_batch_strategy.md
+/build_kpmg_packages.py
+/AGENTS.md
+
+# Impeccable per-developer runtime state (screenshots, live sessions, caches)
+# — the vendored skill itself under .opencode/skills IS tracked.
+.opencode/cache/
+.opencode/logs/
+.opencode/*.local.*

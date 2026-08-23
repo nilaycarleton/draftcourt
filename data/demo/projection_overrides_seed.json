@@ -1,0 +1,62 @@
+[
+  {
+    "deltaValue": -2.66,
+    "effectiveAt": "2026-08-12T00:00:00Z",
+    "expiresAt": null,
+    "playerExternalKey": "demo-player-0056",
+    "rationale": "Demo override: illustrative admin adjustment for testing, not a real projection change.",
+    "replacementValue": null,
+    "season": "2026-27",
+    "stat": "pts"
+  },
+  {
+    "deltaValue": null,
+    "effectiveAt": "2026-08-12T00:00:00Z",
+    "expiresAt": null,
+    "playerExternalKey": "demo-player-0064",
+    "rationale": "Demo override: illustrative admin adjustment for testing, not a real projection change.",
+    "replacementValue": 10.62,
+    "season": "2026-27",
+    "stat": "reb"
+  },
+  {
+    "deltaValue": -1.35,
+    "effectiveAt": "2026-08-12T00:00:00Z",
+    "expiresAt": null,
+    "playerExternalKey": "demo-player-0173",
+    "rationale": "Demo override: illustrative admin adjustment for testing, not a real projection change.",
+    "replacementValue": null,
+    "season": "2026-27",
+    "stat": "ast"
+  },
+  {
+    "deltaValue": null,
+    "effectiveAt": "2026-08-12T00:00:00Z",
+    "expiresAt": null,
+    "playerExternalKey": "demo-player-0018",
+    "rationale": "Demo override: illustrative admin adjustment for testing, not a real projection change.",
+    "replacementValue": 24.73,
+    "season": "2026-27",
+    "stat": "minutesPerGame"
+  },
+  {
+    "deltaValue": 1.33,
+    "effectiveAt": "2026-08-12T00:00:00Z",
+    "expiresAt": null,
+    "playerExternalKey": "demo-player-0119",
+    "rationale": "Demo override: illustrative admin adjustment for testing, not a real projection change.",
+    "replacementValue": null,
+    "season": "2026-27",
+    "stat": "threePm"
+  },
+  {
+    "deltaValue": null,
+    "effectiveAt": "2026-08-12T00:00:00Z",
+    "expiresAt": null,
+    "playerExternalKey": "demo-player-0179",
+    "rationale": "Demo override: illustrative admin adjustment for testing, not a real projection change.",
+    "replacementValue": 1.5,
+    "season": "2026-27",
+    "stat": "stl"
+  }
+]

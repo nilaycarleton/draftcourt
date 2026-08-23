@@ -1,0 +1,36 @@
+{
+  "name": "draftcourt",
+  "private": true,
+  "version": "0.0.0",
+  "description": "DraftCourt monorepo — NBA fantasy live draft assistant",
+  "license": "UNLICENSED",
+  "packageManager": "pnpm@11.22.0+sha512.1ff870c4c6133dfd88fb2afc46dd13d47f09c9794b438c6fdb47ca98caf3bc16381ee0be93a091b8e3824cf01f889f46d7d9e20910fb0be1ab0fb5baa80dd621",
+  "engines": {
+    "node": ">=24.18.0 <25.0.0",
+    "pnpm": ">=11.22.0"
+  },
+  "scripts": {
+    "bootstrap": "bash scripts/bootstrap.sh",
+    "dev": "bash scripts/dev.sh",
+    "build": "turbo run build",
+    "test": "turbo run test",
+    "test:all": "bash scripts/test-all.sh",
+    "lint": "turbo run lint",
+    "format": "prettier --check .",
+    "format:write": "prettier --write .",
+    "typecheck": "turbo run typecheck",
+    "contracts:generate": "pnpm --filter @draftcourt/domain run schemas:generate",
+    "contracts:verify": "bash scripts/verify-contracts.sh",
+    "db:migrate": "pnpm --filter @draftcourt/db run migrate",
+    "db:seed": "pnpm --filter @draftcourt/db run seed",
+    "demo:ingest": "bash scripts/demo-ingest.sh",
+    "storybook": "pnpm --filter @draftcourt/ui run storybook",
+    "e2e": "pnpm --filter web run e2e"
+  },
+  "devDependencies": {
+    "prettier": "3.9.6",
+    "prettier-plugin-tailwindcss": "0.8.1",
+    "turbo": "2.10.11",
+    "typescript": "6.0.3"
+  }
+}

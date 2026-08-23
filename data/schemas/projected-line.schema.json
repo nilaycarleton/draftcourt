@@ -1,0 +1,124 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "playerId": {
+      "type": "string",
+      "format": "uuid",
+      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+    },
+    "games": {
+      "type": "number",
+      "minimum": 0
+    },
+    "minutesPerGame": {
+      "type": "number",
+      "minimum": 0
+    },
+    "pts": {
+      "type": "number",
+      "minimum": 0
+    },
+    "reb": {
+      "type": "number",
+      "minimum": 0
+    },
+    "ast": {
+      "type": "number",
+      "minimum": 0
+    },
+    "stl": {
+      "type": "number",
+      "minimum": 0
+    },
+    "blk": {
+      "type": "number",
+      "minimum": 0
+    },
+    "tov": {
+      "type": "number",
+      "minimum": 0
+    },
+    "fgm": {
+      "type": "number",
+      "minimum": 0
+    },
+    "fga": {
+      "type": "number",
+      "minimum": 0
+    },
+    "ftm": {
+      "type": "number",
+      "minimum": 0
+    },
+    "fta": {
+      "type": "number",
+      "minimum": 0
+    },
+    "threePm": {
+      "type": "number",
+      "minimum": 0
+    },
+    "lower80": {
+      "type": "object",
+      "propertyNames": {
+        "type": "string"
+      },
+      "additionalProperties": {
+        "type": "number"
+      }
+    },
+    "upper80": {
+      "type": "object",
+      "propertyNames": {
+        "type": "string"
+      },
+      "additionalProperties": {
+        "type": "number"
+      }
+    },
+    "injuryRisk": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "consistency": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "upside": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "roleSecurity": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    }
+  },
+  "required": [
+    "playerId",
+    "games",
+    "minutesPerGame",
+    "pts",
+    "reb",
+    "ast",
+    "stl",
+    "blk",
+    "tov",
+    "fgm",
+    "fga",
+    "ftm",
+    "fta",
+    "threePm",
+    "lower80",
+    "upper80",
+    "injuryRisk",
+    "consistency",
+    "upside",
+    "roleSecurity"
+  ],
+  "additionalProperties": false
+}

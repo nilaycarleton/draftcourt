@@ -1,0 +1,128 @@
+[
+  {
+    "confidence": 0.44,
+    "effectiveAt": "2026-08-10T00:00:00Z",
+    "expiresAt": "2026-08-24T00:00:00Z",
+    "impact": -0.37,
+    "playerExternalKey": "demo-player-0120",
+    "rationale": "Demo signal: illustrative injury scenario for testing, not a real report.",
+    "type": "INJURY"
+  },
+  {
+    "confidence": 0.83,
+    "effectiveAt": "2026-08-10T00:00:00Z",
+    "expiresAt": null,
+    "impact": -0.34,
+    "playerExternalKey": "demo-player-0140",
+    "rationale": "Demo signal: illustrative trade scenario for testing, not a real report.",
+    "type": "TRADE"
+  },
+  {
+    "confidence": 0.87,
+    "effectiveAt": "2026-08-10T00:00:00Z",
+    "expiresAt": "2026-08-24T00:00:00Z",
+    "impact": 0.54,
+    "playerExternalKey": "demo-player-0110",
+    "rationale": "Demo signal: illustrative starter change scenario for testing, not a real report.",
+    "type": "STARTER_CHANGE"
+  },
+  {
+    "confidence": 0.67,
+    "effectiveAt": "2026-08-10T00:00:00Z",
+    "expiresAt": null,
+    "impact": -0.48,
+    "playerExternalKey": "demo-player-0123",
+    "rationale": "Demo signal: illustrative role up scenario for testing, not a real report.",
+    "type": "ROLE_UP"
+  },
+  {
+    "confidence": 0.73,
+    "effectiveAt": "2026-08-10T00:00:00Z",
+    "expiresAt": "2026-08-24T00:00:00Z",
+    "impact": -0.18,
+    "playerExternalKey": "demo-player-0196",
+    "rationale": "Demo signal: illustrative role down scenario for testing, not a real report.",
+    "type": "ROLE_DOWN"
+  },
+  {
+    "confidence": 0.47,
+    "effectiveAt": "2026-08-10T00:00:00Z",
+    "expiresAt": null,
+    "impact": 0.24,
+    "playerExternalKey": "demo-player-0116",
+    "rationale": "Demo signal: illustrative injury scenario for testing, not a real report.",
+    "type": "INJURY"
+  },
+  {
+    "confidence": 0.89,
+    "effectiveAt": "2026-08-10T00:00:00Z",
+    "expiresAt": "2026-08-24T00:00:00Z",
+    "impact": -0.03,
+    "playerExternalKey": "demo-player-0079",
+    "rationale": "Demo signal: illustrative trade scenario for testing, not a real report.",
+    "type": "TRADE"
+  },
+  {
+    "confidence": 0.63,
+    "effectiveAt": "2026-08-10T00:00:00Z",
+    "expiresAt": "2026-08-24T00:00:00Z",
+    "impact": 0.6,
+    "playerExternalKey": "demo-player-0091",
+    "rationale": "Demo signal: illustrative starter change scenario for testing, not a real report.",
+    "type": "STARTER_CHANGE"
+  },
+  {
+    "confidence": 0.63,
+    "effectiveAt": "2026-08-10T00:00:00Z",
+    "expiresAt": "2026-08-24T00:00:00Z",
+    "impact": 0.19,
+    "playerExternalKey": "demo-player-0007",
+    "rationale": "Demo signal: illustrative role up scenario for testing, not a real report.",
+    "type": "ROLE_UP"
+  },
+  {
+    "confidence": 0.43,
+    "effectiveAt": "2026-08-10T00:00:00Z",
+    "expiresAt": "2026-08-24T00:00:00Z",
+    "impact": -0.56,
+    "playerExternalKey": "demo-player-0020",
+    "rationale": "Demo signal: illustrative role down scenario for testing, not a real report.",
+    "type": "ROLE_DOWN"
+  },
+  {
+    "confidence": 0.77,
+    "effectiveAt": "2026-08-10T00:00:00Z",
+    "expiresAt": "2026-08-24T00:00:00Z",
+    "impact": -0.23,
+    "playerExternalKey": "demo-player-0015",
+    "rationale": "Demo signal: illustrative injury scenario for testing, not a real report.",
+    "type": "INJURY"
+  },
+  {
+    "confidence": 0.48,
+    "effectiveAt": "2026-08-10T00:00:00Z",
+    "expiresAt": "2026-08-24T00:00:00Z",
+    "impact": 0.47,
+    "playerExternalKey": "demo-player-0113",
+    "rationale": "Demo signal: illustrative trade scenario for testing, not a real report.",
+    "type": "TRADE"
+  },
+  {
+    "confidence": 0.58,
+    "effectiveAt": "2026-08-10T00:00:00Z",
+    "expiresAt": "2026-08-24T00:00:00Z",
+    "impact": 0.04,
+    "playerExternalKey": "demo-player-0111",
+    "rationale": "Demo signal: illustrative starter change scenario for testing, not a real report.",
+    "type": "STARTER_CHANGE"
+  },
+  {
+    "confidence": 0.57,
+    "effectiveAt": "2026-08-10T00:00:00Z",
+    "expiresAt": "2026-08-24T00:00:00Z",
+    "impact": 0.15,
+    "playerExternalKey": "demo-player-0176",
+    "rationale": "Demo signal: illustrative role up scenario for testing, not a real report.",
+    "type": "ROLE_UP"
+  }
+]
