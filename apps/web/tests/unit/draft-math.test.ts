@@ -197,7 +197,20 @@ describe("replay reduction", () => {
 
 describe("candidate slots", () => {
   it("orders specific positions before UTIL before BENCH", () => {
-    expect(candidateSlotsForEligibility(["PG", "SG"])).toEqual(["PG", "SG", "UTIL", "BENCH"]);
+    expect(candidateSlotsForEligibility(["PG", "SG"])).toEqual(["PG", "SG", "G", "UTIL", "BENCH"]);
     expect(candidateSlotsForEligibility(["C"])).toEqual(["C", "UTIL", "BENCH"]);
+  });
+
+  it("treats G and F as combo slots for guards and forwards", () => {
+    // Regression test: G/F are aggregate starter slots — a guard-eligible
+    // player must be placeable in an open G slot even without literal "G"
+    // eligibility, otherwise drafts strand unfilled G/F slots with no legal
+    // picks (found via the authenticated E2E acceptance draft).
+    expect(candidateSlotsForEligibility(["SG"])).toContain("G");
+    expect(candidateSlotsForEligibility(["PG"])).toContain("G");
+    expect(candidateSlotsForEligibility(["SF"])).toContain("F");
+    expect(candidateSlotsForEligibility(["PF"])).toContain("F");
+    expect(candidateSlotsForEligibility(["C"])).not.toContain("G");
+    expect(candidateSlotsForEligibility(["C"])).not.toContain("F");
   });
 });

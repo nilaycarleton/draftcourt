@@ -86,6 +86,13 @@
   align-items: center;
   min-height: 44px;
 }
+/* Armed (awaiting second activation) destructive actions — Undo uses the same
+   two-step confirm as the `U` shortcut. Warning token, never color alone:
+   the label also changes to "Confirm undo". */
+.dc-status-bar button[data-armed] {
+  border: 1px solid var(--dc-color-warning);
+  color: var(--dc-color-warning);
+}
 .dc-recs ol {
   list-style: decimal;
   display: grid;
@@ -131,4 +138,30 @@
 }
 .dc-rule-edit input[type="number"] {
   width: 5rem;
+}
+
+/* Mobile tabs (Phase 2 acceptance): explicit section switching below 900px.
+   Panels stay mounted; hidden ones are display:none so state survives. */
+.dc-tab-hidden {
+  display: none;
+}
+.dc-sheet-roster {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: var(--dc-space-2);
+}
+.dc-sheet-roster li {
+  min-height: 44px;
+  border-bottom: 1px solid var(--dc-color-border);
+  display: flex;
+  align-items: center;
+}
+.dc-board-data summary {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  color: var(--dc-color-text-secondary);
+  cursor: pointer;
 }

@@ -1,0 +1,89 @@
+{
+  "date": "2026-09-05T04:47:44.193Z",
+  "commit": "unknown",
+  "environment": "local docker postgres; node v26.8.1; darwin",
+  "fixture": {
+    "projectionRunId": "f1ccf5f5-ca73-4182-b68c-9fa823809f41",
+    "modelVersion": "baseline-weighted-historical@1.0.0",
+    "inputChecksum": "dd8396dec95dc62375cecc6cce4bba74a412b8d5ba762e47a48b941ca0acbc14"
+  },
+  "versions": {
+    "engineVersion": "phase3-preferences-1.0.0",
+    "preferenceSnapshotVersion": 1,
+    "cpuPersonalityVersion": 1,
+    "cpuSeedStrategyVersion": 1,
+    "capabilityVersion": "pbkdf2-100k-async"
+  },
+  "seed": "bench-demo-seed",
+  "sampleCount": 20,
+  "cacheState": "warm",
+  "timings": {
+    "demoCreation": {
+      "p50": 39.44799999999998,
+      "p95": 56.27875000000006,
+      "p99": 56.27875000000006,
+      "n": 5
+    },
+    "tokenHashSync": {
+      "p50": 9.780624999999986,
+      "p95": 11.227750000000015,
+      "p99": 11.227750000000015,
+      "n": 20
+    },
+    "tokenHashAsync": {
+      "p50": 9.704124999999976,
+      "p95": 10.305417000000034,
+      "p99": 10.305417000000034,
+      "n": 20
+    },
+    "tokenVerifySync": {
+      "p50": 9.643542000000025,
+      "p95": 10.374416999999994,
+      "p99": 10.374416999999994,
+      "n": 20
+    },
+    "tokenVerifyAsync": {
+      "p50": 9.666916999999785,
+      "p95": 10.961958999999979,
+      "p99": 10.961958999999979,
+      "n": 20
+    },
+    "resume": {
+      "p50": 15.99395800000002,
+      "p95": 19.887875000000122,
+      "p99": 19.887875000000122,
+      "n": 20
+    },
+    "userPick": {
+      "p50": 25.607958999999937,
+      "p95": 47.720332999999755,
+      "p99": 47.720332999999755,
+      "n": 5
+    },
+    "cpuPick": {
+      "p50": 66.08550000000014,
+      "p95": 80.48770800000011,
+      "p99": 80.48770800000011,
+      "n": 5
+    },
+    "fullSmallDemo": {
+      "p50": 656.2850000000003,
+      "p95": 726.5422499999995,
+      "p99": 726.5422499999995,
+      "n": 3
+    },
+    "fullRepresentative12Team": {
+      "p50": 656.2850000000003,
+      "p95": 726.5422499999995,
+      "p99": 726.5422499999995,
+      "n": 3
+    },
+    "cleanupBatch": {
+      "p50": 61.199499999999716,
+      "p95": 61.199499999999716,
+      "p99": 61.199499999999716,
+      "n": 1
+    }
+  },
+  "notes": "No raw tokens, IPs, cookies, or private identifiers included. Async token verification used on public paths to avoid event-loop blocking; rate limits (create 3/hour, resume 30/min, pick 10/30s, tokenFailure 5/5min) bound verification load."
+}

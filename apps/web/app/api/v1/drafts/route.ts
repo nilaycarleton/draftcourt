@@ -13,19 +13,54 @@ import { createDraft } from "@/lib/server/drafts";
 
 export const dynamic = "force-dynamic";
 
-const createDraftSchema = z.object({
-  leagueId: z.uuid(),
-  type: z.enum(["REAL", "MOCK", "DEMO"]).default("REAL"),
-  keepers: z
-    .array(
-      z.object({
-        playerId: z.uuid(),
-        teamSlot: z.number().int().min(1).max(20),
-      }),
-    )
-    .max(60)
-    .default([]),
-});
+const createDraftSchema = z
+  .object({
+    leagueId: z.uuid(),
+    type: z.enum(["REAL", "MOCK", "DEMO"]).default("REAL"),
+    keepers: z
+      .array(
+        z.object({
+          playerId: z.uuid(),
+          teamSlot: z.number().int().min(1).max(20),
+        }),
+      )
+      .max(60)
+      .default([]),
+    /** Optional pre-start strategy override; must reference an owned profile
+     * (foreign ids resolve as not-found). Consumed once at draft start. */
+    overrideProfileId: z.uuid().optional(),
+    /** Phase 3C mock configuration (MOCK only). */
+    simulationSeed: z
+      .string()
+      .regex(/^[A-Za-z0-9-]{1,64}$/, "seed must be 1-64 letters, digits, or dashes")
+      .optional(),
+    cpuPersonalityKey: z
+      .string()
+      .regex(/^[a-z][a-z0-9-]{0,63}$/)
+      .optional(),
+    teamPersonalities: z
+      .array(
+        z.object({
+          teamSlot: z.number().int().min(1).max(20),
+          personalityKey: z.string().regex(/^[a-z][a-z0-9-]{0,63}$/),
+        }),
+      )
+      .max(20)
+      .optional(),
+  })
+  .strict()
+  .superRefine((value, context) => {
+    if (value.type === "MOCK") return;
+    for (const key of ["simulationSeed", "cpuPersonalityKey", "teamPersonalities"] as const) {
+      if (value[key] !== undefined) {
+        context.addIssue({
+          code: "custom",
+          path: [key],
+          message: `${key} is available only for MOCK drafts`,
+        });
+      }
+    }
+  });
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
   const userId = await requireUserId();

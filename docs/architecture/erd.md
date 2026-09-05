@@ -279,6 +279,40 @@ Phase 2 additions in the same style:
 - `recommendation_snapshots`: unique `(draftId, sequence, inputChecksum)` —
   identical inputs upsert in place (immutable-by-checksum semantics).
 
+## Phase 3A — preference profiles (ADR 0011)
+
+```
+users 1───* user_preference_profiles 1───* preference_players *───1 players
+                                      1───* preference_teams    *───1 nba_teams
+users 1───* custom_player_ranks *───1 players
+users 1───* custom_player_ranks *───0..1 leagues   (leagueId NULL = global)
+```
+
+Constraints: unique `(ownerId, name)` per profile; PARTIAL unique index
+`(ownerId) WHERE is_default`; unique `(profileId, playerId, listType)`;
+unique `(profileId, teamId)`; composite uniques
+`(ownerId, leagueId, playerId|rank)` plus PARTIAL indexes
+`(ownerId, playerId)` and `(ownerId, rank)` `WHERE league_id IS NULL`
+(Postgres NULL-distinct semantics — see ADR 0011). (Profile settings persist
+as a versioned JSON envelope (`schemaVersion = 1`) re-validated on every
+read; weights are numbers at exact 6-decimal precision summing to 1.)
+
+## Phase 3B — preference snapshot columns (ADR 0012)
+
+```
+leagues   *───0..1 user_preference_profiles  (preferredProfileId, ON DELETE SET NULL)
+drafts    *───0..1 user_preference_profiles  (overrideProfileId,    ON DELETE SET NULL)
+drafts    *───0..1 user_preference_profiles  (preferenceSourceProfileId, provenance only)
+```
+
+New `drafts` columns: `overrideProfileId UUID NULL`, `preferenceSnapshot
+JSONB NULL` (self-contained versioned strategy captured in the DRAFT_STARTED
+transaction), `preferenceSnapshotVersion INT NULL`,
+`preferenceSnapshotChecksum TEXT NULL`, `preferenceSourceProfileId UUID NULL`.
+New `leagues` column: `preferredProfileId UUID NULL`. No backfill — drafts
+started before Phase 3B keep `NULL` snapshots and their recorded legacy
+behavior. Snapshot JSON is never rewritten after capture.
+
 ## Cross-language write boundary
 
 Prisma (`packages/db`) is the sole schema/migration owner. The analytics

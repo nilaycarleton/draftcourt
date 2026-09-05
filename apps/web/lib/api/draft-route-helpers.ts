@@ -9,6 +9,7 @@ import {
   DraftStatusError,
   DraftVersionConflict,
 } from "@/lib/server/drafts";
+import { PreferenceSnapshotValidationError } from "@/lib/server/preference-snapshot";
 
 /**
  * Shared helpers for `/api/v1/drafts/*` route modules: auth gate, error →
@@ -27,7 +28,7 @@ export function draftErrorToProblem(error: unknown): NextResponse | null {
       title: "Conflict",
       status: 409,
       detail: error.message,
-      authoritative: error.authoritative as unknown as Record<string, unknown>,
+      authoritative: error.authoritative,
     });
   }
   if (error instanceof DraftStatusError) {
@@ -48,6 +49,17 @@ export function draftErrorToProblem(error: unknown): NextResponse | null {
   }
   if (error instanceof DraftNotFoundError) {
     return problem(problems.notFound("draft not found"));
+  }
+  if (error instanceof PreferenceSnapshotValidationError) {
+    // Invalid stored preference data fails safely BEFORE draft start (Phase
+    // 3B): the strategy is unusable, so starting is refused with an actionable
+    // problem detail instead of capturing a broken snapshot.
+    return problem({
+      type: "/problems/invalid-strategy",
+      title: "Unprocessable Entity",
+      status: 422,
+      detail: error.message,
+    });
   }
   if (error instanceof DraftError) {
     return problem(problems.badRequest(error.message));

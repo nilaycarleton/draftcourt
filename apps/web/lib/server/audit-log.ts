@@ -7,7 +7,7 @@ import { prisma, Prisma } from "@draftcourt/db";
  * which TS doesn't structurally match to an index-signatured type — can be
  * passed straight through without a cast at every call site. */
 export async function writeAuditLog(entry: {
-  actorId: string;
+  actorId: string | null;
   action: string;
   entityType: string;
   entityId: string;

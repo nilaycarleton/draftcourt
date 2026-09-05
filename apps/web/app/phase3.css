@@ -1,0 +1,428 @@
+/* Phase 3A — /preferences workspace (see docs/design/phase3a-preferences-shape.md) */
+
+.dc-pref-layout {
+  display: grid;
+  gap: var(--dc-space-5, 24px);
+  grid-template-columns: 260px minmax(0, 1fr);
+}
+
+@media (max-width: 720px) {
+  .dc-pref-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.dc-pref-rail {
+  border-right: 1px solid var(--dc-color-line, color-mix(in srgb, currentColor 14%, transparent));
+  padding-right: 16px;
+}
+
+@media (max-width: 720px) {
+  .dc-pref-rail {
+    border-right: 0;
+    padding-right: 0;
+    border-bottom: 1px solid var(--dc-color-line, color-mix(in srgb, currentColor 14%, transparent));
+    padding-bottom: 12px;
+  }
+}
+
+.dc-pref-profile-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 44px;
+  padding: 6px 10px;
+  text-align: left;
+  background: none;
+  border: 0;
+  border-left: 3px solid transparent;
+  color: inherit;
+  cursor: pointer;
+}
+
+.dc-pref-profile-row:hover {
+  background: color-mix(in srgb, currentColor 6%, transparent);
+}
+
+.dc-pref-profile-row[aria-current="true"] {
+  border-left-color: var(--dc-color-accent);
+  font-weight: 600;
+}
+
+.dc-pref-profile-name {
+  overflow: hidden;
+  flex: 1 1 auto;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dc-pref-star {
+  flex: 0 0 auto;
+}
+
+.dc-pref-section {
+  margin-top: 28px;
+}
+
+.dc-pref-section > h2 {
+  border-bottom: 2px solid var(--dc-color-accent);
+  display: inline-block;
+  font-size: 1rem;
+  padding-bottom: 2px;
+}
+
+/* Preset gallery */
+.dc-preset-grid {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+}
+
+.dc-preset-card {
+  align-items: flex-start;
+  background: none;
+  border: 1px solid var(--dc-color-line, color-mix(in srgb, currentColor 18%, transparent));
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-height: 44px;
+  padding: 10px 12px;
+  text-align: left;
+}
+
+.dc-preset-card[aria-pressed="true"] {
+  border-color: var(--dc-color-accent);
+  box-shadow: inset 0 -2px 0 var(--dc-color-accent);
+}
+
+.dc-preset-card small {
+  color: var(--dc-color-text-muted);
+}
+
+/* Factor slider rows */
+.dc-factor-row {
+  align-items: center;
+  column-gap: 12px;
+  display: grid;
+  grid-template-columns: minmax(110px, 160px) minmax(140px, 1fr) 56px 44px;
+  min-height: 44px;
+}
+
+@media (max-width: 560px) {
+  .dc-factor-row {
+    grid-template-columns: minmax(96px, 1fr) 48px 44px;
+  }
+
+  .dc-factor-row input[type="range"] {
+    grid-column: 1 / -1;
+    order: 4;
+  }
+}
+
+.dc-factor-value {
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.dc-lock-button,
+.dc-mini-button {
+  align-items: center;
+  background: none;
+  border: 1px solid var(--dc-color-line, color-mix(in srgb, currentColor 22%, transparent));
+  cursor: pointer;
+  display: inline-flex;
+  height: 44px;
+  justify-content: center;
+  min-width: 44px;
+  padding: 0 8px;
+}
+
+.dc-lock-button[aria-pressed="true"] {
+  border-color: var(--dc-color-accent);
+  color: var(--dc-color-accent);
+}
+
+/* Sticky save bar */
+.dc-save-bar {
+  backdrop-filter: blur(6px);
+  background: var(--dc-color-surface, rgba(12, 14, 18, 0.92));
+  border-top: 1px solid var(--dc-color-line, color-mix(in srgb, currentColor 20%, transparent));
+  bottom: 0;
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  left: 0;
+  padding: 10px max(16px, env(safe-area-inset-right));
+  padding-bottom: max(10px, env(safe-area-inset-bottom));
+  position: sticky;
+  right: 0;
+  z-index: 30;
+}
+
+/* Preference list entries (players/teams) */
+.dc-entry-list {
+  display: grid;
+  gap: 6px;
+  list-style: none;
+  margin: 8px 0 0;
+  padding: 0;
+}
+
+.dc-entry-list li {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  min-height: 44px;
+}
+
+.dc-entry-name {
+  flex: 1 1 180px;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Rank editor */
+.dc-rank-list {
+  counter-reset: dcRank;
+  list-style: none;
+  margin: 8px 0 0;
+  padding: 0;
+}
+
+.dc-rank-row {
+  align-items: center;
+  border-top: 1px solid var(--dc-color-line, color-mix(in srgb, currentColor 10%, transparent));
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  min-height: 52px;
+  padding: 4px 0;
+}
+
+.dc-rank-index {
+  font-variant-numeric: tabular-nums;
+  min-width: 2.2em;
+}
+
+.dc-rank-player {
+  flex: 1 1 200px;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dc-rank-note {
+  flex: 2 1 240px;
+  min-width: 140px;
+}
+
+/* Inline confirmation panel (no window.confirm anywhere) */
+.dc-confirm-panel {
+  border: 1px solid var(--dc-color-warning, #b8860b);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+  padding: 12px;
+}
+
+/* Status banner */
+.dc-status-banner {
+  border: 1px solid var(--dc-color-line, color-mix(in srgb, currentColor 20%, transparent));
+  margin: 10px 0;
+  padding: 10px 12px;
+}
+
+.dc-status-banner[data-tone="error"] {
+  border-color: var(--dc-color-danger, #c0392b);
+}
+
+.dc-status-banner[role="alert"] {
+  font-weight: 600;
+}
+
+/* Phase 3B strategy surfaces (picker, start flow, evidence, contributions). */
+/* League settings strategy picker */
+.dc-strategy-picker {
+  border: 1px solid var(--dc-color-border, color-mix(in srgb, currentColor 20%, transparent));
+  margin-top: var(--dc-space-5, 1.5rem);
+  padding: var(--dc-space-4, 1rem);
+}
+
+.dc-strategy-option {
+  align-items: center;
+  border-bottom: 1px solid var(--dc-color-line, color-mix(in srgb, currentColor 10%, transparent));
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--dc-space-2, 0.5rem);
+  min-height: 44px;
+  padding: var(--dc-space-1, 0.25rem) 0;
+}
+
+.dc-strategy-option input[type="radio"] {
+  min-height: 24px;
+  min-width: 24px;
+}
+
+.dc-strategy-option-name {
+  flex: 1 1 200px;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dc-strategy-star {
+  color: var(--dc-color-accent, #b24a00);
+}
+
+.dc-strategy-meta {
+  color: var(--dc-color-text-secondary, #4a4f5c);
+  flex-basis: auto;
+}
+
+.dc-strategy-note {
+  color: var(--dc-color-success, #157a4a);
+}
+
+.dc-strategy-banner,
+.dc-start-flow .dc-strategy-banner {
+  border-color: var(--dc-color-danger, #c0392b);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--dc-space-2, 0.5rem);
+  margin: var(--dc-space-2, 0.5rem) 0;
+  padding: var(--dc-space-2, 0.5rem) var(--dc-space-3, 0.75rem);
+}
+
+.dc-strategy-save-row {
+  margin: var(--dc-space-3, 0.75rem) 0 0;
+}
+
+/* Start-draft flow */
+.dc-start-league-fieldset,
+.dc-start-override-fieldset {
+  border: 0;
+  margin: var(--dc-space-4, 1rem) 0;
+  padding: 0;
+}
+
+.dc-preview-sentence {
+  border-left: 3px solid var(--dc-color-line, color-mix(in srgb, currentColor 20%, transparent));
+  color: var(--dc-color-text-secondary, #4a4f5c);
+  padding-left: var(--dc-space-3, 0.75rem);
+}
+
+/* Draft-room evidence card — quieter than recommendations on purpose. */
+.dc-evidence-card {
+  align-items: center;
+  border: 1px solid var(--dc-color-line, color-mix(in srgb, currentColor 12%, transparent));
+  color: var(--dc-color-text-secondary, #4a4f5c);
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 0.875em;
+  gap: var(--dc-space-2, 0.5rem);
+  margin: var(--dc-space-2, 0.5rem) 0;
+  padding: var(--dc-space-2, 0.5rem) var(--dc-space-3, 0.75rem);
+}
+
+.dc-evidence-badge {
+  background: var(--dc-color-surface, transparent);
+  border: 1px solid var(--dc-color-border-strong, currentColor);
+  border-radius: var(--dc-radius-full, 999px);
+  flex: 0 0 auto;
+  padding: 0 var(--dc-space-2, 0.5rem);
+}
+
+.dc-evidence-name {
+  flex: 1 1 160px;
+  font-weight: 600;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dc-evidence-invalid {
+  background: var(--dc-color-warning-surface, transparent);
+  border-color: var(--dc-color-warning, #925709);
+  color: var(--dc-color-warning, #925709);
+}
+
+.dc-evidence-sheet {
+  display: grid;
+  gap: var(--dc-space-3, 0.75rem);
+  max-width: 40rem;
+}
+
+.dc-evidence-table {
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+  width: 100%;
+}
+
+.dc-evidence-table th,
+.dc-evidence-table td {
+  border-bottom: 1px solid var(--dc-color-border, color-mix(in srgb, currentColor 15%, transparent));
+  padding: var(--dc-space-2, 0.5rem);
+  text-align: left;
+}
+
+.dc-evidence-punts {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: var(--dc-space-2, 0.5rem);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Signed contribution chips inside recommendation rows */
+.dc-contrib {
+  margin: var(--dc-space-1, 0.25rem) 0;
+  width: 100%;
+}
+
+.dc-contrib-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--dc-space-2, 0.5rem);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.dc-contrib-chip {
+  border: 1px solid var(--dc-color-border, color-mix(in srgb, currentColor 20%, transparent));
+  border-radius: var(--dc-radius-full, 999px);
+  flex: 0 1 auto;
+  font-size: 0.8125em;
+  font-variant-numeric: tabular-nums;
+  min-height: 32px;
+  padding: 2px var(--dc-space-2, 0.5rem);
+}
+
+.dc-contrib-warnings {
+  color: var(--dc-color-warning, #925709);
+  display: grid;
+  gap: var(--dc-space-1, 0.25rem);
+  margin: 0 0 var(--dc-space-1, 0.25rem);
+}
+
+.dc-contrib-warning {
+  background: var(--dc-color-warning-surface, transparent);
+  border-left: 3px solid var(--dc-color-warning, #925709);
+  margin: 0;
+  padding: var(--dc-space-1, 0.25rem) var(--dc-space-2, 0.5rem);
+}
+
+.dc-contrib-details summary {
+  cursor: pointer;
+  min-height: 44px;
+}

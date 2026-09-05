@@ -35,6 +35,9 @@ export default async function DashboardPage() {
           Create a league
         </Link>
       </header>
+      <p className="dc-hint">
+        Tune how future drafts are scored in <Link href="/preferences">Preferences</Link>.
+      </p>
       {leagues.length === 0 ? (
         <p className="dc-hint">No leagues yet — create your first one.</p>
       ) : (

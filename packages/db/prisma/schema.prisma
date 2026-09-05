@@ -49,6 +49,8 @@ model User {
   auditLogEntries    AuditLog[]               @relation("AuditActor")
   leagues            League[]                 @relation("LeagueOwner")
   drafts             Draft[]                  @relation("DraftOwner")
+  preferenceProfiles PreferenceProfile[]      @relation("PreferenceProfileOwner")
+  customRanks        CustomPlayerRank[]       @relation("CustomRankOwner")
 
   @@map("users")
 }
@@ -163,6 +165,7 @@ model NbaTeam {
   updatedAt      DateTime @updatedAt @db.Timestamptz
 
   players Player[]
+  preferenceEntries PreferenceTeam[] @relation("PreferenceTeamRef")
 
   @@map("nba_teams")
 }
@@ -194,6 +197,8 @@ model Player {
   adpConsensusEntries AdpConsensusPlayer[]
   projections         PlayerProjection[]
   overrides           ProjectionOverride[]
+  preferenceEntries   PreferencePlayer[]   @relation("PreferencePlayerRef")
+  customRanks         CustomPlayerRank[]   @relation("CustomRankPlayerRef")
 
   @@index([currentTeamId])
   @@map("players")
@@ -628,6 +633,10 @@ model League {
   playoffWeeks            Int?
   isPrivate               Boolean       @default(true)
   activeSettingsVersionId String?       @unique @db.Uuid
+  /// Optional league-level strategy selection (Phase 3B). Owner-validated at
+  /// the service layer; deleting the profile clears the selection (SetNull) —
+  /// started drafts are unaffected because they hold copied snapshots.
+  preferredProfileId      String?       @db.Uuid
   createdAt               DateTime      @default(now()) @db.Timestamptz
   updatedAt               DateTime      @updatedAt @db.Timestamptz
 
@@ -636,6 +645,8 @@ model League {
   settingsVersions      LeagueSettingsVersion[] @relation("LeagueSettingsVersions")
   teams                 LeagueTeam[]
   drafts                Draft[]
+  customRanks           CustomPlayerRank[]      @relation("CustomRankLeague")
+  preferredProfile      PreferenceProfile?      @relation("LeaguePreferredProfile", fields: [preferredProfileId], references: [id], onDelete: SetNull)
 
   @@index([ownerId, updatedAt(sort: Desc)])
   @@map("leagues")
@@ -732,8 +743,8 @@ enum DraftEventType {
 
 model Draft {
   id               String      @id @default(uuid(7)) @db.Uuid
-  ownerId          String      @db.Uuid
-  leagueId         String      @db.Uuid
+  ownerId          String?     @db.Uuid
+  leagueId         String?     @db.Uuid
   type             DraftType   @default(REAL)
   status           DraftStatus @default(SETUP)
   /// Monotonic count of appended events; equals the latest event's sequence.
@@ -751,16 +762,38 @@ model Draft {
   projectionRunId  String?     @db.Uuid
   adpSnapshotId    String?     @db.Uuid
   shareTokenHash   String?
+  /// Optional pre-start strategy override (Phase 3B). Owner-validated at
+  /// creation; SetNull on profile delete. Ignored once a snapshot exists.
+  overrideProfileId           String? @db.Uuid
+  /// Immutable strategy snapshot captured in the DRAFT_STARTED transaction
+  /// (ADR 0012). Null for drafts started before Phase 3B — those keep their
+  /// recorded legacy behavior. Never rewritten after capture.
+  preferenceSnapshot          Json?
+  preferenceSnapshotVersion   Int?
+  preferenceSnapshotChecksum  String?
+  preferenceSourceProfileId   String? @db.Uuid
+  /// Reproducibility code for authenticated MOCK drafts (ADR 0013): user-
+  /// supplied or server-generated, immutable after creation. CPU per-pick
+  /// decision seeds derive deterministically from this string plus effective
+  /// state. Always NULL for real drafts.
+  simulationSeed              String? @db.VarChar(64)
+  /// Phase 3D: demo draft capability reference (NULL for authenticated drafts).
+  demoCapabilityId            String?   @unique @db.Uuid
+  /// Phase 3D: denormalized capability token hash for fast read-path validation.
+  demoTokenHash               String?   @db.VarChar(255)
   createdAt        DateTime    @default(now()) @db.Timestamptz
   updatedAt        DateTime    @updatedAt @db.Timestamptz
 
-  owner       User                     @relation("DraftOwner", fields: [ownerId], references: [id])
-  league      League                   @relation(fields: [leagueId], references: [id])
-  teams       DraftTeam[]
-  events      DraftEvent[]
-  assignments DraftRosterAssignment[]
-  snapshots   RecommendationSnapshot[]
-  outbox      DraftOutbox[]
+  owner                User?                    @relation("DraftOwner", fields: [ownerId], references: [id])
+  league               League?                  @relation(fields: [leagueId], references: [id])
+  teams                DraftTeam[]
+  events               DraftEvent[]
+  assignments          DraftRosterAssignment[]
+  snapshots            RecommendationSnapshot[]
+  outbox               DraftOutbox[]
+  overrideProfile      PreferenceProfile?       @relation("DraftOverrideProfile", fields: [overrideProfileId], references: [id], onDelete: SetNull)
+  preferenceSourceProfile PreferenceProfile?   @relation("DraftPreferenceSource", fields: [preferenceSourceProfileId], references: [id], onDelete: SetNull)
+  demoCapability       DemoDraftCapability?     @relation("DemoDraftCapability")
 
   @@index([ownerId, updatedAt(sort: Desc)])
   @@index([leagueId])
@@ -774,7 +807,13 @@ model DraftTeam {
   slot        Int
   displayName String
   isUserTeam  Boolean @default(false)
+  /// Phase 2 headroom; Phase 3C stores the personality KEY here for cheap
+  /// display. The immutable authority is cpuPersonalitySnapshot JSON below.
   cpuStrategy String?
+  /// Full immutable CpuPersonalitySnapshot (ADR 0013) written once at MOCK
+  /// creation for every non-user team; fail-closed parse on read. NULL on
+  /// user teams and real drafts.
+  cpuPersonalitySnapshot Json?
 
   draft Draft @relation(fields: [draftId], references: [id])
 
@@ -875,6 +914,30 @@ model DraftOutbox {
 }
 
 // ---------------------------------------------------------------------------
+// Phase 3D — guest demo draft capabilities
+// ---------------------------------------------------------------------------
+
+/// One-time capability token for a guest demo draft. The raw token is returned
+/// once at creation (as a recovery code + HttpOnly cookie) and never stored.
+/// Only the Argon2id hash persists. Expires after 24 hours; cleanup job removes
+/// expired capabilities and their associated demo drafts.
+model DemoDraftCapability {
+  id            String    @id @default(uuid(7)) @db.Uuid
+  draftId       String    @unique @db.Uuid
+  tokenHash     String    @db.VarChar(255)
+  /// Hashed client fingerprint (IP + UA) for rate limiting — never raw IP.
+  rateLimitKey  String    @db.VarChar(64)
+  expiresAt     DateTime  @db.Timestamptz
+  revokedAt     DateTime? @db.Timestamptz
+  createdAt     DateTime  @default(now()) @db.Timestamptz
+
+  draft Draft @relation("DemoDraftCapability", fields: [draftId], references: [id])
+
+  @@index([expiresAt])
+  @@map("demo_draft_capabilities")
+}
+
+// ---------------------------------------------------------------------------
 // Audit
 // ---------------------------------------------------------------------------
 
@@ -894,4 +957,114 @@ model AuditLog {
   @@index([entityType, entityId])
   @@index([actorId, createdAt(sort: Desc)])
   @@map("audit_log")
+}
+
+// ---------------------------------------------------------------------------
+// Phase 3A — preference profiles foundation (BUILD_SPEC.md sections 2.2, 4.2)
+// ---------------------------------------------------------------------------
+
+enum PreferenceListType {
+  FAVORITE
+  DISLIKED
+  TARGET
+  AVOID
+}
+
+/// Teams only support favorite/disliked (BUILD_SPEC.md section 4.2).
+enum TeamPreferenceType {
+  FAVORITE
+  DISLIKED
+}
+
+/// Owner-scoped strategy profile. The full versioned settings envelope
+/// (factor weights, locks, scalar controls, position/category priorities,
+/// punts, avoid mode) persists as validated JSON — see
+/// packages/domain/src/preferences.ts and docs/adr/0011-preference-storage-
+/// and-normalization.md. At most one default profile per owner is enforced
+/// by a partial unique index added in the Phase 3A migration.
+model PreferenceProfile {
+  id            String   @id @default(uuid(7)) @db.Uuid
+  ownerId       String   @db.Uuid
+  name          String   @db.VarChar(80)
+  /// Provenance: last preset applied (null = fully custom).
+  presetKey     String?  @db.VarChar(64)
+  presetVersion Int?
+  settingsJson  Json
+  isDefault     Boolean  @default(false)
+  createdAt     DateTime @default(now()) @db.Timestamptz
+  updatedAt     DateTime @updatedAt @db.Timestamptz
+
+  owner             User               @relation("PreferenceProfileOwner", fields: [ownerId], references: [id])
+  playerPreferences PreferencePlayer[] @relation("ProfilePlayerPreferences")
+  teamPreferences   PreferenceTeam[]   @relation("ProfileTeamPreferences")
+  preferredByLeagues League[]          @relation("LeaguePreferredProfile")
+  draftOverrides    Draft[]            @relation("DraftOverrideProfile")
+  draftPreferenceSources Draft[]       @relation("DraftPreferenceSource")
+
+  @@unique([ownerId, name])
+  @@index([ownerId, updatedAt(sort: Desc)])
+  @@map("user_preference_profiles")
+}
+
+model PreferencePlayer {
+  id        String             @id @default(uuid(7)) @db.Uuid
+  profileId String             @db.Uuid
+  playerId  String             @db.Uuid
+  listType  PreferenceListType
+  /// Bounded [-1, 1]; sign follows list type (favorites/targets > 0,
+  /// dislikes/avoids < 0). Precise Decimal per repository convention.
+  magnitude Decimal            @db.Decimal(4, 3)
+  createdAt DateTime           @default(now()) @db.Timestamptz
+
+  profile PreferenceProfile @relation("ProfilePlayerPreferences", fields: [profileId], references: [id], onDelete: Cascade)
+  player  Player                @relation("PreferencePlayerRef", fields: [playerId], references: [id])
+
+  @@unique([profileId, playerId, listType])
+  @@index([profileId])
+  @@index([playerId])
+  @@map("preference_players")
+}
+
+model PreferenceTeam {
+  id        String             @id @default(uuid(7)) @db.Uuid
+  profileId String             @db.Uuid
+  teamId    String             @db.Uuid
+  listType  TeamPreferenceType
+  magnitude Decimal            @db.Decimal(4, 3)
+  createdAt DateTime           @default(now()) @db.Timestamptz
+
+  profile PreferenceProfile @relation("ProfileTeamPreferences", fields: [profileId], references: [id], onDelete: Cascade)
+  team    NbaTeam               @relation("PreferenceTeamRef", fields: [teamId], references: [id])
+
+  @@unique([profileId, teamId])
+  @@index([profileId])
+  @@index([teamId])
+  @@map("preference_teams")
+}
+
+/// Personal player rankings. `leagueId = NULL` marks the owner's GLOBAL
+/// board; a league id scopes ranks to one league. Postgres treats NULLs as
+/// distinct in composite uniques, so global-scope uniqueness for both player
+/// and rank value is enforced by PARTIAL unique indexes created in the
+/// Phase 3A migration (league-scoped rows are covered by the composites).
+model CustomPlayerRank {
+  id        String   @id @default(uuid(7)) @db.Uuid
+  ownerId   String   @db.Uuid
+  leagueId  String?  @db.Uuid
+  playerId  String   @db.Uuid
+  rank      Int
+  tier      Int?
+  note      String?  @db.VarChar(280)
+  createdAt DateTime @default(now()) @db.Timestamptz
+  updatedAt DateTime @updatedAt @db.Timestamptz
+
+  owner  User    @relation("CustomRankOwner", fields: [ownerId], references: [id], onDelete: Cascade)
+  league League? @relation("CustomRankLeague", fields: [leagueId], references: [id], onDelete: Cascade)
+  player Player  @relation("CustomRankPlayerRef", fields: [playerId], references: [id])
+
+  @@unique([ownerId, leagueId, playerId])
+  @@unique([ownerId, leagueId, rank])
+  @@index([ownerId, rank])
+  @@index([playerId])
+  @@map("custom_player_ranks")
 }

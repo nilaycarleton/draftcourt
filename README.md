@@ -57,6 +57,10 @@ For each available legal player, the engine:
 
 The future AI assistant may convert natural-language goals into bounded, visible preference changes. It may not invent data or directly replace the deterministic score.
 
+## Implemented so far
+
+Phases 0–2 (data pipeline, league wizard, event-sourced live drafts, deterministic recommendations) and the preference foundation plus its integration are working locally: signed-in managers build strategy profiles at `/preferences`, select one per league or override it before starting a draft, and every started draft captures an immutable, checksummed snapshot of that strategy which drives bounded, explainable personalization in the live recommendations. Editing a profile affects only future drafts. See [BUILD_SPEC.md](./BUILD_SPEC.md) §24 for the phase checklist and [docs/architecture/preferences.md](./docs/architecture/preferences.md) for the design.
+
 ## Frontend direction
 
 The interface is a minimalist, futuristic NBA analytics dashboard with equally polished light and dark themes. The live desktop view keeps the visual board, top three recommendations, and user's roster visible; mobile uses recommendations-first tabs and an interruptible bottom sheet.

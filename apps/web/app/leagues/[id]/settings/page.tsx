@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { getCurrentUser } from "@/lib/server/auth";
 import { getLeagueDetail } from "@/lib/server/leagues";
+import { getDefaultProfile, listProfiles } from "@/lib/server/preference-profiles";
+import { StrategyProfilePicker } from "@/features/leagues/StrategyProfilePicker";
 
 export const dynamic = "force-dynamic";
 export const metadata = { title: "League settings — DraftCourt" };
@@ -29,6 +31,11 @@ export default async function LeagueSettingsPage({ params }: PageProps) {
       </main>
     );
   }
+  // Owner-scoped profile list + current default for the strategy picker.
+  const [{ profiles }, defaultProfile] = await Promise.all([
+    listProfiles(user.id, { limit: 100 }),
+    getDefaultProfile(user.id),
+  ]);
 
   return (
     <main className="dc-page">
@@ -68,6 +75,22 @@ export default async function LeagueSettingsPage({ params }: PageProps) {
           ))}
         </ol>
       </section>
+      <StrategyProfilePicker
+        leagueId={detail.id}
+        profiles={profiles.map((profile) => ({
+          id: profile.id,
+          name: profile.name,
+          presetKey: profile.presetKey,
+          presetVersion: profile.presetVersion,
+          isDefault: profile.isDefault,
+        }))}
+        selection={{
+          preferredProfileId: detail.strategySelection.preferredProfileId,
+          preferredProfileName: detail.strategySelection.preferredProfileName,
+          defaultProfileId: defaultProfile?.id ?? null,
+          defaultProfileName: defaultProfile?.name ?? null,
+        }}
+      />
       <p>
         <Link className="dc-button-primary" href="/drafts/new">
           Start a draft with this league

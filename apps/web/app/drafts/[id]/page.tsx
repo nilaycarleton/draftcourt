@@ -56,9 +56,20 @@ export default async function DraftRoomPage({ params }: PageProps) {
             isUserTeam: team.isUserTeam,
             assignments: team.assignments.map((a) => ({
               playerId: a.playerId,
+              playerName: a.playerName,
               sequence: typeof a.sequence === "number" ? a.sequence : 0,
+              round: a.round,
+              pickInRound: a.pickInRound,
+              isKeeper: a.isKeeper,
+              slotPosition: a.slotPosition,
+              isBench: a.isBench,
             })),
           })),
+          strategy: draft.strategy ?? undefined,
+          mock:
+            draft.type === "MOCK" && draft.mock !== null
+              ? { simSeed: draft.mock.simSeed, teams: draft.mock.teams }
+              : undefined,
         }}
       />
     </main>

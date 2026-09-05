@@ -11,12 +11,17 @@ function generateNonce(): string {
 
 function withSecurityHeaders(request: NextRequest): NextResponse {
   const nonce = generateNonce();
+  const csp = buildContentSecurityPolicy(nonce);
 
+  // Next.js extracts the nonce for its own bootstrap scripts from the
+  // Content-Security-Policy REQUEST header during SSR; without it,
+  // 'strict-dynamic' blocks every first-party and Clerk script.
   const requestHeaders = new Headers(request.headers);
   requestHeaders.set("x-nonce", nonce);
+  requestHeaders.set("Content-Security-Policy", csp);
 
   const response = NextResponse.next({ request: { headers: requestHeaders } });
-  response.headers.set("Content-Security-Policy", buildContentSecurityPolicy(nonce));
+  response.headers.set("Content-Security-Policy", csp);
   return response;
 }
 

@@ -11,6 +11,7 @@ import {
   type RecommendationOutput,
 } from "@draftcourt/domain";
 import { PROJECTION_AS_OF } from "@/lib/server/current-run";
+import { PreferenceSnapshotValidationError, readStoredSnapshot } from "./preference-snapshot";
 
 /**
  * Server orchestration for the deterministic engine: loads the immutable
@@ -23,6 +24,17 @@ import { PROJECTION_AS_OF } from "@/lib/server/current-run";
  * `(draftId, sequence, inputChecksum)` — identical inputs return the stored
  * payload byte-for-byte, and no stale cache can ever affect pick legality
  * because legality is enforced in the pick transaction against live tables.
+ *
+ * Preference provenance (Phase 3B): the draft's immutable strategy snapshot is
+ * read ONCE here and projected into `EngineInput.preferences`. Because it
+ * participates in the canonical checksum, different snapshots cannot share
+ * cached rows and unchanged inputs stay idempotent. The early lookup below
+ * serves a stored payload only when its engine version equals the draft's —
+ * drafts stamp that version at creation from the SAME domain constant the
+ * engine emits, so a started draft's stored recommendations always correspond
+ * to its recorded strategy. Snapshots are never rewritten after start, so the
+ * latest-at-sequence row is definitionally computed from this draft's
+ * immutable strategy.
  */
 
 export class DraftNotReadyError extends Error {}
@@ -41,6 +53,7 @@ export async function getRecommendationsForOwner(
       nextOverallPick: true,
       engineVersion: true,
       settingsSnapshot: true,
+      preferenceSnapshot: true,
     },
   });
   if (!draft) return null;
@@ -64,6 +77,21 @@ export async function getRecommendationsForOwner(
 
   const settings = draft.settingsSnapshot as unknown as EngineSettings;
   const season = settings.season;
+
+  // Immutable strategy snapshot (Phase 3B). Legacy drafts (started before
+  // Phase 3B) have none and keep their recorded behavior byte-for-byte. A
+  // malformed payload makes recommendations unavailable rather than silently
+  // recomputing against the wrong strategy.
+  let preferences: EngineInput["preferences"];
+  try {
+    const evidence = readStoredSnapshot(draft.preferenceSnapshot);
+    preferences = evidence?.enginePreferences;
+  } catch (error) {
+    if (error instanceof PreferenceSnapshotValidationError) {
+      throw new DraftNotReadyError(error.message);
+    }
+    throw error;
+  }
 
   const [currentRun, adpEntries, assignments] = await Promise.all([
     prisma.projectionRun.findFirst({
@@ -169,6 +197,7 @@ export async function getRecommendationsForOwner(
     picksUntilUserTurn: picksUntilUserTurn(settings, draft.nextOverallPick),
     includeUnsigned: false,
     engineSeed: seedFromIds(draftId, currentRun.id),
+    preferences,
   };
 
   const output = recommend(input);

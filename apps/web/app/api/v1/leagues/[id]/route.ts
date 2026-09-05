@@ -17,6 +17,7 @@ export const dynamic = "force-dynamic";
 const metaPatchSchema = z.object({
   name: z.string().trim().min(1).max(80).optional(),
   playoffWeeks: z.number().int().min(1).max(14).nullable().optional(),
+  preferredProfileId: z.uuid().nullable().optional(),
 });
 
 const rulesPatchSchema = z.object({
@@ -100,6 +101,9 @@ export async function PATCH(request: NextRequest, context: RouteContext): Promis
     const league = await updateLeagueMeta(user.id, id, {
       ...(parsed.data.name !== undefined ? { name: parsed.data.name } : {}),
       ...(parsed.data.playoffWeeks !== undefined ? { playoffWeeks: parsed.data.playoffWeeks } : {}),
+      ...(parsed.data.preferredProfileId !== undefined
+        ? { preferredProfileId: parsed.data.preferredProfileId }
+        : {}),
     });
     return ok(league);
   } catch (error) {

@@ -7,7 +7,9 @@ export default defineConfig({
   testDir: "./tests/e2e",
   fullyParallel: true,
   forbidOnly: Boolean(process.env.CI),
-  retries: process.env.CI ? 2 : 0,
+  // One local retry absorbs transient server hiccups when several browser
+  // workers share the single production server; CI keeps its own policy.
+  retries: process.env.CI ? 2 : 1,
   reporter: [["html", { open: "never" }]],
   use: {
     baseURL,

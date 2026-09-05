@@ -64,7 +64,10 @@ export const playersQuerySchema = z.object({
     .default("overallRank"),
   direction: z.enum(["asc", "desc"]).default("asc"),
   cursor: z.string().optional(),
-  limit: z.coerce.number().int().min(1).max(100).default(25),
+  // The live draft room fetches the whole available pool in one request
+  // (features/drafts/DraftRoom.tsx uses limit=600 for search-to-draft), so
+  // the cap must cover a full league-size player universe.
+  limit: z.coerce.number().int().min(1).max(1000).default(25),
 });
 
 export type PlayersQuery = z.infer<typeof playersQuerySchema>;

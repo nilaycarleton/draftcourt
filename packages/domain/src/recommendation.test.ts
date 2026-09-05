@@ -170,6 +170,53 @@ describe("recommendation engine", () => {
     expect(unsignedAllowed.pool.map((e) => e.playerId)).toContain("p-unsigned");
   });
 
+  it("excludes players with no legal roster slot left (league-wide inventory)", () => {
+    // Regression test: the engine recommended a center-only player when
+    // every C slot AND every BENCH slot in the league was already filled —
+    // the pick then correctly failed server-side as illegal. Eligibility
+    // must mirror the transactional authority's league-wide inventory
+    // (slot.count × teamCount minus fills) and its slot preference order.
+    // SETTINGS: SG slots 12, UTIL 12, BENCH 24 league-wide. Fill SG+UTIL+24
+    // bench assignments so a C-only player has nowhere legal to go, while a
+    // flexible G-eligible player still fits nothing either — only add one
+    // open UTIL-capable guard to keep the pool non-empty.
+    const assignments = [
+      ...Array.from({ length: 12 }, (_, index) => ({
+        playerId: `sg-${String(index)}`,
+        teamSlot: (index % 12) + 1,
+        slotPosition: "SG",
+      })),
+      ...Array.from({ length: 12 }, (_, index) => ({
+        playerId: `util-${String(index)}`,
+        teamSlot: (index % 12) + 1,
+        slotPosition: "UTIL",
+      })),
+      ...Array.from({ length: 24 }, (_, index) => ({
+        playerId: `bench-${String(index)}`,
+        teamSlot: (index % 12) + 1,
+        slotPosition: "BENCH",
+      })),
+    ];
+    const extraPlayers = [
+      ...assignments.map((a) =>
+        meta({ playerId: a.playerId, displayName: a.playerId, eligiblePositions: ["SG"] }),
+      ),
+      meta({ playerId: "p-center", displayName: "Center Only", eligiblePositions: ["C"] }),
+    ];
+    const extraProjections = [
+      ...assignments.map((a) => projection({ playerId: a.playerId })),
+      projection({ playerId: "p-center", pts: 30 }),
+    ];
+    const result = recommend(
+      baseInput({
+        draftedAssignments: assignments,
+        players: [...METAS, ...extraPlayers],
+        projections: [...PLAYERS, ...extraProjections],
+      }),
+    );
+    expect(result.pool.map((entry) => entry.playerId)).not.toContain("p-center");
+  });
+
   it("weights follow reciprocal rank and sum to 1", () => {
     const weights = defaultWeights();
     const total = Object.values(weights).reduce((sum, w) => sum + w, 0);

@@ -157,11 +157,23 @@ export function replayFromEvents(events: DraftLogEvent[], teamCount: number): Re
  * the league's slot inventory, returns candidate slot positions ordered by
  * preference (specific > G/F hybrid > UTIL > BENCH). The caller resolves the
  * final choice against currently-open slots.
+ *
+ * G and F are COMBO starter slots: G accepts guard-eligible (PG/SG) players
+ * and F accepts forward-eligible (SF/PF) players. Without this, a league
+ * whose dataset has no literally-"G"/"F"-eligible players can strand open
+ * G/F slots with no legal picks left (found via the authenticated E2E
+ * acceptance draft).
  */
 export function candidateSlotsForEligibility(eligible: string[]): Position[] {
   const candidates: Position[] = [];
   for (const position of ["PG", "SG", "SF", "PF", "C", "G", "F"] as const) {
     if (eligible.includes(position)) candidates.push(position);
+  }
+  if (eligible.includes("PG") || eligible.includes("SG")) {
+    if (!candidates.includes("G")) candidates.push("G");
+  }
+  if (eligible.includes("SF") || eligible.includes("PF")) {
+    if (!candidates.includes("F")) candidates.push("F");
   }
   // UTIL accepts any player; BENCH is the final fallback.
   candidates.push("UTIL", "BENCH");

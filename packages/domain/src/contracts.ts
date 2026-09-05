@@ -77,14 +77,32 @@ export const scoreComponentKeySchema = z.enum([
 ]);
 export type ScoreComponentKey = z.infer<typeof scoreComponentKeySchema>;
 
-export const scoreComponentSchema = z.object({
-  key: scoreComponentKeySchema,
-  raw: z.number(),
-  normalized: z.number().min(0).max(1),
-  weight: z.number().min(0).max(1),
-  contribution: z.number(),
-  reason: z.string().min(1),
-});
+export const scoreComponentSchema = z
+  .object({
+    key: scoreComponentKeySchema,
+    raw: z.number(),
+    // Structural floor/ceiling covers the widest legal component (the signed
+    // preference component); the per-key refinement below enforces the
+    // 0..1 floor for every other key. The generated JSON Schema therefore
+    // publishes [-1, 1] as the structural bound.
+    normalized: z.number().min(-1).max(1),
+    weight: z.number().min(0).max(1),
+    contribution: z.number(),
+    reason: z.string().min(1),
+  })
+  .superRefine((component, ctx) => {
+    // Phase 3B (ADR 0012): the personalization component is the one bounded
+    // SIGNED component — its normalized value may span [-1, 1]. Every other
+    // component remains a pool-relative/absolute 0..1 score.
+    if (component.key === "preference") return;
+    if (component.normalized < 0) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["normalized"],
+        message: "normalized must be >= 0",
+      });
+    }
+  });
 export type ScoreComponent = z.infer<typeof scoreComponentSchema>;
 // Structural Zod schema mirrors the engine's ScoreComponent interface
 // (recommendation.ts) — the engine type remains the implementation source.

@@ -56,4 +56,13 @@ describe("playersQuerySchema", () => {
     expect(query.filters.position).toEqual([]);
     expect(query.filters.availability).toEqual([]);
   });
+
+  it("accepts the live draft room's full-pool fetch (limit=600)", () => {
+    // Regression test: the room requests limit=600 for search-to-draft, but
+    // the schema capped limit at 100 → 422 → an empty in-room pool. Found
+    // via the authenticated E2E acceptance draft.
+    const parsed = playersQuerySchema.parse({ limit: "600" });
+    expect(parsed.limit).toBe(600);
+    expect(() => playersQuerySchema.parse({ limit: "1001" })).toThrow();
+  });
 });

@@ -7,7 +7,12 @@
  * Component pipeline per eligible player:
  *   production -> scarcity -> rosterNeed -> risk -> consistency -> age ->
  *   upside -> role -> adpValue -> nextPickAvailability (seeded Monte Carlo)
- *   -> preference (bounded; Phase 2 default profile contributes 0)
+ *   -> preference (bounded; Phase 3B user preferences, hard-capped at ±10%)
+ *
+ * When `input.preferences` is absent every expression takes the exact legacy
+ * Phase 2 path; when present, factor weights come from the snapshot and the
+ * risk/upside/age/role components are modulated by the user's strategy
+ * scalars, plus signed player/team/rank/category/position preference terms.
  *
  * Weights come from reciprocal rank over the default factor priority, then
  * normalize to sum 1 (section 2.2). Components are percentile-normalized
@@ -102,6 +107,14 @@ export interface EngineInput {
   picksUntilUserTurn: number;
   includeUnsigned: boolean;
   engineSeed: number;
+  /**
+   * Immutable, versioned preference snapshot projection (Phase 3B, ADR 0012).
+   * Optional so every Phase 2 caller and test compiles and behaves unchanged:
+   * when absent (or null — normalized to undefined internally) the engine runs
+   * the exact legacy code path and the canonical checksum serializes nothing
+   * for this key. When present it participates fully in the checksum.
+   */
+  preferences?: EnginePreferences | undefined;
 }
 
 import type { RecommendationLabel, ScoreComponent } from "./contracts";
@@ -120,6 +133,10 @@ export interface PoolEntry {
   explanation: string;
   availabilityNextPick: number;
   lookaheadBonus: number;
+  /** Phase 3B: present only when a preference-driven advisory applies
+   * (preference reach vs market ADP, avoid-list fallback). Omitted entirely
+   * when empty so legacy payloads stay byte-identical. */
+  warnings?: string[] | undefined;
 }
 
 export interface RecommendationOutput {
@@ -130,9 +147,10 @@ export interface RecommendationOutput {
   userTeamSlot: number;
 }
 
-import { overallPickToSlot } from "./draft";
+import { candidateSlotsForEligibility, overallPickToSlot } from "./draft";
+import type { EnginePreferences } from "./recommendation-snapshot";
 
-export const ENGINE_VERSION = "phase2-deterministic-1.0.0";
+export const ENGINE_VERSION = "phase3-preferences-1.0.0";
 
 /** Default factor priority (BUILD_SPEC section 2.2) -> reciprocal rank weights. */
 const DEFAULT_PRIORITY: ComponentKey[] = [
@@ -522,6 +540,11 @@ export function buildTendency(
 const SIM_RUNS_LIVE = 250;
 const LOOKAHEAD_POOL = 20;
 const LOOKAHEAD_CAP = 0.1;
+/** Phase 3B: the signed preference component may never move the final score
+ * by more than 10 points (contribution is clamped after weighting). */
+const PREFERENCE_CONTRIBUTION_CAP = 0.1;
+const AVOID_FALLBACK_WARNING =
+  "Your avoid list would empty the eligible pool — severe penalties applied instead.";
 /** Diminishing returns: category win-probability utility decays to zero as
  * the projected win probability approaches this ceiling (section 6.4). */
 const WIN_PROB_CEILING = 0.85;
@@ -539,7 +562,13 @@ interface Candidate {
 }
 
 export function recommend(input: EngineInput): RecommendationOutput {
-  const weights = defaultWeights();
+  // Phase 3B gate: normalized copy (arrays canonically sorted) used for BOTH
+  // math and the canonical checksum so upstream array order can never change
+  // results or hash identity. Undefined => exact legacy behavior.
+  const prefs = input.preferences ? normalizeEnginePreferences(input.preferences) : undefined;
+  const weights: Record<ComponentKey, number> = prefs
+    ? { ...prefs.factorWeights, schedule: 0 }
+    : defaultWeights();
   const userTeamSlot = overallPickToSlot(input.nextOverallPick, input.settings.teamCount);
 
   // ---- eligibility -------------------------------------------------------
@@ -547,14 +576,62 @@ export function recommend(input: EngineInput): RecommendationOutput {
   const playersById = new Map(input.players.map((p) => [p.playerId, p]));
   const projectionsById = new Map(input.projections.map((p) => [p.playerId, p]));
 
-  const projectionByIdSafe = new Map(input.projections.map((p) => [p.playerId, p] as const));
-  void projectionByIdSafe;
-  const pool = input.players.filter((player) => {
+  // League-wide open-slot inventory — mirrors the transactional authority's
+  // computeOpenSlots/chooseSlot (apps/web/lib/server/drafts.ts) so a
+  // recommended player always has at least one legal final assignment
+  // (BUILD_SPEC.md §6.1). Slot inventory is per-league: `count` instances
+  // of each position exist on EVERY team.
+  const filledByPosition = new Map<string, number>();
+  for (const assignment of input.draftedAssignments) {
+    filledByPosition.set(
+      assignment.slotPosition,
+      (filledByPosition.get(assignment.slotPosition) ?? 0) + 1,
+    );
+  }
+  const openSlots = input.settings.rosterSlots.map((slot) => ({
+    position: slot.position,
+    remaining: slot.count * input.settings.teamCount - (filledByPosition.get(slot.position) ?? 0),
+    isStarter: slot.isStarter,
+  }));
+
+  const isEligible = (player: EnginePlayerMeta): boolean => {
     if (draftedIds.has(player.playerId)) return false;
     if (player.status === "RETIRED") return false;
     if (player.status === "UNSIGNED" && !input.includeUnsigned) return false;
-    return projectionsById.has(player.playerId);
-  });
+    if (!projectionsById.has(player.playerId)) return false;
+    const fitsSomeSlot = candidateSlotsForEligibility(player.eligiblePositions).some((candidate) =>
+      openSlots.some(
+        (open) =>
+          open.position === candidate &&
+          open.remaining > 0 &&
+          (candidate === "BENCH" ? !open.isStarter : open.isStarter),
+      ),
+    );
+    return fitsSomeSlot;
+  };
+
+  let pool = input.players.filter(isEligible);
+
+  // Phase 3B hard avoids: EXCLUDE drops AVOID-listed players like any other
+  // eligibility rule (before the checksum, which covers full input arrays).
+  // If that would leave fewer than 3 candidates, fall back to the full
+  // eligible pool and treat those avoids as severe penalties instead.
+  let avoidFallbackApplied = false;
+  if (prefs?.avoidMode === "EXCLUDE") {
+    const avoidIds = new Set(
+      Object.entries(prefs.playerEntries)
+        .filter(([, entry]) => entry.listType === "AVOID")
+        .map(([playerId]) => playerId),
+    );
+    if (avoidIds.size > 0) {
+      const withoutAvoids = pool.filter((player) => !avoidIds.has(player.playerId));
+      if (withoutAvoids.length >= 3) {
+        pool = withoutAvoids;
+      } else {
+        avoidFallbackApplied = true;
+      }
+    }
+  }
 
   // ---- canonical checksum over the full immutable snapshot ---------------
   const canonicalInput = canonicalize({
@@ -566,6 +643,7 @@ export function recommend(input: EngineInput): RecommendationOutput {
     nextOverallPick: input.nextOverallPick,
     picksUntilUserTurn: input.picksUntilUserTurn,
     players: input.players,
+    preferences: prefs,
     projectionRunId: input.projectionRunId,
     projections: input.projections,
     settings: input.settings,
@@ -598,6 +676,31 @@ export function recommend(input: EngineInput): RecommendationOutput {
     candidate.fgZ = (impact.fgImpact - baselines.meanFgImpact) / baselines.sdFgImpact;
     candidate.ftZ = (impact.ftImpact - baselines.meanFtImpact) / baselines.sdFtImpact;
   }
+
+  // ---- Phase 3B category-priority term -----------------------------------
+  // Only when explicit category priorities exist: raw score is Σ weight ×
+  // per-game stat value, then rank-normalized into [0,1] across the pool.
+  // League scoringRules are never touched by this — production/scarcity/
+  // rosterNeed stay untouched. Punted stats carry weight 0 and contribute 0.
+  const categoryTermById = new Map<string, number>();
+  if (prefs && prefs.categoryPriorities.length > 0) {
+    const categoryScores = new Map<string, number>();
+    for (const candidate of candidates) {
+      let score = 0;
+      for (const entry of prefs.categoryPriorities) {
+        const value = categoryStatValue(candidate, entry.stat);
+        if (value !== undefined) score += entry.weight * value;
+      }
+      categoryScores.set(candidate.playerId, score);
+    }
+    for (const [playerId, value] of rankNormalize(categoryScores)) {
+      categoryTermById.set(playerId, value);
+    }
+  }
+
+  // AVOID entries act as severe penalties when their mode says so or when the
+  // EXCLUDE fallback had to keep them in the pool.
+  const severeAvoids = prefs ? prefs.avoidMode === "SEVERE_PENALTY" || avoidFallbackApplied : false;
 
   // ---- production --------------------------------------------------------
   const isPoints = input.settings.type === "POINTS";
@@ -695,9 +798,15 @@ export function recommend(input: EngineInput): RecommendationOutput {
     const p = candidate.projection;
     const width =
       Math.abs((p.upper80.pts ?? 0) - (p.lower80.pts ?? 0)) / Math.max(1, Math.abs(p.pts) + 1);
+    const safetyValue = clamp01(
+      1 - (0.6 * p.injuryRisk + 0.25 * Math.min(1, width) + 0.15 * (1 - p.roleSecurity)),
+    );
+    // riskTolerance is AVERSION-weighted inversely: low tolerance (risk-averse)
+    // amplifies safety differences; high tolerance attenuates toward neutral.
+    // Neutral 0.5 keeps the exact legacy arithmetic via the short-circuit.
     riskRaw.set(
       candidate.playerId,
-      clamp01(1 - (0.6 * p.injuryRisk + 0.25 * Math.min(1, width) + 0.15 * (1 - p.roleSecurity))),
+      prefs ? modulateCentered(safetyValue, 1 - prefs.riskTolerance) : safetyValue,
     );
     consistencyRaw.set(candidate.playerId, clamp01(p.consistency));
 
@@ -711,13 +820,22 @@ export function recommend(input: EngineInput): RecommendationOutput {
       input.settings.scoringRules,
     );
     const medianFp = Math.max(1, Math.abs(candidate.fantasyPoints));
+    const upsideValue = clamp01(((upperFp - candidate.fantasyPoints) / medianFp) * p.roleSecurity);
     upsideRaw.set(
       candidate.playerId,
-      clamp01(((upperFp - candidate.fantasyPoints) / medianFp) * p.roleSecurity),
+      prefs ? modulateCentered(upsideValue, prefs.upsidePriority) : upsideValue,
     );
     roleRaw.set(
       candidate.playerId,
-      clamp01(0.7 * p.roleSecurity + 0.3 * Math.min(1, p.minutesPerGame / 36)),
+      prefs
+        ? clamp01(
+            modulatedRole(
+              p.roleSecurity,
+              Math.min(1, p.minutesPerGame / 36),
+              prefs.roleMinutesPriority,
+            ),
+          )
+        : clamp01(0.7 * p.roleSecurity + 0.3 * Math.min(1, p.minutesPerGame / 36)),
     );
   }
 
@@ -727,9 +845,14 @@ export function recommend(input: EngineInput): RecommendationOutput {
     const age = candidate.meta.age;
     if (age === undefined || input.settings.horizon === "REDRAFT") {
       ageRaw.set(candidate.playerId, 0.5); // neutral in redraft
-    } else {
+    } else if (prefs) {
       // Youth curve: no penalty through the prime (~24), gently decaying
       // value for older players — dynasty/keeper contexts value runway.
+      ageRaw.set(
+        candidate.playerId,
+        modulateAge(clamp01(Math.exp(-(Math.max(0, age - 24) ** 2) / 40)), prefs.youthBias),
+      );
+    } else {
       ageRaw.set(candidate.playerId, clamp01(Math.exp(-(Math.max(0, age - 24) ** 2) / 40)));
     }
   }
@@ -774,6 +897,10 @@ export function recommend(input: EngineInput): RecommendationOutput {
     const adpEntry = adpById.get(playerId);
     const availabilityValue = availability.availability.get(playerId) ?? 1;
     const urgency = 1 - availabilityValue;
+
+    const preference = prefs
+      ? evaluatePreferences(candidate, prefs, severeAvoids, categoryTermById, weights.preference)
+      : { raw: 0, normalized: 0, reason: "default profile — personalization arrives in Phase 3" };
 
     const components: ScoreComponent[] = [
       component(
@@ -850,10 +977,10 @@ export function recommend(input: EngineInput): RecommendationOutput {
       ),
       component(
         "preference",
-        0,
-        0,
+        preference.raw,
+        preference.normalized,
         weights.preference,
-        "default profile — personalization arrives in Phase 3",
+        preference.reason,
       ),
       {
         key: "schedule",
@@ -861,11 +988,20 @@ export function recommend(input: EngineInput): RecommendationOutput {
         normalized: 0,
         weight: 0,
         contribution: 0,
-        reason: "off by default",
+        reason: prefs?.schedule.enabled
+          ? "schedule enabled — playoff-week game data is not provided to the engine yet"
+          : "off by default",
       },
     ];
     for (const comp of components) {
       comp.contribution = comp.normalized * comp.weight;
+    }
+    const preferenceComponent = components.find((c) => c.key === "preference");
+    if (preferenceComponent) {
+      preferenceComponent.contribution = Math.min(
+        PREFERENCE_CONTRIBUTION_CAP,
+        Math.max(-PREFERENCE_CONTRIBUTION_CAP, preferenceComponent.contribution),
+      );
     }
     const base = components.reduce((sum, c) => sum + c.contribution, 0);
 
@@ -923,6 +1059,37 @@ export function recommend(input: EngineInput): RecommendationOutput {
   const top3 = entries.slice(0, 3);
   for (const entry of top3) entry.labels = entry.labels.length ? entry.labels : ["BEST_OVERALL"];
 
+  // ---- Phase 3B advisory warnings ----------------------------------------
+  if (prefs) {
+    const top3Ids = new Set(top3.map((entry) => entry.playerId));
+    for (const entry of entries) {
+      const warnings: string[] = [];
+      if (avoidFallbackApplied) {
+        const playerEntry = prefs.playerEntries[entry.playerId];
+        if (playerEntry?.listType === "AVOID") {
+          warnings.push(AVOID_FALLBACK_WARNING);
+        }
+      }
+      if (top3Ids.has(entry.playerId)) {
+        const playerEntry = prefs.playerEntries[entry.playerId];
+        const adpEntry = adpById.get(entry.playerId);
+        const preferenceComponent = entry.components.find((c) => c.key === "preference");
+        if (
+          playerEntry &&
+          (playerEntry.listType === "TARGET" || playerEntry.listType === "FAVORITE") &&
+          adpEntry &&
+          adpEntry.adp - input.nextOverallPick > 24 &&
+          preferenceComponent &&
+          preferenceComponent.contribution > 0.02
+        ) {
+          const gapPicks = String(Math.round(adpEntry.adp - input.nextOverallPick));
+          warnings.push(`Preference reach: market ADP ${gapPicks} picks beyond your current pick.`);
+        }
+      }
+      if (warnings.length > 0) entry.warnings = warnings;
+    }
+  }
+
   return {
     engineVersion: ENGINE_VERSION,
     inputChecksum,
@@ -954,6 +1121,153 @@ function component(
   reason: string,
 ): ScoreComponent {
   return { key, raw, normalized, weight, contribution: normalized * weight, reason };
+}
+
+/** Canonically sorted copy of the engine-facing preferences: array-shaped
+ * collections are sorted here because the generic canonicalizer only sorts
+ * object keys (and arrays of objects), not arrays of strings. Sorting once at
+ * entry also makes category-term float summation order-independent. */
+function normalizeEnginePreferences(prefs: EnginePreferences): EnginePreferences {
+  const byPosition = (a: { position: string }, b: { position: string }): number =>
+    a.position < b.position ? -1 : a.position > b.position ? 1 : 0;
+  const byStat = (a: { stat: string }, b: { stat: string }): number =>
+    a.stat < b.stat ? -1 : a.stat > b.stat ? 1 : 0;
+  return {
+    ...prefs,
+    factorWeights: { ...prefs.factorWeights },
+    schedule: { ...prefs.schedule },
+    positionPriorities: [...prefs.positionPriorities].sort(byPosition),
+    categoryPriorities: [...prefs.categoryPriorities].sort(byStat),
+    puntStats: [...prefs.puntStats].sort(),
+    playerEntries: { ...prefs.playerEntries },
+    teamEntries: { ...prefs.teamEntries },
+    customRanks: { ...prefs.customRanks },
+  };
+}
+
+/** Centered scalar modulation around the neutral midpoint: intensity 0
+ * flattens to 0.5, intensity 1 doubles the deviation. The neutral value
+ * (0.5) short-circuits so defaults reproduce legacy values bit-for-bit. */
+function modulateCentered(raw: number, intensity: number): number {
+  if (intensity === 0.5) return raw;
+  return clamp01(0.5 + (raw - 0.5) * (2 * intensity));
+}
+
+/** Age modulation with youthBias in [-1,1]: +1 doubles the youth tilt, −1
+ * inverts it (favors veterans). Neutral 0 short-circuits to the raw value. */
+function modulateAge(raw: number, bias: number): number {
+  if (bias === 0) return raw;
+  return clamp01(0.5 + (raw - 0.5) * (1 + 2 * bias));
+}
+
+/** roleMinutesPriority blends role security against raw minutes; the neutral
+ * value keeps the exact legacy 0.7/0.3 arithmetic for byte-identical output. */
+function modulatedRole(roleSecurity: number, minutesTerm: number, priority: number): number {
+  if (priority === 0.5) return 0.7 * roleSecurity + 0.3 * minutesTerm;
+  const wSec = 0.4 + 0.6 * priority;
+  return wSec * roleSecurity + (1 - wSec) * minutesTerm;
+}
+
+/** Maps a user-facing category key to this candidate's per-game stat value.
+ * Percentages use volume-aware pool z-scores mapped into [0,1]; unknown
+ * stats are skipped by returning undefined. */
+function categoryStatValue(candidate: Candidate, stat: string): number | undefined {
+  switch (stat) {
+    case "PTS":
+      return candidate.perGame.pts;
+    case "REB":
+      return candidate.perGame.reb;
+    case "AST":
+      return candidate.perGame.ast;
+    case "STL":
+      return candidate.perGame.stl;
+    case "BLK":
+      return candidate.perGame.blk;
+    case "TOV":
+      return candidate.perGame.tov;
+    case "FGM":
+      return candidate.perGame.fgm;
+    case "FGA":
+      return candidate.perGame.fga;
+    case "FTM":
+      return candidate.perGame.ftm;
+    case "FTA":
+      return candidate.perGame.fta;
+    case "THREE_PM":
+    case "3PM":
+      return candidate.perGame.threePm;
+    case "FG_PCT":
+      return clamp01((candidate.fgZ + 4) / 8);
+    case "FT_PCT":
+      return clamp01((candidate.ftZ + 4) / 8);
+    default:
+      return undefined;
+  }
+}
+
+/** Signed preference terms — position priority (max over eligible slots),
+ * rank-normalized category score, player list entry, team affinity, and the
+ * custom-rank delta — summed in that order and clamped to [-1,1]. Stored
+ * magnitudes keep their storage sign; list type decides direction, so a sign
+ * slip upstream can never corrupt the math. The reason string carries the
+ * actual capped score-point impact deterministically. */
+function evaluatePreferences(
+  candidate: Candidate,
+  prefs: EnginePreferences,
+  severeAvoids: boolean,
+  categoryTermById: Map<string, number>,
+  preferenceWeight: number,
+): { raw: number; normalized: number; reason: string } {
+  let positionTerm = 0;
+  for (const entry of prefs.positionPriorities) {
+    if (!candidate.meta.eligiblePositions.includes(entry.position)) continue;
+    if (entry.priority > positionTerm) positionTerm = entry.priority;
+  }
+
+  const categoryTerm = categoryTermById.get(candidate.playerId) ?? 0;
+
+  const playerEntry = prefs.playerEntries[candidate.playerId];
+  let playerTerm = 0;
+  if (playerEntry) {
+    const magnitude = Math.abs(playerEntry.magnitude);
+    if (playerEntry.listType === "FAVORITE") playerTerm = magnitude;
+    else if (playerEntry.listType === "TARGET") playerTerm = 0.75 * magnitude;
+    else if (playerEntry.listType === "DISLIKED") playerTerm = -magnitude;
+    else if (severeAvoids) playerTerm = -Math.max(0.5, magnitude);
+  }
+
+  const teamEntry = candidate.meta.nbaTeamId
+    ? prefs.teamEntries[candidate.meta.nbaTeamId]
+    : undefined;
+  let teamTerm = 0;
+  if (teamEntry) {
+    teamTerm =
+      teamEntry.type === "FAVORITE"
+        ? Math.abs(teamEntry.magnitude)
+        : -Math.abs(teamEntry.magnitude);
+  }
+
+  const rankedCount = Object.keys(prefs.customRanks).length;
+  const customRank = prefs.customRanks[candidate.playerId];
+  let rankDelta = 0;
+  if (rankedCount > 0 && customRank !== undefined) {
+    rankDelta = Math.min(1, Math.max(-1, ((rankedCount + 1) / 2 - customRank) / 24));
+  }
+
+  const raw = positionTerm + categoryTerm + playerTerm + teamTerm + rankDelta;
+  const normalized = Math.min(1, Math.max(-1, raw));
+  const cappedContribution = Math.min(
+    PREFERENCE_CONTRIBUTION_CAP,
+    Math.max(-PREFERENCE_CONTRIBUTION_CAP, normalized * preferenceWeight),
+  );
+  const points = String(Math.round(Math.abs(cappedContribution) * 1000) / 10);
+  const reason =
+    normalized > 0
+      ? `your preferences add ${points} points`
+      : normalized < 0
+        ? `your preferences subtract ${points} points`
+        : "your preference lists did not move this player";
+  return { raw, normalized, reason };
 }
 
 function clampAdpGap(gap: number): number {
@@ -1304,10 +1618,20 @@ function buildExplanation(
 
   const parts: string[] = [];
   if (first) {
-    parts.push(`Strongest factor: ${first.reason} (${describeShare(first)}).`);
+    // The preference component's reason already carries its score-point
+    // impact; a pool percentile would be meaningless for a signed term.
+    parts.push(
+      `Strongest factor: ${first.reason}${
+        first.key === "preference" ? "" : ` (${describeShare(first)})`
+      }.`,
+    );
   }
   if (second) {
-    parts.push(`Also helps: ${second.reason} (${describeShare(second)}).`);
+    parts.push(
+      `Also helps: ${second.reason}${
+        second.key === "preference" ? "" : ` (${describeShare(second)})`
+      }.`,
+    );
   }
   if (caveat) {
     parts.push(`Watch: ${caveat.reason}.`);

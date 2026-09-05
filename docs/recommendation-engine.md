@@ -75,8 +75,51 @@ relative: Best Overall (production), Best Fit (scarcity+need), Best Value
 Explanations use deterministic templates citing the two largest positive
 contributions and the largest material caveat — never generated prose.
 
+## Personalization (Phase 3B — immutable preference snapshots)
+
+Engine version `phase3-preferences-1.0.0`. Every started draft carries a
+self-contained `DraftPreferenceSnapshot` (ADR 0012) captured atomically in the
+start transaction; recommendations read ONLY that snapshot. Its projection
+enters the canonical input as one optional `preferences` key — absent for
+pre-3B drafts, so Phase 2 checksums and payloads stay byte-identical; present
+snapshots change the checksum, which is exactly what separates cache entries.
+
+When preferences exist (every modulation short-circuits at its neutral value
+so defaults reproduce the legacy arithmetic):
+
+| Input                     | Formula                                                                                                                                            | Bounds                     |
+| ------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------- |
+| factor weights            | snapshot weights replace reciprocal-rank defaults                                                                                                  | Σ = 1 ± 1e-6               |
+| riskTolerance r           | risk' = clamp01(0.5 + (risk−0.5)·2(1−r)) — low tolerance amplifies safety differences                                                              | [0,1]; r=0.5 identity      |
+| upsidePriority u          | upside' = clamp01(0.5+(upside−0.5)·2u)                                                                                                             | [0,1]; u=0.5 identity      |
+| youthBias y               | age' = clamp01(0.5+(age−0.5)(1+2y)); y<0 favors veterans; redraft stays neutral                                                                    | [0,1]                      |
+| roleMinutesPriority m     | role' = wSec·roleSec + (1−wSec)·min(1,mpg/36), wSec = 0.4+0.6m                                                                                     | m=0.5 ⇒ legacy 0.7/0.3 mix |
+| position priorities       | max priority among eligible positions                                                                                                              | [0,1] term                 |
+| category priorities       | rankNormalize(Σ weight·perGameStat); FG%/FT% via volume-aware z-map; league scoring rules never altered; punts contribute 0 and are never inferred | [0,1] term                 |
+| FAVORITE / TARGET         | +                                                                                                                                                  | m                          | / +0.75                   | m      |     | ≤ 1  |
+| DISLIKED / AVOID (severe) | −                                                                                                                                                  | m                          | / −max(0.5,               | m      | )   | ≥ −1 |
+| team preferences          | ±                                                                                                                                                  | m                          | via the player's NBA team | [−1,1] |
+| custom ranks              | clamp(((n+1)/2 − rank)/24, −1, 1), n = ranked players; league scope overrides global upstream                                                      | monotone in rank           |
+
+The signed total clamps to [-1, 1]; its weighted contribution is HARD-CAPPED
+at ±10 score points even with the preference slider at 100%. Hard avoids
+(EXCLUDE mode) remove players like any eligibility rule; if that would leave
+fewer than three legal candidates the engine falls back to severe penalties
+and labels affected entries with an actionable warning — an avoid list can
+never silently empty the board. Targets/favorites cannot bypass legality.
+Schedule stays a zero-weight component until playoff-week game data exists;
+enabling it today yields an honestly-labeled neutral signal.
+
+Warnings (`warnings[]`, omitted when empty): top-3 entries boosted by
+targets/favorites sitting >24 picks beyond market ADP with material positive
+contribution get a reach warning; avoid-fallback entries get the fallback
+warning. The preference component's explanation reports actual points added or
+subtracted rather than a percentile. Same-team stacking remains unpenalized by
+construction.
+
 ## Performance
 
 Targets (§6.9): warm p95 < 300 ms, cold p95 < 800 ms on the 12×16×600
 fixture. Latest measured results live in
-`docs/benchmarks/recommendations-latest.json`.
+`docs/benchmarks/recommendations-latest.json`; preference-scenario results
+(defaults/balanced/extreme/large-lists) in `docs/benchmarks/preferences-latest.json`.

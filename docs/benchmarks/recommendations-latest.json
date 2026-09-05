@@ -1,18 +1,19 @@
 {
-  "date": "2026-08-23T00:23:37.008Z",
+  "date": "2026-08-24T16:46:50.445Z",
   "fixture": "demo dataset, 12 teams x 16 rounds, categories (9-cat), measured at picks 12/60/120",
-  "engineVersion": "phase2-deterministic-1.0.0",
+  "engineVersion": "phase3-preferences-1.0.0",
+  "strategyScenario": "draftcourt-defaults (no profile selected)",
   "poolSize": 110,
   "cold": {
-    "p50": 86,
-    "p95": 156,
-    "p99": 163,
+    "p50": 90,
+    "p95": 166,
+    "p99": 190,
     "n": 21
   },
   "warm": {
     "p50": 6,
-    "p95": 9,
-    "p99": 9,
+    "p95": 11,
+    "p99": 16,
     "n": 21
   },
   "targets": {

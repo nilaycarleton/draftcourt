@@ -11,10 +11,17 @@
 
 import { mkdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
-import { createLeague } from "../lib/server/leagues";
-import { createDraft, makePick, transitionStatus } from "../lib/server/drafts";
-import { getRecommendationsForOwner } from "../lib/server/recommendations";
-import { prisma } from "@draftcourt/db";
+import { loadRootEnv } from "@draftcourt/db/src/load-root-env";
+
+// tsx runs this script directly (no Next/vitest env injection), so load the
+// repo-root .env.local BEFORE any module that constructs a Prisma client.
+loadRootEnv();
+
+const { ENGINE_VERSION } = await import("@draftcourt/domain");
+const { createLeague } = await import("../lib/server/leagues");
+const { createDraft, makePick, transitionStatus } = await import("../lib/server/drafts");
+const { getRecommendationsForOwner } = await import("../lib/server/recommendations");
+const { prisma } = await import("@draftcourt/db");
 
 interface Percentiles {
   p50: number;
@@ -126,7 +133,8 @@ async function main(): Promise<void> {
       date: new Date().toISOString(),
       fixture:
         "demo dataset, 12 teams x 16 rounds, categories (9-cat), measured at picks 12/60/120",
-      engineVersion: "phase2-deterministic-1.0.0",
+      engineVersion: ENGINE_VERSION,
+      strategyScenario: "draftcourt-defaults (no profile selected)",
       poolSize: picksMade > 0 ? board.length - picksMade : board.length,
       cold: percentiles(coldTimes),
       warm: percentiles(warmTimes),

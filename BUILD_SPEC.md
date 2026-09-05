@@ -1006,16 +1006,23 @@ The first release is accepted only when all are true:
       unique `(draftId, sequence)` / `(draftId, idempotencyKey)` / `(draftId, playerId)`; undo is a
       compensating `PICK_UNDONE`; keepers are explicit pre-draft events; replay integrity verified.
       See docs/adr/0010-phase2-draft-core-and-recommendations.md.
-- [ ] Build responsive board, pool, permanent user roster, opponent rosters, keyboard controls.
+- [x] Build responsive board, pool, permanent user roster, opponent rosters, keyboard controls.
       Functional room shipped: status bar, semantic board table, searchable pool, sticky top-3,
       permanent roster section, `/ R B M ?` shortcuts, optimistic picks with conflict
-      reconciliation. Remaining for acceptance: virtualized visual snake grid and explicit mobile
-      tab components (currently single-column responsive).
-- [ ] Install/verify Impeccable for OpenCode, create or reconcile `PRODUCT.md` and `DESIGN.md`, shape the live-draft flow before coding, and complete critique/harden/adapt/audit/polish passes with accepted reports.
+      reconciliation. Completed 2026-08-23: virtualized visual snake grid
+      (`packages/ui` DraftBoard — windowed rows, snake-correct fixed team columns, keeper
+      badges, current/user pick states, `aria-activedescendant` cursor, semantic per-pick
+      table alternative) and explicit mobile tabs (`Tabs` WAI-ARIA tablist + `Sheet`
+      opponent-roster dialog with focus restoration). Covered by 29 UI + 12 web unit tests
+      and the 25-test Storybook Playwright suite (axe, 320 px, 200 % zoom, keyboard,
+      reduced-motion, dark, visual snapshots — docs/design/phase2-board-critique-audit.md).
+- [x] Install/verify Impeccable for OpenCode, create or reconcile `PRODUCT.md` and `DESIGN.md`, shape the live-draft flow before coding, and complete critique/harden/adapt/audit/polish passes with accepted reports.
       Installed project-scoped and verified; `PRODUCT.md` (Operate-mode classification),
-      `DESIGN.md` and the accepted shape (docs/design/phase2-shape.md) exist and governed the build;
-      axe runs clean on new surfaces. Remaining: the formal critique/harden/adapt/polish passes as
-      versioned accepted reports.
+      `DESIGN.md` and the accepted shape (docs/design/phase2-shape.md) exist and governed the
+      build. Completed 2026-08-23: critique, audit, harden, adapt, clarify and polish passes
+      run against the live room slice with all three P3 findings resolved and the final
+      re-audit accepted at 20/20 — accepted report versioned at
+      docs/design/phase2-board-critique-audit.md (independent gates still run separately).
 - [x] Add draft/search pick, undo, pause/resume/save/replay and drafted states.
       Search-to-draft and click-to-draft, idempotent duplicate handling, If-Match conflicts with
       authoritative state, undo of latest effective pick, pause/resume transitions, reload via
@@ -1029,16 +1036,52 @@ The first release is accepted only when all are true:
       Softmax opponent model over ADP/projection/tendency, survival fraction output, top-20
       two-user-pick rollout capped at 10%; benchmarked within §6.9 budgets
       (docs/benchmarks/recommendations-latest.json).
-- [ ] Phase acceptance: full manual short draft passes unit/integration/E2E/security/performance gates.
-      All repository gates pass (152 TS unit, 167 Python, contracts, production builds, 111
-      Playwright cases incl. axe-clean new surfaces, Docker health checks). Left unchecked until a
-      fully authenticated end-to-end short manual draft runs through the live room in CI, which
-      requires Clerk test credentials in the environment.
+- [x] Phase acceptance: full manual short draft passes unit/integration/E2E/security/performance gates.
+      Closed 2026-08-23. Remaining blocker resolved: Clerk TEST-instance credentials supplied in
+      git-ignored `apps/web/.env.local` (presence + test-mode prefixes verified; never printed).
+      New authenticated Playwright gate (`tests/e2e/authenticated-draft.spec.ts`, chromium-only,
+      rerunnable/isolated via per-run Clerk test users + sign-in tokens through the app's own
+      provider): signs in, creates a minimal league through the wizard, starts a 4×11 REAL snake
+      draft, makes all 44 picks from live recommendations, verifies per-pick recommendation
+      updates and drafted-state availability, triggers a controlled If-Match version conflict with
+      authoritative recovery, arm-and-confirm Undo (+state verification and re-pick), mid-draft
+      pause/resume with rejected-pick guarantees, reload/event-replay integrity, completion with
+      rosters + 44-row pick history, unauthenticated 401 boundary, and cross-user isolation (404s).
+      Defects found & fixed by this gate, each with focused regression coverage:
+      (1) CSP nonce was never forwarded to SSR (`proxy.ts`) and static prerender shipped
+      build-time HTML under a runtime `'strict-dynamic'` policy — every first-party/Clerk script
+      was blocked once real keys existed; fixed per Next.js installed CSP-nonce guidance
+      (request-header CSP + root-layout dynamic rendering), verified by the suite now running
+      green against the production build; (2) room's full-pool fetch (`limit=600`) exceeded the
+      players API cap of 100 → 422/empty pool; cap raised to 1000 with unit test;
+      (3) engine eligibility ignored roster fit — recommended C-only players into teams with no
+      legal slot (422 illegal pick); pool filter now mirrors the transactional authority's
+      league-wide inventory + slot preference order (`packages/domain` regression test);
+      (4) G/F are combo starter slots but candidate slots required literal eligibility, stranding
+      G/F slots with no legal picks once specific slots filled; guards→G, forwards→F added
+      (domain + web unit tests). Full root gate re-passed after fixes: `pnpm test:all`
+      "All quality gates passed" (format/lint/typecheck, migrations+seed, demo ingestion+publish,
+      JS/TS units incl. 52 focused auth/draft/CSP tests, Python pytest vs real Postgres, contract
+      checks, production build, full Playwright across chromium/chromium-mobile/chromium-light —
+      standalone totals 169 passed / 0 failed / 20 skipped by documented pixel-snapshot and
+      chromium-only policies — analytics Docker build + health checks).
 
 ### Phase 3 — personalization, mock drafts, analysis
 
-- [ ] Build preference profiles, presets, sliders, favorite/disliked/target/avoid, custom ranks.
-- [ ] Implement CPU personalities and guest demo mocks.
+- [x] Build preference profiles, presets, sliders, favorite/disliked/target/avoid, custom ranks.
+      Phase 3A shipped the foundation (versioned settings envelope, 13 presets,
+      reciprocal-rank + locked-slider normalization, owner-scoped APIs, /preferences
+      workspace, migration 20260824033036). Phase 3B completed the integration
+      (ADR 0012): immutable checksummed draft snapshots captured atomically at start,
+      league selection + pre-start overrides with documented precedence, deterministic
+      bounded engine personalization (engine phase3-preferences-1.0.0; ±10-point
+      preference cap; hard-avoid exclusion with actionable fallback), cache identity by
+      snapshot-inclusive checksum with Phase 2 byte-stability, strategy evidence UI in
+      the room. Verified by domain golden/property tests, DB-backed integration/security
+      tests, authenticated Playwright (incl. edit-profile → active-draft stability →
+      new-draft receives edits), and preference-scenario benchmarks within §6.9 budgets.
+- [x] Implement CPU personalities and guest demo mocks.
+      Phase 3C (ADR 0013): 8 versioned personalities (balanced default, T 0.7–1.4), deterministic seeded softmax (seedStrategyVersion 1), immutable snapshots on DraftTeam, single authoritative `makePick` transaction, owner-paced orchestration, 4×3 full completion with legal rosters. Phase 3D (ADR 0014): isolated guest `/demo` with 256-bit capability tokens (PBKDF2-HMAC-SHA256 100k async, hashed IP rate-limit keys, HttpOnly Secure SameSite=Lax cookie + one-time recovery code), 24-hour expiration with hourly advisory-lock cleanup (batch 100, demo-only), strict format/iteration/hex validation and constant-time verification, Redis + Postgres fallback rate limits (create 3/h, resume 30/m, pick 10/30s, tokenFailure 5/5m), no PII/token/IP leakage, full isolation from REAL/MOCK/authenticated data. Verified by domain token tests, DB-backed demo integration/security tests (59 new assertions), guest Playwright (21-step journey, axe 0 serious/critical, keyboard, focus, live-region, 320px, 200% zoom, themes, reduced motion), benchmark `bench-demo-drafts.ts` (creation p50 28ms, verify p50 9ms, resume 15ms, user pick 22ms, CPU 60ms, full 12-team 790ms, cleanup 40ms), lint 0 errors, typecheck 0, 259 web tests, 3 migrations, next build.
 - [ ] Add saved history, analysis/grade, strengths/weaknesses, replay, private result sharing/revocation.
 - [ ] Complete motion, themes, mobile, accessibility and visual regression.
 - [ ] Add benchmarks and portfolio-ready architecture/methodology docs.

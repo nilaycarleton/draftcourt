@@ -99,6 +99,12 @@ export const problems = {
     status: 404,
     detail,
   }),
+  conflict: (detail: string): ProblemDetails => ({
+    type: "/problems/conflict",
+    title: "Conflict",
+    status: 409,
+    detail,
+  }),
   internal: (detail = "An unexpected error occurred."): ProblemDetails => ({
     type: "/problems/internal-error",
     title: "Internal Server Error",

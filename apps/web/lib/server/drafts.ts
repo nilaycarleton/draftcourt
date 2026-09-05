@@ -1,13 +1,31 @@
 import { Prisma } from "@draftcourt/db";
 import { prisma } from "@draftcourt/db";
 import {
+  ENGINE_VERSION,
   overallPickToPickInRound,
   overallPickToRound,
   overallPickToSlot,
   replayFromEvents,
   candidateSlotsForEligibility,
+  cpuPersonalityByKey,
+  defaultCpuPersonalityKey,
+  parseCpuPersonalitySnapshot,
+  toCpuPersonalitySnapshot,
+  type CpuDecision,
+  type CpuPersonalitySnapshot,
   type DraftLogEvent,
 } from "@draftcourt/domain";
+
+/** Fail-closed personality read: malformed stored snapshots degrade to null
+ * instead of crashing the room view. */
+function parseCpuPersonalitySnapshotSafe(json: Prisma.JsonValue): CpuPersonalitySnapshot | null {
+  try {
+    return parseCpuPersonalitySnapshot(json);
+  } catch {
+    return null;
+  }
+}
+import { buildSnapshotForStart, readStoredSnapshot } from "./preference-snapshot";
 
 /**
  * Event-sourced draft core (BUILD_SPEC.md sections 4.2, 4.4; Phase 2 scope
@@ -46,6 +64,7 @@ export interface AuthoritativeState {
   status: string;
   currentSequence: number;
   nextOverallPick: number;
+  [key: string]: unknown;
 }
 
 interface DraftSettingsSnapshot {
@@ -79,6 +98,53 @@ export interface CreateDraftInput {
   /** Retained keeper players: explicit pre-draft events (never hidden
    * mutations). Validated against the league's horizon. */
   keepers?: { playerId: string; teamSlot: number }[];
+  /** Optional pre-start strategy override (Phase 3B). Must be an owned
+   * profile; foreign ids resolve as not-found (no enumeration oracle). The
+   * override is consumed once, when the draft starts. */
+  overrideProfileId?: string | undefined;
+  /** MOCK only: user-visible reproducibility code (ADR 0013). User-supplied
+   * or server-generated at creation; immutable afterwards. */
+  simulationSeed?: string | undefined;
+  /** MOCK only: default CPU personality for every non-user team. Must be a
+   * valid personality key. */
+  cpuPersonalityKey?: string | undefined;
+  /** MOCK only: per-team overrides (slot must be a non-user team slot). */
+  teamPersonalities?: { teamSlot: number; personalityKey: string }[] | undefined;
+}
+
+const SEED_PATTERN = /^[A-Za-z0-9-]{1,64}$/;
+
+function randomSimulationSeed(): string {
+  // 12 chars of base36 from crypto randomness — unguessable enough for a
+  // reproducibility code while staying copy/paste friendly.
+  const alphabet = "abcdefghijklmnopqrstuvwxyz0123456789";
+  const bytes = crypto.getRandomValues(new Uint8Array(12));
+  let out = "";
+  for (const byte of bytes) out += alphabet[byte % alphabet.length] ?? "0";
+  return out;
+}
+
+/** Resolves and validates the immutable CPU personality snapshot for one
+ * non-user team (ADR 0013): unknown keys are rejected, snapshots are frozen
+ * copies of the current versioned definition. */
+function resolveCpuTeamSnapshot(key: string): {
+  cpuStrategy: string;
+  cpuPersonalitySnapshot: Prisma.InputJsonValue;
+} {
+  const definition = cpuPersonalityByKey(key);
+  if (definition === undefined) {
+    throw new DraftIllegalPickError(`unknown CPU personality "${key}"`);
+  }
+  if (!definition.supportedModes.includes("MOCK")) {
+    throw new DraftIllegalPickError(
+      `CPU personality "${key}" does not support authenticated mock drafts`,
+    );
+  }
+  const snapshot = toCpuPersonalitySnapshot(definition);
+  return {
+    cpuStrategy: snapshot.key,
+    cpuPersonalitySnapshot: snapshot as unknown as Prisma.InputJsonValue,
+  };
 }
 
 export async function createDraft(
@@ -111,6 +177,81 @@ export async function createDraft(
   });
   if (!snapshotData?.activeSettingsVersion || !snapshotData.activeSettingsVersionId) {
     throw new DraftNotFoundError("league not found");
+  }
+
+  if (input.overrideProfileId !== undefined) {
+    const profile = await prisma.preferenceProfile.findFirst({
+      where: { id: input.overrideProfileId, ownerId },
+      select: { id: true },
+    });
+    if (!profile) throw new DraftNotFoundError("override profile not found");
+  }
+
+  // Phase 3C mock configuration: validated BEFORE any write so a malformed
+  // payload cannot create a half-configured draft.
+  const isMock = (input.type ?? "REAL") === "MOCK";
+  const mockConfig = (() => {
+    if (!isMock) return null;
+    const userTeams = snapshotData.teams.filter((team) => team.isUserTeam);
+    if (userTeams.length !== 1) {
+      throw new DraftIllegalPickError(
+        "authenticated mock drafts require exactly one user-controlled team",
+      );
+    }
+    const seed = (() => {
+      if (input.simulationSeed === undefined) return randomSimulationSeed();
+      if (!SEED_PATTERN.test(input.simulationSeed)) {
+        throw new DraftIllegalPickError(
+          "simulation seed must be 1-64 characters of letters, digits, or dashes",
+        );
+      }
+      return input.simulationSeed;
+    })();
+    const defaultKey = input.cpuPersonalityKey ?? defaultCpuPersonalityKey;
+    const overrides = new Map<number, string>();
+    for (const override of input.teamPersonalities ?? []) {
+      if (
+        !Number.isInteger(override.teamSlot) ||
+        override.teamSlot < 1 ||
+        override.teamSlot > snapshotData.teamCount
+      ) {
+        throw new DraftIllegalPickError(`CPU team slot ${String(override.teamSlot)} out of range`);
+      }
+      if (overrides.has(override.teamSlot)) {
+        throw new DraftIllegalPickError(
+          `duplicate personality override for team ${String(override.teamSlot)}`,
+        );
+      }
+      if (userTeams[0]?.slot === override.teamSlot) {
+        throw new DraftIllegalPickError(
+          "CPU personality metadata cannot be assigned to the user's team",
+        );
+      }
+      overrides.set(override.teamSlot, override.personalityKey);
+    }
+    return { seed, defaultKey, overrides };
+  })();
+
+  // Freeze the data inputs a mock will use for every CPU decision. These
+  // columns already existed for draft reproducibility; Phase 3C is the first
+  // write path that makes them authoritative instead of repeatedly asking for
+  // whatever projection/ADP run happens to be current later.
+  const mockDataInputs =
+    mockConfig === null
+      ? null
+      : await Promise.all([
+          prisma.projectionRun.findFirst({
+            where: { season: snapshotData.season, isCurrent: true },
+            select: { id: true },
+          }),
+          prisma.adpConsensusSnapshot.findFirst({
+            where: { season: snapshotData.season },
+            orderBy: { capturedAt: "desc" },
+            select: { id: true },
+          }),
+        ]);
+  if (mockDataInputs !== null && mockDataInputs[0] === null) {
+    throw new DraftStatusError("no published projection run exists for this mock draft season");
   }
 
   const settingsSnapshot: DraftSettingsSnapshot = {
@@ -154,17 +295,36 @@ export async function createDraft(
         currentSequence: sequence,
         nextOverallPick: 1,
         version: 0,
+        ...(input.overrideProfileId !== undefined
+          ? { overrideProfileId: input.overrideProfileId }
+          : {}),
+        ...(mockConfig !== null ? { simulationSeed: mockConfig.seed } : {}),
+        ...(mockDataInputs?.[0] !== null && mockDataInputs?.[0] !== undefined
+          ? { projectionRunId: mockDataInputs[0].id }
+          : {}),
+        ...(mockDataInputs?.[1] !== null && mockDataInputs?.[1] !== undefined
+          ? { adpSnapshotId: mockDataInputs[1].id }
+          : {}),
       },
       select: { id: true },
     });
 
     await tx.draftTeam.createMany({
-      data: settingsSnapshot.teams.map((team) => ({
-        draftId: created.id,
-        slot: team.slot,
-        displayName: team.displayName,
-        isUserTeam: team.isUserTeam,
-      })),
+      data: settingsSnapshot.teams.map((team) => {
+        // Immutable CPU personality snapshots for every non-user team of a
+        // MOCK draft (ADR 0013). User teams and real drafts stay NULL.
+        const cpu =
+          mockConfig !== null && !team.isUserTeam
+            ? resolveCpuTeamSnapshot(mockConfig.overrides.get(team.slot) ?? mockConfig.defaultKey)
+            : null;
+        return {
+          draftId: created.id,
+          slot: team.slot,
+          displayName: team.displayName,
+          isUserTeam: team.isUserTeam,
+          ...(cpu ?? {}),
+        };
+      }),
     });
 
     for (const keeper of sortKeepersBySlot(keepers)) {
@@ -273,13 +433,30 @@ function resolveKeeperSlot(snapshot: DraftSettingsSnapshot) {
 // Read model + event listing
 // ---------------------------------------------------------------------------
 
-const ENGINE_VERSION = "phase2-deterministic-1.0.0";
+// The engine version is imported from @draftcourt/domain so the value stamped
+// onto new drafts and the version recorded in recommendation outputs can never
+// drift (a mismatch would permanently defeat the warm-cache guard).
 export const CURRENT_ENGINE_VERSION = ENGINE_VERSION;
 
 export async function getDraftForOwner(draftId: string, ownerId: string) {
   const draft = await prisma.draft.findFirst({
     where: { id: draftId, ownerId },
-    include: {
+    select: {
+      id: true,
+      leagueId: true,
+      type: true,
+      status: true,
+      version: true,
+      currentSequence: true,
+      nextOverallPick: true,
+      engineVersion: true,
+      settingsSnapshot: true,
+      overrideProfileId: true,
+      preferenceSnapshot: true,
+      preferenceSnapshotVersion: true,
+      preferenceSnapshotChecksum: true,
+      preferenceSourceProfileId: true,
+      simulationSeed: true,
       teams: { orderBy: { slot: "asc" } },
       assignments: {
         include: {
@@ -291,7 +468,88 @@ export async function getDraftForOwner(draftId: string, ownerId: string) {
   });
   if (!draft) return null;
 
+  // Display names for every drafted player in one query — the visual board
+  // and roster panels need them; bare ids are meaningless to humans.
+  const playerIds = [...new Set(draft.assignments.map((a) => a.playerId))];
+  const players = playerIds.length
+    ? await prisma.player.findMany({
+        where: { id: { in: playerIds } },
+        select: { id: true, displayName: true },
+      })
+    : [];
+  const playerNameById = new Map(players.map((p) => [p.id, p.displayName]));
+
   const snapshot = draft.settingsSnapshot as unknown as DraftSettingsSnapshot;
+
+  // Strategy evidence (Phase 3B): parsed from the immutable stored snapshot.
+  // "invalid" marks a tampered/legacy-incompatible payload honestly instead of
+  // crashing the room; "none" covers drafts started before Phase 3B.
+  let strategy: DraftStrategyEvidenceView | null = null;
+  if (draft.preferenceSnapshot != null) {
+    try {
+      const evidence = readStoredSnapshot(draft.preferenceSnapshot);
+      if (evidence) {
+        strategy = {
+          status: "OK",
+          source: {
+            kind: evidence.snapshot.source.kind,
+            profileId: evidence.snapshot.source.profileId,
+            profileName: evidence.snapshot.source.profileName,
+            presetKey: evidence.snapshot.source.presetKey,
+            presetVersion: evidence.snapshot.source.presetVersion,
+          },
+          snapshotVersion: evidence.snapshot.snapshotVersion,
+          preferenceSchemaVersion: evidence.snapshot.preferenceSchemaVersion,
+          checksum: draft.preferenceSnapshotChecksum ?? evidence.checksum,
+          capturedAt: evidence.snapshot.capturedAt,
+          engineVersion: draft.engineVersion,
+          settingsSummary: {
+            topFactors: Object.entries(evidence.snapshot.settings.factorWeights)
+              .sort((a, b) => b[1] - a[1] || (a[0] < b[0] ? -1 : 1))
+              .slice(0, 4)
+              .map(([key, weight]) => ({ key, weight })),
+            punts: [...evidence.snapshot.settings.puntStats].sort(),
+            avoidMode: evidence.snapshot.settings.avoidMode,
+            scheduleEnabled: evidence.snapshot.settings.schedule.enabled,
+            favoritePlayers: evidence.snapshot.playerEntries.filter(
+              (entry) => entry.listType === "FAVORITE",
+            ).length,
+            dislikedPlayers: evidence.snapshot.playerEntries.filter(
+              (entry) => entry.listType === "DISLIKED",
+            ).length,
+            targetPlayers: evidence.snapshot.playerEntries.filter(
+              (entry) => entry.listType === "TARGET",
+            ).length,
+            avoidedPlayers: evidence.snapshot.playerEntries.filter(
+              (entry) => entry.listType === "AVOID",
+            ).length,
+            teamPreferences: evidence.snapshot.teamEntries.length,
+            customRanks:
+              evidence.snapshot.customRanks.league.length +
+              evidence.snapshot.customRanks.global.length,
+          },
+        };
+      }
+    } catch {
+      strategy = {
+        status: "INVALID",
+        source: {
+          kind: "DRAFTCOURT_DEFAULTS",
+          profileId: null,
+          profileName: null,
+          presetKey: null,
+          presetVersion: null,
+        },
+        snapshotVersion: null,
+        preferenceSchemaVersion: null,
+        checksum: null,
+        capturedAt: null,
+        engineVersion: draft.engineVersion,
+        settingsSummary: null,
+      };
+    }
+  }
+
   return {
     id: draft.id,
     leagueId: draft.leagueId,
@@ -302,6 +560,30 @@ export async function getDraftForOwner(draftId: string, ownerId: string) {
     nextOverallPick: draft.nextOverallPick,
     engineVersion: draft.engineVersion,
     settingsSnapshot: snapshot,
+    overrideProfileId: draft.overrideProfileId,
+    // Phase 3C mock view: present ONLY for MOCK drafts. Personality keys are
+    // read from the immutable snapshots (fail-closed parse; a malformed
+    // snapshot degrades to null rather than crashing the room).
+    mock:
+      draft.type !== "MOCK"
+        ? null
+        : {
+            simSeed: draft.simulationSeed,
+            teams: draft.teams.map((team) => {
+              let personalityKey: string | null = null;
+              if (team.cpuPersonalitySnapshot !== null) {
+                const parsed = parseCpuPersonalitySnapshotSafe(team.cpuPersonalitySnapshot);
+                personalityKey = parsed?.key ?? null;
+              }
+              return {
+                slot: team.slot,
+                displayName: team.displayName,
+                isUserTeam: team.isUserTeam,
+                personalityKey,
+              };
+            }),
+          },
+    strategy,
     picksRemaining: snapshot.rounds * snapshot.teamCount - (draft.nextOverallPick - 1),
     teams: draft.teams.map((team) => ({
       slot: team.slot,
@@ -311,6 +593,7 @@ export async function getDraftForOwner(draftId: string, ownerId: string) {
         .filter((a) => a.teamSlot === team.slot)
         .map((a) => ({
           playerId: a.playerId,
+          playerName: playerNameById.get(a.playerId) ?? "Unknown player",
           slotPosition: a.slotPosition,
           isBench: a.isBench,
           isKeeper: a.isKeeper,
@@ -321,6 +604,34 @@ export async function getDraftForOwner(draftId: string, ownerId: string) {
     })),
     boardSize: snapshot.rounds * snapshot.teamCount,
   };
+}
+
+export interface DraftStrategyEvidenceView {
+  status: "OK" | "INVALID";
+  source: {
+    kind: string;
+    profileId: string | null;
+    profileName: string | null;
+    presetKey: string | null;
+    presetVersion: number | null;
+  };
+  snapshotVersion: number | null;
+  preferenceSchemaVersion: number | null;
+  checksum: string | null;
+  capturedAt: string | null;
+  engineVersion: string;
+  settingsSummary: {
+    topFactors: { key: string; weight: number }[];
+    punts: string[];
+    avoidMode: "EXCLUDE" | "SEVERE_PENALTY";
+    scheduleEnabled: boolean;
+    favoritePlayers: number;
+    dislikedPlayers: number;
+    targetPlayers: number;
+    avoidedPlayers: number;
+    teamPreferences: number;
+    customRanks: number;
+  } | null;
 }
 
 export async function listEventsForOwner(draftId: string, ownerId: string) {
@@ -401,23 +712,26 @@ export async function verifyReplayIntegrity(
 // Mutations
 // ---------------------------------------------------------------------------
 
-async function lockDraft(tx: Tx, draftId: string) {
+export async function lockDraft(tx: Tx, draftId: string) {
   const rows = await tx.$queryRaw<
     {
       id: string;
-      ownerId: string;
+      ownerId: string | null;
+      leagueId: string | null;
+      overrideProfileId: string | null;
       status: "SETUP" | "ACTIVE" | "PAUSED" | "COMPLETED" | "ABANDONED";
       currentSequence: number;
       nextOverallPick: number;
       version: number;
+      type: "REAL" | "MOCK" | "DEMO";
     }[]
   >(
-    Prisma.sql`SELECT id, "ownerId", status, "currentSequence", "nextOverallPick", version FROM drafts WHERE id = ${draftId}::uuid FOR UPDATE`,
+    Prisma.sql`SELECT id, "ownerId", "leagueId", "overrideProfileId", type, status, "currentSequence", "nextOverallPick", version FROM drafts WHERE id = ${draftId}::uuid FOR UPDATE`,
   );
   return rows[0] ?? null;
 }
 
-function assertOwner(row: { ownerId: string }, ownerId: string): void {
+function assertOwner(row: { ownerId: string | null }, ownerId: string): void {
   if (row.ownerId !== ownerId) throw new DraftNotFoundError("draft not found");
 }
 
@@ -429,17 +743,42 @@ export interface PickResult {
   };
 }
 
+/** Optional CPU-decision hook (ADR 0013): when provided, the picking player
+ * is resolved INSIDE the locked transaction from authoritative state, so a
+ * CPU pick sees exactly what the validator will see. The personality snapshot
+ * rides along so event evidence is complete without re-parsing team rows. */
+export interface CpuPickContext {
+  snapshot: DraftSettingsSnapshot;
+  /** ALL effective selections (including keepers), by slot. */
+  assignments: { playerId: string; teamSlot: number; slotPosition: string }[];
+  nextOverallPick: number;
+}
+
+export interface CpuPickParams {
+  personality: CpuPersonalitySnapshot;
+  decide: (context: CpuPickContext) => CpuDecision;
+}
+
 export async function makePick(params: {
   draftId: string;
   ownerId: string;
-  playerId: string;
+  playerId?: string | undefined;
   idempotencyKey: string;
   ifMatchVersion: number;
+  cpu?: CpuPickParams | undefined;
 }): Promise<PickResult> {
+  if (params.playerId === undefined && params.cpu === undefined) {
+    throw new DraftIllegalPickError("pick requires a player or a CPU decision provider");
+  }
   return prisma.$transaction(async (tx) => {
     const draft = await lockDraft(tx, params.draftId);
     if (!draft) throw new DraftNotFoundError();
-    assertOwner(draft, params.ownerId);
+    // DEMO drafts are capability-authorized (ownerId null); skip owner check for DEMO.
+    if (draft.type !== "DEMO") {
+      assertOwner(draft, params.ownerId);
+    } else if (draft.ownerId !== null) {
+      assertOwner(draft, params.ownerId);
+    }
 
     // Duplicate delivery replays the recorded outcome (idempotent).
     const existing = await tx.draftEvent.findUnique({
@@ -471,35 +810,80 @@ export async function makePick(params: {
     const boardFull = draft.nextOverallPick > snapshot.rounds * snapshot.teamCount;
     if (boardFull) throw new DraftStatusError("draft board is complete");
 
+    // Phase 3C: resolve the CPU decision against the LOCKED state. The
+    // decision seed derives from effective state only, so races re-decide
+    // correctly and undo restores identical decisions.
+    let cpuEvidence: Prisma.InputJsonValue | null = null;
+    let resolvedPlayerId = params.playerId;
+    if (params.cpu !== undefined) {
+      const assignments = await tx.draftRosterAssignment.findMany({
+        where: { draftId: params.draftId },
+        select: { playerId: true, teamSlot: true, slotPosition: true },
+      });
+      const decision = params.cpu.decide({
+        snapshot,
+        assignments,
+        nextOverallPick: draft.nextOverallPick,
+      });
+      if (!decision.ok) {
+        throw new DraftStatusError(`CPU selection failed: ${decision.failure.message}`);
+      }
+      const draftingTeamNow = overallPickToSlot(draft.nextOverallPick, snapshot.teamCount);
+      if (draftingTeamNow === snapshot.userDraftSlot) {
+        throw new DraftStatusError("CPU cannot pick for the user's team");
+      }
+      resolvedPlayerId = decision.playerId;
+      cpuEvidence = {
+        cpu: true,
+        actorType: "CPU",
+        personalityKey: params.cpu.personality.key,
+        personalityVersion: params.cpu.personality.version,
+        seedStrategyVersion: params.cpu.personality.seedStrategyVersion,
+        decisionSeed: decision.evidence.pickSeedHex,
+        decisionInputChecksum: decision.inputChecksum,
+        decisionChecksum: decision.decisionChecksum,
+        selectionScore: Math.round(decision.score * 10000) / 10000,
+      };
+    }
+    if (resolvedPlayerId === undefined) {
+      throw new DraftIllegalPickError("pick requires a player or a CPU decision provider");
+    }
+
     const alreadyDrafted = await tx.draftRosterAssignment.findUnique({
-      where: { draftId_playerId: { draftId: params.draftId, playerId: params.playerId } },
+      where: { draftId_playerId: { draftId: params.draftId, playerId: resolvedPlayerId } },
       select: { id: true },
     });
     if (alreadyDrafted) throw new DraftIllegalPickError("player already drafted");
 
     const player = await tx.player.findUnique({
-      where: { id: params.playerId },
+      where: { id: resolvedPlayerId },
       select: { id: true, status: true, unsigned: true },
     });
     if (!player) throw new DraftIllegalPickError("player not found");
     if (player.status === "RETIRED") throw new DraftIllegalPickError("player is retired");
+    if (cpuEvidence !== null && (player.status === "UNSIGNED" || player.unsigned)) {
+      throw new DraftIllegalPickError("CPU unsigned-player policy excludes this player");
+    }
 
     const eligibility = await tx.playerEligibility.findMany({
-      where: { playerId: params.playerId, season: snapshot.season },
+      where: { playerId: resolvedPlayerId, season: snapshot.season },
       select: { position: true },
     });
     if (eligibility.length === 0 && player.status !== "UNSIGNED") {
       throw new DraftIllegalPickError("player has no eligibility for this season");
     }
 
-    const openSlots = await computeOpenSlots(tx, params.draftId, snapshot);
+    const draftingSlot = overallPickToSlot(draft.nextOverallPick, snapshot.teamCount);
+    if (draft.type === "MOCK" && cpuEvidence === null && draftingSlot !== snapshot.userDraftSlot) {
+      throw new DraftStatusError("the CPU-controlled team is on the clock");
+    }
+    const openSlots = await computeOpenSlots(tx, params.draftId, draftingSlot, snapshot);
     const slotChoice = chooseSlot(
       openSlots,
       eligibility.map((e) => e.position),
     );
     if (!slotChoice) throw new DraftIllegalPickError("no legal roster slot available for player");
 
-    const draftingSlot = overallPickToSlot(draft.nextOverallPick, snapshot.teamCount);
     const sequence = draft.currentSequence + 1;
     const eventId = crypto.randomUUID();
 
@@ -509,13 +893,19 @@ export async function makePick(params: {
         draftId: params.draftId,
         sequence,
         eventType: "PLAYER_DRAFTED",
-        actorUserId: params.ownerId,
+        // CPU picks carry explicit payload evidence instead of a user actor —
+        // actor status is never inferred from a missing user id alone.
+        ...(cpuEvidence !== null ? {} : { actorUserId: params.ownerId }),
         teamSlot: draftingSlot,
-        playerId: params.playerId,
+        playerId: resolvedPlayerId,
         round: overallPickToRound(draft.nextOverallPick, snapshot.teamCount),
         pickInRound: overallPickToPickInRound(draft.nextOverallPick, snapshot.teamCount),
         idempotencyKey: params.idempotencyKey,
-        payload: { slotPosition: slotChoice.position, isBench: slotChoice.isBench },
+        payload: {
+          slotPosition: slotChoice.position,
+          isBench: slotChoice.isBench,
+          ...(cpuEvidence !== null ? { cpuEvidence } : {}),
+        },
       },
     });
     await tx.draftRosterAssignment.create({
@@ -523,7 +913,7 @@ export async function makePick(params: {
         draftId: params.draftId,
         eventId,
         teamSlot: draftingSlot,
-        playerId: params.playerId,
+        playerId: resolvedPlayerId,
         slotPosition: slotChoice.position as never,
         isBench: slotChoice.isBench,
         assignedAt: new Date(),
@@ -551,7 +941,7 @@ export async function makePick(params: {
       duplicated: false,
       authoritative: {
         ...updated,
-        playerId: params.playerId,
+        playerId: resolvedPlayerId,
         teamSlot: draftingSlot,
       },
     };
@@ -567,7 +957,11 @@ export async function undoPick(params: {
   return prisma.$transaction(async (tx) => {
     const draft = await lockDraft(tx, params.draftId);
     if (!draft) throw new DraftNotFoundError();
-    assertOwner(draft, params.ownerId);
+    if (draft.type !== "DEMO") {
+      assertOwner(draft, params.ownerId);
+    } else if (draft.ownerId !== null) {
+      assertOwner(draft, params.ownerId);
+    }
 
     const existing = await tx.draftEvent.findUnique({
       where: {
@@ -667,9 +1061,50 @@ export async function transitionStatus(params: {
     const snapshot = await loadSnapshot(tx, params.draftId);
     const sequence = draft.currentSequence + 1;
 
+    // Phase 3B: resolve the effective strategy ONCE, inside the authoritative
+    // start transaction (ADR 0012). The snapshot is self-contained — later
+    // profile edits can never affect this draft. Malformed stored settings
+    // fail closed HERE, before DRAFT_STARTED is appended.
+    let captured: {
+      preferenceSnapshot: Prisma.InputJsonValue;
+      preferenceSnapshotVersion: number;
+      preferenceSnapshotChecksum: string;
+      preferenceSourceProfileId: string | null;
+      engineVersion: string;
+    } | null = null;
     if (params.action === "start") {
+      if (!draft.leagueId) throw new DraftStatusError("leagueId missing for start");
+      const league = await tx.league.findUnique({
+        where: { id: draft.leagueId },
+        select: { preferredProfileId: true },
+      });
+      const { snapshot: prefSnapshot, checksum } = await buildSnapshotForStart(tx, {
+        ownerId: params.ownerId,
+        leagueId: draft.leagueId,
+        leaguePreferredProfileId: league?.preferredProfileId ?? null,
+        overrideProfileId: draft.overrideProfileId,
+      });
+      captured = {
+        preferenceSnapshot: prefSnapshot as unknown as Prisma.InputJsonValue,
+        preferenceSnapshotVersion: prefSnapshot.snapshotVersion,
+        preferenceSnapshotChecksum: checksum,
+        preferenceSourceProfileId: prefSnapshot.source.profileId,
+        // Heal the engine-version stamp at the moment strategy is captured so
+        // a draft created before an engine bump but started after it stays
+        // cache-coherent (stored rows will carry the current version).
+        engineVersion: CURRENT_ENGINE_VERSION,
+      };
       await tx.draftEvent.create({
-        data: { draftId: params.draftId, sequence, eventType: "DRAFT_STARTED" },
+        data: {
+          draftId: params.draftId,
+          sequence,
+          eventType: "DRAFT_STARTED",
+          payload: {
+            preferenceSnapshotVersion: prefSnapshot.snapshotVersion,
+            preferenceSnapshotChecksum: checksum,
+            strategySource: prefSnapshot.source.kind,
+          },
+        },
       });
     } else if (params.action === "pause") {
       await tx.draftEvent.create({
@@ -707,6 +1142,7 @@ export async function transitionStatus(params: {
         status: nextStatus,
         currentSequence: sequence,
         version: draft.version + 1,
+        ...(captured ?? {}),
       },
       select: { status: true, version: true },
     });
@@ -718,7 +1154,7 @@ export async function transitionStatus(params: {
 // Helpers
 // ---------------------------------------------------------------------------
 
-function currentAuthoritative(row: {
+export function currentAuthoritative(row: {
   status: string;
   currentSequence: number;
   nextOverallPick: number;
@@ -732,7 +1168,7 @@ function currentAuthoritative(row: {
   };
 }
 
-async function versionConflict(
+export async function versionConflict(
   tx: Tx,
   draftId: string,
   _presented: number,
@@ -748,7 +1184,7 @@ async function versionConflict(
   );
 }
 
-async function loadSnapshot(tx: Tx, draftId: string): Promise<DraftSettingsSnapshot> {
+export async function loadSnapshot(tx: Tx, draftId: string): Promise<DraftSettingsSnapshot> {
   const row = await tx.draft.findUniqueOrThrow({
     where: { id: draftId },
     select: { settingsSnapshot: true },
@@ -758,37 +1194,48 @@ async function loadSnapshot(tx: Tx, draftId: string): Promise<DraftSettingsSnaps
 
 interface OpenSlot {
   position: string;
-  remaining: number;
+  leagueRemaining: number;
+  teamRemaining: number;
   isStarter: boolean;
 }
 
-async function computeOpenSlots(
+export async function computeOpenSlots(
   tx: Tx,
   draftId: string,
+  teamSlot: number,
   snapshot: DraftSettingsSnapshot,
 ): Promise<OpenSlot[]> {
   const assignments = await tx.draftRosterAssignment.groupBy({
-    by: ["slotPosition"],
+    by: ["teamSlot", "slotPosition"],
     where: { draftId },
     _count: { slotPosition: true },
   });
-  const filledByPosition = new Map<string, number>();
+  const leagueFilledByPosition = new Map<string, number>();
+  const teamFilledByPosition = new Map<string, number>();
   for (const group of assignments) {
-    filledByPosition.set(group.slotPosition, group._count.slotPosition);
+    leagueFilledByPosition.set(
+      group.slotPosition,
+      (leagueFilledByPosition.get(group.slotPosition) ?? 0) + group._count.slotPosition,
+    );
+    if (group.teamSlot === teamSlot) {
+      teamFilledByPosition.set(group.slotPosition, group._count.slotPosition);
+    }
   }
   // Slot inventory is LEAGUE-WIDE: every team owns `count` instances of each
   // position. Comparing fills against a single team's count made slots look
   // exhausted long before they were (found by the benchmark harness).
   return snapshot.rosterSlots.map((slot) => ({
     position: slot.position,
-    remaining: slot.count * snapshot.teamCount - (filledByPosition.get(slot.position) ?? 0),
+    leagueRemaining:
+      slot.count * snapshot.teamCount - (leagueFilledByPosition.get(slot.position) ?? 0),
+    teamRemaining: slot.count - (teamFilledByPosition.get(slot.position) ?? 0),
     isStarter: slot.isStarter,
   }));
 }
 
 /** Maximum-weight-ish matching kept honest and deterministic: prefer specific
  * eligible starter slots in eligibility order, then UTIL, then BENCH. */
-function chooseSlot(
+export function chooseSlot(
   openSlots: OpenSlot[],
   eligiblePositions: string[],
 ): { position: string; isBench: boolean } | null {
@@ -797,7 +1244,8 @@ function chooseSlot(
     const slot = openSlots.find(
       (open) =>
         open.position === candidate &&
-        open.remaining > 0 &&
+        open.leagueRemaining > 0 &&
+        open.teamRemaining > 0 &&
         (candidate === "BENCH" ? !open.isStarter : open.isStarter),
     );
     if (slot) return { position: slot.position, isBench: !slot.isStarter };

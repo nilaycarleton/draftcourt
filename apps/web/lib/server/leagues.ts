@@ -198,6 +198,7 @@ export async function getLeagueDetail(ownerId: string, leagueId: string) {
     select: {
       ...LEAGUE_SUMMARY_SELECT,
       ownerId: true,
+      preferredProfile: { select: { id: true, name: true, presetKey: true } },
       teams: {
         orderBy: { slot: "asc" },
         select: { id: true, slot: true, displayName: true, isUserTeam: true },
@@ -236,8 +237,19 @@ export async function getLeagueDetail(ownerId: string, leagueId: string) {
     settingsVersionNumber: settings.versionNumber,
     updatedAt: row.updatedAt,
   };
+  const defaultProfile = await prisma.preferenceProfile.findFirst({
+    where: { ownerId, isDefault: true },
+    select: { id: true, name: true },
+  });
   return {
     ...summary,
+    strategySelection: {
+      /** League-level selection; null = fall through to user default at start. */
+      preferredProfileId: row.preferredProfile?.id ?? null,
+      preferredProfileName: row.preferredProfile?.name ?? null,
+      defaultProfileId: defaultProfile?.id ?? null,
+      defaultProfileName: defaultProfile?.name ?? null,
+    },
     settings: {
       versionNumber: settings.versionNumber,
       createdAt: settings.createdAt,
@@ -306,7 +318,7 @@ export async function updateLeagueRules(
 export async function updateLeagueMeta(
   ownerId: string,
   leagueId: string,
-  patch: { name?: string; playoffWeeks?: number | null },
+  patch: { name?: string; playoffWeeks?: number | null; preferredProfileId?: string | null },
 ): Promise<LeagueSummary> {
   await getLeagueMetaForOwner(ownerId, leagueId);
   const name =
@@ -317,11 +329,28 @@ export async function updateLeagueMeta(
       : patch.playoffWeeks === null
         ? null
         : z.number().int().min(1).max(14).parse(patch.playoffWeeks);
+  // League-level strategy selection (Phase 3B): the id must reference an OWNED
+  // profile — a foreign id is indistinguishable from a missing one (404), and
+  // null clears the selection so drafts fall back to the user default.
+  let preferredProfileId: string | null | undefined;
+  if (patch.preferredProfileId !== undefined) {
+    if (patch.preferredProfileId === null) {
+      preferredProfileId = null;
+    } else {
+      const profile = await prisma.preferenceProfile.findFirst({
+        where: { id: patch.preferredProfileId, ownerId },
+        select: { id: true },
+      });
+      if (!profile) throw new LeagueNotFoundError("profile not found");
+      preferredProfileId = patch.preferredProfileId;
+    }
+  }
   const updated = await prisma.league.update({
     where: { id: leagueId },
     data: {
       ...(name !== undefined ? { name } : {}),
       ...(playoffWeeks !== undefined ? { playoffWeeks } : {}),
+      ...(preferredProfileId !== undefined ? { preferredProfileId } : {}),
     },
     select: LEAGUE_SUMMARY_SELECT,
   });
