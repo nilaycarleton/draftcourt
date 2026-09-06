@@ -47,3 +47,31 @@ export type {
   MockPersonalityPickerProps,
   CpuPersonalityOption,
 } from "./components/MockPersonalityPicker";
+
+export { HistoryCard } from "./components/HistoryCard";
+export type {
+  HistoryCardProps,
+  HistoryDraftType,
+  HistoryDraftStatus,
+} from "./components/HistoryCard";
+
+export { GradeHero } from "./components/GradeHero";
+export type { GradeHeroProps } from "./components/GradeHero";
+
+export { GradeBreakdown } from "./components/GradeBreakdown";
+export type { GradeBreakdownProps, GradeBreakdownComponent } from "./components/GradeBreakdown";
+
+export { RoundValueTable } from "./components/RoundValueTable";
+export type { RoundValueTableProps, RoundValueRow } from "./components/RoundValueTable";
+
+export { StrengthWeaknessCards } from "./components/StrengthWeaknessCards";
+export type {
+  StrengthWeaknessCardsProps,
+  StrengthWeaknessItem,
+} from "./components/StrengthWeaknessCards";
+
+export { StandingDistribution } from "./components/StandingDistribution";
+export type {
+  StandingDistributionProps,
+  StandingDistributionPoint,
+} from "./components/StandingDistribution";

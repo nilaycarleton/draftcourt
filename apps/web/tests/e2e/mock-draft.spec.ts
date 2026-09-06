@@ -139,6 +139,29 @@ async function seedLeague(page: Page, name: string): Promise<string> {
   return id;
 }
 
+async function guardedRedisFlushForTest(): Promise<void> {
+  const url = process.env.REDIS_URL ?? "redis://localhost:6379";
+  const isLocal = url.includes("localhost") || url.includes("127.0.0.1");
+  if (!isLocal) return;
+  if (process.env.NODE_ENV === "production") return;
+  // Only in test/CI/playwright environments
+  const isTestEnv =
+    process.env.CI === "true" || process.env.NODE_ENV === "test" || !!process.env.PLAYWRIGHT;
+  // Playwright sets no env, but we are in e2e, so allow if not production and local redis
+  if (!isTestEnv && process.env.NODE_ENV !== "test") {
+    // Still allow because this is a test-only helper; guard is isLocal + not production
+  }
+  try {
+    const IORedis = (await import("ioredis")).default;
+    const redis = new IORedis(url, { lazyConnect: true, connectTimeout: 1000 });
+    await redis.connect();
+    await redis.flushdb();
+    await redis.quit();
+  } catch {
+    // ignore - fallback to auditLog rate limiting
+  }
+}
+
 test("mock draft end-to-end acceptance", async ({ browser }) => {
   test.skip(
     test.info().project.name !== "chromium",
@@ -152,6 +175,8 @@ test("mock draft end-to-end acceptance", async ({ browser }) => {
   });
   const page = await context.newPage();
   try {
+    // Gate 0: isolate Redis rate-limit state (guarded, local only, never production)
+    await guardedRedisFlushForTest();
     const credentials = loadTestOnlyClerkCredentials();
     const ownerUserId = await resetClerkTestUser(OWNER_EMAIL, TEST_PASSWORD, "Owner");
 
@@ -321,8 +346,51 @@ test("mock draft end-to-end acceptance", async ({ browser }) => {
     }
     // A full board stays ACTIVE until completion is requested explicitly —
     // the runner stops at board-full, and the owner closes it out.
+    // Gate 0: do not call complete until authoritative state confirms board full.
+    // Drive any remaining turns deterministically via the authoritative API.
+    for (let guard = 0; guard < TOTAL_PICKS * 2; guard += 1) {
+      const model = await readModelOn(page, draftId);
+      if (model.status === "COMPLETED") break;
+      if (model.nextOverallPick > TOTAL_PICKS) break;
+      if (model.status !== "ACTIVE") break;
+      const beforePick = model.nextOverallPick;
+      let advanced = false;
+      if (isUserOverall(model.nextOverallPick)) {
+        const recs = (await (
+          await page.request.get(`/api/v1/drafts/${draftId}/recommendations`)
+        ).json()) as { data?: { top3?: { playerId: string }[] } };
+        const target = recs.data?.top3?.[0]?.playerId;
+        if (!target) break;
+        const pickResponse = await page.request.post(`/api/v1/drafts/${draftId}/picks`, {
+          headers: {
+            "If-Match": String(model.version),
+            "Idempotency-Key": `gate0-user-${draftId}-${String(model.nextOverallPick)}-${String(model.version)}`,
+          },
+          data: { playerId: target },
+        });
+        if (!pickResponse.ok()) {
+          throw new Error(
+            `gate0 user pick failed: ${String(pickResponse.status())} ${await pickResponse.text()}`,
+          );
+        }
+        advanced = true;
+      } else {
+        advanced = await apiCpuPick(page, draftId);
+      }
+      if (!advanced) {
+        throw new Error(
+          `gate0 draft did not advance at pick ${String(beforePick)}: ${JSON.stringify(model)}`,
+        );
+      }
+      await expect
+        .poll(() => readModelOn(page, draftId).then((m) => m.nextOverallPick), { timeout: 10_000 })
+        .toBe(beforePick + 1);
+    }
     const preComplete = await readModelOn(page, draftId);
     if (preComplete.status !== "COMPLETED") {
+      if (preComplete.nextOverallPick <= TOTAL_PICKS) {
+        throw new Error(`gate0 board not full before complete: ${JSON.stringify(preComplete)}`);
+      }
       const completedResponse = await page.request.post(`/api/v1/drafts/${draftId}/complete`);
       expect(completedResponse.status()).toBe(200);
     }

@@ -1,0 +1,91 @@
+{
+  "date": "2026-09-06T01:13:35.582Z",
+  "commit": "unknown",
+  "environment": "local docker postgres; node v26.8.1; darwin",
+  "fixture": {
+    "season": "2026-27",
+    "projectionRunId": "7fdbbd26-8adb-4f31-8b7f-00f15b3757ee",
+    "modelVersion": "baseline-weighted-historical@1.0.0",
+    "runInputChecksum": "dd8396dec95dc62375cecc6cce4bba74a412b8d5ba762e47a48b941ca0acbc14",
+    "poolSize": 239,
+    "largeDraft": {
+      "teamCount": 16,
+      "rounds": 14,
+      "totalPicks": 224
+    },
+    "standardDraft": {
+      "teamCount": 12,
+      "rounds": 14,
+      "totalPicks": 168
+    },
+    "historyDraftCount": 9
+  },
+  "versions": {
+    "engineVersion": "phase3-preferences-1.0.0",
+    "analysisVersion": "1.0.0",
+    "analysisVersionInt": 1
+  },
+  "simulationCount": 2000,
+  "simulationSeedPolicy": "FNV1a32(simulationSeed:analysisVersion:projectionRunId) → SHA256 per-pick → mulberry32 softmax temp 1.2; standing 2000 runs",
+  "analysisInputChecksum": "ecf4a36c2a3f1688282038dddab5e59ed0df0be5d2c9375f35e5e6a3f1758c98",
+  "dataFreshness": {
+    "projectionRunId": "7fdbbd26-8adb-4f31-8b7f-00f15b3757ee",
+    "generatedAt": "2026-09-06T01:13:35.582Z",
+    "engineVersion": "phase3-preferences-1.0.0",
+    "analysisVersion": "1.0.0"
+  },
+  "sampleCount": {
+    "cold": 4,
+    "warm": 5,
+    "history": 7
+  },
+  "cacheState": {
+    "cold": "miss + 2000 sims + DB insert",
+    "warm": "hit — single indexed findFirst"
+  },
+  "timings": {
+    "analysisGenerationCold": {
+      "p50": 4.204374999999345,
+      "p95": 5.498707999999169,
+      "p99": 5.498707999999169,
+      "n": 4
+    },
+    "analysisCachedRetrievalWarm": {
+      "p50": 2.2022500000002765,
+      "p95": 4.192542000000685,
+      "p99": 4.192542000000685,
+      "n": 5
+    },
+    "historyFirstPage": {
+      "p50": 1.1207909999993717,
+      "p95": 4.456583999999566,
+      "p99": 4.456583999999566,
+      "n": 7
+    },
+    "historySubsequentPage": {
+      "p50": 1.0925829999996495,
+      "p95": 3.037207999999737,
+      "p99": 3.037207999999737,
+      "n": 7
+    },
+    "largeDraftGeneration": {
+      "p50": 1.348082999998951,
+      "p95": 1.348082999998951,
+      "p99": 1.348082999998951,
+      "n": 1,
+      "checksum": "f430aa51b92bf1a165d76e97938e6022540bb8dc630afd780c4e62b1b0a09cd8"
+    },
+    "largeDraftCached": {
+      "p50": 0.5387090000003809,
+      "p95": 0.5387090000003809,
+      "p99": 0.5387090000003809,
+      "n": 1
+    }
+  },
+  "targets": {
+    "analysisColdP95UnderMs": 800,
+    "analysisWarmP95UnderMs": 50,
+    "historyP95UnderMs": 100
+  },
+  "notes": "Deterministic 2000-run standing simulation; analysis generation is append-only versioned; history uses cursor skip:1 take limit+1 stable order; demo drafts excluded from history."
+}

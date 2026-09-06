@@ -475,6 +475,7 @@ model ProjectionRun {
   model       ProjectionModel      @relation(fields: [modelId], references: [id])
   projections PlayerProjection[]
   overrides   ProjectionOverride[]
+  analyses    DraftAnalysis[]
 
   @@index([season, isCurrent])
   @@map("projection_runs")
@@ -791,6 +792,7 @@ model Draft {
   assignments          DraftRosterAssignment[]
   snapshots            RecommendationSnapshot[]
   outbox               DraftOutbox[]
+  analyses             DraftAnalysis[]
   overrideProfile      PreferenceProfile?       @relation("DraftOverrideProfile", fields: [overrideProfileId], references: [id], onDelete: SetNull)
   preferenceSourceProfile PreferenceProfile?   @relation("DraftPreferenceSource", fields: [preferenceSourceProfileId], references: [id], onDelete: SetNull)
   demoCapability       DemoDraftCapability?     @relation("DemoDraftCapability")
@@ -935,6 +937,46 @@ model DemoDraftCapability {
 
   @@index([expiresAt])
   @@map("demo_draft_capabilities")
+}
+
+// ---------------------------------------------------------------------------
+// Phase 3E1 — deterministic post-draft analysis (BUILD_SPEC 9.4, ADR 0015)
+// ---------------------------------------------------------------------------
+
+model DraftAnalysis {
+  id                         String   @id @default(uuid(7)) @db.Uuid
+  draftId                    String   @db.Uuid
+  analysisVersion            String   @db.VarChar(32)
+  analysisVersionInt         Int      @default(1)
+  inputChecksum              String   @db.VarChar(64)
+  engineVersion              String
+  projectionRunId            String?  @db.Uuid
+  adpSnapshotId              String?  @db.Uuid
+  preferenceSnapshotChecksum String?
+  simulationSeed             String?  @db.VarChar(64)
+  grade                      String   @db.VarChar(4)
+  gradeScore                 Float
+  gradeComponents            Json
+  assumptions                Json
+  categoryStrengths          Json
+  positionStrengths          Json
+  roundByRound               Json
+  bestValuePick              Json?
+  biggestReach               Json?
+  projectedStanding          Json
+  categoryWinProbs           Json?
+  dataFreshness              Json
+  generatedAt                DateTime @default(now()) @db.Timestamptz
+  createdAt                  DateTime @default(now()) @db.Timestamptz
+  updatedAt                  DateTime @updatedAt @db.Timestamptz
+
+  draft         Draft          @relation(fields: [draftId], references: [id], onDelete: Cascade)
+  projectionRun ProjectionRun? @relation(fields: [projectionRunId], references: [id])
+
+  @@unique([draftId, analysisVersion, inputChecksum])
+  @@unique([draftId, analysisVersion])
+  @@index([draftId, generatedAt(sort: Desc)])
+  @@map("draft_analyses")
 }
 
 // ---------------------------------------------------------------------------
