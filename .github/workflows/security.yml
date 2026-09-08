@@ -44,3 +44,7 @@ jobs:
           format: table
           severity: HIGH,CRITICAL
           exit-code: "1"
+          # CVE-specific, time-bounded risk acceptance only (see the file):
+          # unfixable-on-bookworm findings with machine-enforced expiry.
+          # Anything NOT listed there still fails this gate.
+          trivyignores: services/analytics/.trivyignore

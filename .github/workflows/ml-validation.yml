@@ -50,12 +50,6 @@ jobs:
       - name: Install dependencies (frozen lockfile)
         run: uv sync --frozen
 
-      - name: Determinism, fallback, and adjustment-formula unit tests
-        run: uv run pytest tests/pipelines/test_baseline.py tests/pipelines/test_adjustments.py -v
-
-      - name: Time-ordered-split leakage and reproducibility integration tests
-        run: uv run pytest tests/pipelines/test_run_integration.py tests/pipelines/test_evaluation.py -v
-
       - uses: pnpm/action-setup@v6
         with:
           version: "11.22.0"
@@ -65,6 +59,9 @@ jobs:
           node-version: "24.18.0"
           cache: pnpm
 
+      # Migrate and seed BEFORE the DB-backed pytest steps below: the
+      # integration tests assert against real tables/rows (not mocks), so
+      # they require a migrated database instead of a fresh-empty one.
       - name: Install JS dependencies and migrate/seed the database
         working-directory: .
         env:
@@ -77,6 +74,12 @@ jobs:
           pnpm --filter @draftcourt/db run generate
           pnpm db:migrate
           pnpm db:seed
+
+      - name: Determinism, fallback, and adjustment-formula unit tests
+        run: uv run pytest tests/pipelines/test_baseline.py tests/pipelines/test_adjustments.py -v
+
+      - name: Time-ordered-split leakage and reproducibility integration tests
+        run: uv run pytest tests/pipelines/test_run_integration.py tests/pipelines/test_evaluation.py -v
 
       - name: Ingest demo data
         run: uv run python -m app.ingestion.cli

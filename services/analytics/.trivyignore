@@ -1,0 +1,47 @@
+# Trivy ignores for the DraftCourt analytics image (services/analytics/Dockerfile).
+#
+# Time-bounded risk acceptance per BUILD_SPEC §13 ("Address critical/high
+# vulnerabilities before deploy or record a time-bounded risk acceptance").
+#
+# Basis: trivy 0.70.0 image scan, 2026-09-08, AFTER `apt-get upgrade` in the
+# Dockerfile (python:3.12.5-slim stays pinned; only Debian packages move).
+# Every CVE listed below has NO fixed version in Debian bookworm at scan
+# time (trivy status affected / fix_deferred / will_not_fix, empty
+# FixedVersion) — there is nothing left to upgrade to on this base.
+#
+# Scope of acceptance: the analytics service is INTERNAL-ONLY (no browser
+# traffic; service-auth bearer + timestamp window per
+# docs/architecture/06-trust-boundaries.md). The findings sit in base-image
+# OS packages (util-linux mount helpers, perl-base regex, ncurses, sqlite
+# libs, expat, zlib MiniZip) that the Python service does not invoke as
+# setuid/helper binaries. Production is unprovisioned (see
+# docs/architecture/05-deployment-topology.md); revisit before any public
+# deploy and on/before the expiry below.
+#
+# Mechanism: one CVE per line with machine-enforced expiry (exp:YYYY-MM-DD).
+# CVEs NOT listed here still fail the CI gate. Re-scan with
+# `trivy image --severity HIGH,CRITICAL` and drop entries that gain fixes.
+CVE-2023-45853 exp:2026-12-08
+CVE-2025-59375 exp:2026-12-08
+CVE-2025-69720 exp:2026-12-08
+CVE-2025-7458 exp:2026-12-08
+CVE-2026-11822 exp:2026-12-08
+CVE-2026-11824 exp:2026-12-08
+CVE-2026-13221 exp:2026-12-08
+CVE-2026-16742 exp:2026-12-08
+CVE-2026-25210 exp:2026-12-08
+CVE-2026-41992 exp:2026-12-08
+CVE-2026-42496 exp:2026-12-08
+CVE-2026-42497 exp:2026-12-08
+CVE-2026-45186 exp:2026-12-08
+CVE-2026-48962 exp:2026-12-08
+CVE-2026-53613 exp:2026-12-08
+CVE-2026-54369 exp:2026-12-08
+CVE-2026-57432 exp:2026-12-08
+CVE-2026-57433 exp:2026-12-08
+CVE-2026-76642 exp:2026-12-08
+CVE-2026-78408 exp:2026-12-08
+CVE-2026-78409 exp:2026-12-08
+CVE-2026-78410 exp:2026-12-08
+CVE-2026-8376 exp:2026-12-08
+CVE-2026-9538 exp:2026-12-08

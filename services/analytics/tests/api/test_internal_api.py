@@ -82,7 +82,7 @@ def _auth_headers(trace_id: str | None = None) -> dict[str, str]:
 def _clean_job_rows() -> Iterator[None]:
     yield
     with contextlib.suppress(Exception):  # cleanup is best-effort (DB may be down)
-        _run_with_fresh_engine("DELETE FROM analytics_jobs WHERE traceId LIKE 'it-%'")
+        _run_with_fresh_engine("DELETE FROM analytics_jobs WHERE \"traceId\" LIKE 'it-%'")
 
 
 @pytest.fixture
@@ -337,9 +337,12 @@ def test_real_demo_file_ingestion_through_http(client: TestClient) -> None:
         pytest.skip("Postgres not reachable at DATABASE_URL for integration tests")
 
     before = asyncio.run(_fetch_scalar("SELECT COUNT(*) FROM ingestion_runs"))
+    # Per-run key on BOTH posts: the replay assertion must hold on a fresh
+    # database, not only when a previous run left this key behind.
+    idempotency_key = f"it-replay-{uuid.uuid4()}"
     response = client.post(
         "/internal/v1/ingestion/demo-file",
-        headers=_auth_headers(),
+        headers=_auth_headers() | {"Idempotency-Key": idempotency_key},
         json={"reason": "internal-api integration test"},
     )
     assert response.status_code == 200, response.text
@@ -355,7 +358,7 @@ def test_real_demo_file_ingestion_through_http(client: TestClient) -> None:
 
     duplicate = client.post(
         "/internal/v1/ingestion/demo-file",
-        headers=_auth_headers() | {"Idempotency-Key": "it-integration-replay"},
+        headers=_auth_headers() | {"Idempotency-Key": idempotency_key},
         json={},
     )
     assert duplicate.status_code == 200

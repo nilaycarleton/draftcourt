@@ -1,5 +1,9 @@
 FROM python:3.12.5-slim AS base
 
+# Patch Debian OS packages for HIGH/CRITICAL CVEs (CI Trivy gate). The
+# Python runtime stays pinned at 3.12.5 — only distribution packages move.
+RUN apt-get update && apt-get upgrade -y && rm -rf /var/lib/apt/lists/*
+
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
     PIP_NO_CACHE_DIR=1

@@ -13,7 +13,7 @@ from datetime import UTC, datetime
 
 import pytest
 import pytest_asyncio
-from sqlalchemy import select
+from sqlalchemy import select, text
 from sqlalchemy.ext.asyncio import AsyncConnection, create_async_engine
 
 from app.core.config import get_settings
@@ -172,9 +172,17 @@ class TestOverridesAppliedInRun:
     ) -> None:
         admin_id = (await seeded_conn.execute(select(db.users.c.id).limit(1))).scalar_one_or_none()
         if admin_id is None:
+            # Fresh database (e.g. CI): the python users mirror is
+            # read-only (id/clerkUserId/role), so the fallback admin row is
+            # inserted with explicit SQL including the NOT NULL timestamps.
+            # Locally this branch never runs because seeded/dev users exist.
             admin_id = str(uuid.uuid4())
             await seeded_conn.execute(
-                db.users.insert().values(id=admin_id, clerkUserId="test-admin-run", role="ADMIN")
+                text(
+                    'INSERT INTO users (id, "clerkUserId", role, "createdAt", "updatedAt")'
+                    " VALUES (:id, :clerk_user_id, :role, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)"
+                ),
+                {"id": admin_id, "clerk_user_id": "test-admin-run", "role": "ADMIN"},
             )
 
         player_id = (await seeded_conn.execute(select(db.players.c.id).limit(1))).scalar_one()

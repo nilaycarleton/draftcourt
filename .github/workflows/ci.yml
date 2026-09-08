@@ -61,6 +61,12 @@ jobs:
         working-directory: services/analytics
         run: uv sync --frozen
 
+      # The generated Prisma client is gitignored, so it must exist before
+      # any step that typechecks or builds TypeScript (turbo builds
+      # @draftcourt/db as a dependency of typecheck).
+      - name: Generate Prisma client
+        run: pnpm --filter @draftcourt/db run generate
+
       - name: Format check
         run: pnpm format
 
@@ -69,9 +75,6 @@ jobs:
 
       - name: Typecheck
         run: pnpm typecheck
-
-      - name: Generate Prisma client
-        run: pnpm --filter @draftcourt/db run generate
 
       - name: Apply migrations
         run: pnpm db:migrate
