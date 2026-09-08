@@ -75,3 +75,11 @@ export type {
   StandingDistributionProps,
   StandingDistributionPoint,
 } from "./components/StandingDistribution";
+
+export { ReplayTransport, ReplayTimeline } from "./components/ReplayTransport";
+export type {
+  ReplayTransportProps,
+  ReplayTransportSpeed,
+  ReplayTimelineProps,
+  ReplayTimelineEntry,
+} from "./components/ReplayTransport";

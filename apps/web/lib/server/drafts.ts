@@ -6,6 +6,8 @@ import {
   overallPickToRound,
   overallPickToSlot,
   replayFromEvents,
+  actorOf as replayActorOf,
+  describeReplayEvent,
   candidateSlotsForEligibility,
   cpuPersonalityByKey,
   defaultCpuPersonalityKey,
@@ -657,6 +659,197 @@ export async function listEventsForOwner(draftId: string, ownerId: string) {
     },
   });
   return { events };
+}
+
+export class TimelineValidationError extends Error {}
+
+/** Safe per-event view for the owner timeline (ADR 0016 R3). Contains no
+ * credentials, no internal UUIDs, no raw payload internals. */
+export interface TimelineEventView {
+  sequence: number;
+  eventType: string;
+  actorType: "USER" | "CPU" | "SYSTEM";
+  description: string;
+  teamSlot: number | null;
+  playerId: string | null;
+  playerName: string | null;
+  round: number | null;
+  pickInRound: number | null;
+  overallPick: number | null;
+  slotPosition: string | null;
+  isBench: boolean;
+  isKeeper: boolean;
+  /** True when this undo event references the pick it compensates. The raw
+   * internal causation UUID is never exposed; owners render undo links from
+   * sequence order plus this flag. */
+  causationLinked: boolean;
+  cpuPersonalityKey: string | null;
+  createdAt: string;
+}
+
+export interface TimelinePage {
+  events: TimelineEventView[];
+  nextCursor: number | null;
+  integrity: { ok: boolean; detail: string };
+}
+
+function toReplayInput(event: {
+  sequence: number;
+  eventType: string;
+  id: string;
+  causationEventId: string | null;
+  teamSlot: number | null;
+  playerId: string | null;
+  payload: unknown;
+}): {
+  sequence: number;
+  eventType: string;
+  eventId: string;
+  causationEventId: string | null;
+  teamSlot: number | null;
+  playerId: string | null;
+  slotPosition: string | null;
+  isBench: boolean;
+  isKeeper: boolean;
+  payload: unknown;
+} {
+  const payload = event.payload as {
+    slotPosition?: unknown;
+    isBench?: unknown;
+    keeper?: unknown;
+  } | null;
+  return {
+    sequence: event.sequence,
+    eventType: event.eventType,
+    eventId: event.id,
+    causationEventId: event.causationEventId,
+    teamSlot: event.teamSlot,
+    playerId: event.playerId,
+    slotPosition:
+      payload !== null && typeof payload === "object" && typeof payload.slotPosition === "string"
+        ? payload.slotPosition
+        : null,
+    isBench: payload !== null && typeof payload === "object" && payload.isBench === true,
+    isKeeper: payload !== null && typeof payload === "object" && payload.keeper === true,
+    payload: event.payload,
+  };
+}
+
+/**
+ * Owner-only cursor timeline (ADR 0016 R3). Stable ascending order,
+ * sequence-keyed cursor (no gaps/duplicates), bounded page sizes, safe
+ * descriptions, undo linkage, CPU evidence subset, and replay-integrity
+ * status. Returns null when the draft is missing or not owned (no oracle).
+ */
+export async function listTimelineEventsForOwner(
+  draftId: string,
+  ownerId: string,
+  opts: { cursor?: number; limit?: number } = {},
+): Promise<TimelinePage | null> {
+  const cursor = opts.cursor ?? 0;
+  const limit = opts.limit ?? 50;
+  if (!Number.isInteger(cursor) || cursor < 0) {
+    throw new TimelineValidationError("cursor must be an integer sequence >= 0");
+  }
+  if (!Number.isInteger(limit) || limit < 1 || limit > 100) {
+    throw new TimelineValidationError("limit must be an integer between 1 and 100");
+  }
+
+  const owned = await prisma.draft.findFirst({
+    where: { id: draftId, ownerId },
+    select: { id: true, settingsSnapshot: true },
+  });
+  if (!owned) return null;
+  const snapshot = owned.settingsSnapshot as unknown as { teamCount?: unknown } | null;
+  const teamCount =
+    snapshot !== null && typeof snapshot === "object" && typeof snapshot.teamCount === "number"
+      ? snapshot.teamCount
+      : 12;
+
+  const rows = await prisma.draftEvent.findMany({
+    where: { draftId, sequence: { gt: cursor } },
+    orderBy: { sequence: "asc" },
+    take: limit + 1,
+    select: {
+      id: true,
+      sequence: true,
+      eventType: true,
+      teamSlot: true,
+      playerId: true,
+      round: true,
+      pickInRound: true,
+      causationEventId: true,
+      payload: true,
+      createdAt: true,
+    },
+  });
+
+  let nextCursor: number | null = null;
+  const page = rows.length > limit ? rows.slice(0, limit) : rows;
+  if (rows.length > limit) nextCursor = page[page.length - 1]?.sequence ?? null;
+
+  const playerIds = [
+    ...new Set(page.map((e) => e.playerId).filter((id): id is string => id !== null)),
+  ];
+  const players = playerIds.length
+    ? await prisma.player.findMany({
+        where: { id: { in: playerIds } },
+        select: { id: true, displayName: true },
+      })
+    : [];
+  const nameById = new Map(players.map((p) => [p.id, p.displayName]));
+
+  const events: TimelineEventView[] = page.map((event) => {
+    const payload = event.payload as {
+      slotPosition?: unknown;
+      isBench?: unknown;
+      keeper?: unknown;
+      cpuEvidence?: { personalityKey?: unknown };
+    } | null;
+    const input = toReplayInput({ ...event, payload });
+    const actorType = replayActorOf({ eventType: event.eventType, payload: event.payload });
+    const overallPick =
+      event.round !== null && event.pickInRound !== null && Number.isInteger(teamCount)
+        ? (event.round - 1) * teamCount + event.pickInRound
+        : null;
+    const cpuEvidence: unknown =
+      payload !== null && typeof payload === "object"
+        ? (payload as { cpuEvidence?: unknown }).cpuEvidence
+        : undefined;
+    const cpuEvidenceKey =
+      typeof cpuEvidence === "object" && cpuEvidence !== null
+        ? (cpuEvidence as { personalityKey?: unknown }).personalityKey
+        : undefined;
+    const cpuPersonalityKey = typeof cpuEvidenceKey === "string" ? cpuEvidenceKey : null;
+    return {
+      sequence: event.sequence,
+      eventType: event.eventType,
+      actorType,
+      description: describeReplayEvent(input, teamCount, overallPick ?? undefined),
+      teamSlot: event.teamSlot,
+      playerId: event.playerId,
+      playerName: event.playerId ? (nameById.get(event.playerId) ?? null) : null,
+      round: event.round,
+      pickInRound: event.pickInRound,
+      overallPick,
+      slotPosition: typeof payload?.slotPosition === "string" ? payload.slotPosition : null,
+      isBench: payload?.isBench === true,
+      isKeeper: payload?.keeper === true,
+      // Internal causation UUIDs are unnecessary for owners to render undo
+      // links; expose only whether a link exists via the description plus a
+      // boolean-safe null-or-present marker. Keep the raw id out of the API.
+      causationLinked: event.causationEventId !== null,
+      cpuPersonalityKey,
+      createdAt: event.createdAt.toISOString(),
+    };
+  });
+
+  const integrity = await verifyReplayIntegrity(draftId).catch(() => ({
+    ok: false as const,
+    detail: "integrity check unavailable",
+  }));
+
+  return { events, nextCursor, integrity };
 }
 
 /** Rebuilds state purely from the event log and compares it to the stored

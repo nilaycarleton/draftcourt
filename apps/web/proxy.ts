@@ -22,6 +22,15 @@ function withSecurityHeaders(request: NextRequest): NextResponse {
 
   const response = NextResponse.next({ request: { headers: requestHeaders } });
   response.headers.set("Content-Security-Policy", csp);
+
+  // Private capability URLs (ADR 0016 R6): never indexed/archived, never a
+  // referrer, never cached anywhere. Path-scoped so owner/app routes keep
+  // their own caching behavior.
+  if (request.nextUrl.pathname.startsWith("/share/")) {
+    response.headers.set("X-Robots-Tag", "noindex, noarchive");
+    response.headers.set("Referrer-Policy", "no-referrer");
+    response.headers.set("Cache-Control", "private, no-store");
+  }
   return response;
 }
 

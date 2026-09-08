@@ -793,6 +793,7 @@ model Draft {
   snapshots            RecommendationSnapshot[]
   outbox               DraftOutbox[]
   analyses             DraftAnalysis[]
+  shareCapability      DraftShareCapability?
   overrideProfile      PreferenceProfile?       @relation("DraftOverrideProfile", fields: [overrideProfileId], references: [id], onDelete: SetNull)
   preferenceSourceProfile PreferenceProfile?   @relation("DraftPreferenceSource", fields: [preferenceSourceProfileId], references: [id], onDelete: SetNull)
   demoCapability       DemoDraftCapability?     @relation("DemoDraftCapability")
@@ -937,6 +938,34 @@ model DemoDraftCapability {
 
   @@index([expiresAt])
   @@map("demo_draft_capabilities")
+}
+
+// ---------------------------------------------------------------------------
+// Phase 3E2 — private result-sharing capabilities (ADR 0016 R4–R5)
+// ---------------------------------------------------------------------------
+
+/// One active share-capability row per draft. The raw 256-bit token is
+/// returned exactly once at creation and never stored — only its SHA-256 hex
+/// digest persists. Rotation inserts version+1 (old digest dies immediately);
+/// revocation stamps revokedAt (immediate effect); expiry is server-enforced
+/// on every lookup (90-day TTL per ADR 0016 R5). Cleanup deletes expired or
+/// long-revoked rows only — never drafts, analyses, events, or history.
+/// Legacy `Draft.shareTokenHash` is untouched (stays NULL).
+model DraftShareCapability {
+  id              String    @id @default(uuid(7)) @db.Uuid
+  draftId         String    @unique @db.Uuid
+  tokenDigest     String    @unique @db.VarChar(64)
+  version         Int       @default(1)
+  expiresAt       DateTime  @db.Timestamptz
+  revokedAt       DateTime? @db.Timestamptz
+  lastAccessedAt  DateTime? @db.Timestamptz
+  createdAt       DateTime  @default(now()) @db.Timestamptz
+  updatedAt       DateTime  @updatedAt @db.Timestamptz
+
+  draft Draft @relation(fields: [draftId], references: [id], onDelete: Cascade)
+
+  @@index([expiresAt])
+  @@map("draft_share_capabilities")
 }
 
 // ---------------------------------------------------------------------------

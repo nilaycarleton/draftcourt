@@ -297,6 +297,22 @@ unique `(profileId, teamId)`; composite uniques
 as a versioned JSON envelope (`schemaVersion = 1`) re-validated on every
 read; weights are numbers at exact 6-decimal precision summing to 1.)
 
+## Phase 3E2 — private result sharing (ADR 0016)
+
+```
+drafts 1───0..1 draft_share_capabilities   (draftId UNIQUE, ON DELETE CASCADE)
+```
+
+`draft_share_capabilities`: `id UUID7, draftId UNIQUE → drafts(id) CASCADE,
+tokenDigest VARCHAR(64) UNIQUE (hex SHA-256 of the 256-bit raw token),
+version INT ≥1, expiresAt TIMESTAMPTZ (90-day TTL), revokedAt NULL,
+lastAccessedAt NULL (privacy-safe timestamp only), createdAt/updatedAt`.
+CHECK `tokenDigest ~ '^[0-9a-f]{64}$'`; partial index `expiresAt WHERE
+revokedAt IS NULL`. Legacy `drafts.shareTokenHash` stays NULL (no backfill;
+existing drafts never become shared). Cleanup deletes expired or
+long-revoked share rows only — never drafts, analyses, events, history, or
+demo capability rows.
+
 ## Phase 3B — preference snapshot columns (ADR 0012)
 
 ```

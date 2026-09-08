@@ -16,11 +16,18 @@ const SENSITIVE_HEADER_NAMES = new Set([
   "x-analytics-service-secret",
 ]);
 
-const SENSITIVE_KEY_PATTERN = /token|secret|password|prompt|api[-_]?key|share[-_]?token|^email$/i;
+const SENSITIVE_KEY_PATTERN =
+  /token|secret|password|prompt|api[-_]?key|share[-_]?token|share[-_]?digest|capability[-_]?token|^email$/i;
 const EMAIL_PATTERN = /[^\s@]+@[^\s@]+\.[^\s@]+/g;
 
+// 43-char base64url path segments are capability/share-token shaped — scrub
+// them wherever they appear in free text (URLs, pathnames, breadcrumbs).
+const TOKEN_SHAPED_SEGMENT = /[A-Za-z0-9_-]{43}/g;
+
 function redactString(value: string): string {
-  return value.replace(EMAIL_PATTERN, "[redacted-email]");
+  return value
+    .replace(EMAIL_PATTERN, "[redacted-email]")
+    .replace(TOKEN_SHAPED_SEGMENT, "[redacted-token]");
 }
 
 function redactValue(value: unknown): unknown {
@@ -65,6 +72,9 @@ export function scrubSentryEvent(event: ErrorEvent, _hint: EventHint): ErrorEven
       event.request.cookies = Object.fromEntries(
         Object.keys(event.request.cookies).map((key) => [key, "[redacted]"]),
       );
+    }
+    if (typeof event.request.url === "string") {
+      event.request.url = redactString(event.request.url);
     }
     if (event.request.data) {
       event.request.data = redactValue(event.request.data);

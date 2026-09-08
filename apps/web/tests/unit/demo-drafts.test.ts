@@ -405,6 +405,10 @@ describe("demo drafts — draft behavior and transactions", () => {
     if (!run) throw new Error("no run");
     const proj = await prisma.playerProjection.findFirst({
       where: { runId: run.id },
+      // Deterministic choice (same pattern as the full-draft loop below):
+      // an unordered findFirst returns a plan-dependent arbitrary row, and a
+      // few projected players legitimately lack eligibility rows.
+      orderBy: { overallRank: "asc" },
       select: { playerId: true },
     });
     if (!proj) throw new Error("no player");
@@ -472,6 +476,9 @@ describe("demo drafts — draft behavior and transactions", () => {
     if (!run) throw new Error("no projection run");
     const proj = await prisma.playerProjection.findFirst({
       where: { runId: run.id },
+      // Deterministic choice (see note above): unordered findFirst is
+      // plan-dependent and can return a player without eligibility rows.
+      orderBy: { overallRank: "asc" },
       select: { playerId: true },
     });
     if (!proj) throw new Error("no player");

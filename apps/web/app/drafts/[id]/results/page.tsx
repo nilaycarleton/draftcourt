@@ -14,6 +14,8 @@ import { GradeBreakdown } from "@/features/results/GradeBreakdown";
 import { RoundValueTable } from "@/features/results/RoundValueTable";
 import { StrengthWeaknessSection } from "@/features/results/StrengthWeaknessSection";
 import { StandingDistribution } from "@/features/results/StandingDistribution";
+import { ReplaySection } from "@/features/replay/ReplaySection";
+import { ShareControls } from "@/features/replay/ShareControls";
 
 export const dynamic = "force-dynamic";
 
@@ -137,6 +139,10 @@ export default async function ResultsPage({ params }: ResultsPageProps) {
           />
           <p className="dc-hint">Seeded 2000 simulations vs replacement-built opponent.</p>
         </section>
+
+        <ReplaySection draftId={draftId} />
+
+        <ShareControls draftId={draftId} />
 
         <section aria-labelledby="freshness-heading">
           <h2 id="freshness-heading">Provenance and assumptions</h2>
