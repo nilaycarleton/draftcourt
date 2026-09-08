@@ -36,11 +36,14 @@ in `schemas.py` (validation), `identity.py` (reconciliation),
 verified by the integration tests exercising a second, in-test-only
 `SourceAdapter` implementation alongside `DemoFileAdapter`.
 
-Two things are **not** yet built and would be prerequisites at that point:
+Two things were true when this was written and have since changed (ADR 0008,
+2026-08-22) — kept here so the history reads honestly:
 
-1. An internal HTTP endpoint on the analytics service to trigger ingestion
-   remotely (today it's CLI-only — `uv run python -m app.ingestion.cli`,
-   wrapped by `pnpm demo:ingest`) — see
+1. ~~An internal HTTP endpoint … CLI-only~~ — **shipped**: the analytics
+   service now exposes service-authenticated `/internal/v1/*` (ingestion,
+   projections, evaluate, jobs) and real Inngest functions
+   (`nightly-source-refresh-and-publish` cron 06:00 UTC,
+   `projection-publish-on-demand`) call them — see
    `docs/adr/0008-background-jobs-and-caching.md`.
 2. `DataSource.enabled` being read by `run_ingestion` before calling
    `extract()` — see `docs/runbooks/source-disable.md`. With only one
@@ -48,7 +51,8 @@ Two things are **not** yet built and would be prerequisites at that point:
 
 ## Refresh policy
 
-None of these demo sources refresh on a schedule — `pnpm demo:ingest` is
-run manually (or once, in CI, in `.github/workflows/ci.yml`). See
+Demo sources refresh via the nightly 06:00 UTC Inngest cron (or on-demand
+publish); `pnpm demo:ingest` remains the manual fallback and the CI path —
+see `docs/adr/0008-background-jobs-and-caching.md`. See
 `docs/runbooks/stale-data.md` for what "stale" means here and how to fix
 it.

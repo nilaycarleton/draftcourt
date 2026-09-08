@@ -93,12 +93,20 @@ body {
   flex-direction: row;
   align-items: center;
   gap: var(--dc-space-2);
+  /* The label is the hit area: 20px box stays visual, but the whole row
+   * meets the 44px touch target (Phase 3F a11y). */
+  min-height: var(--dc-touch-target-min);
+  padding: var(--dc-space-1) var(--dc-space-2);
+  margin-left: calc(-1 * var(--dc-space-2));
+  cursor: pointer;
 }
 
 .dc-field-checkbox input {
   min-height: unset;
   width: 20px;
   height: 20px;
+  flex-shrink: 0;
+  accent-color: var(--dc-color-accent);
 }
 
 .dc-filter-advanced summary {
@@ -120,44 +128,8 @@ body {
   align-items: center;
 }
 
-.dc-button-primary,
-.dc-button-ghost {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: var(--dc-touch-target-min);
-  padding: 0 var(--dc-space-4);
-  border-radius: var(--dc-radius-md);
-  font-weight: 600;
-  font-size: var(--dc-font-size-sm);
-  cursor: pointer;
-  text-decoration: none;
-  /* NOTE: the background-color transition lives on :hover/:focus-visible,
-   * NOT here on the base rule. Astryx's <Theme> swaps data-theme after
-   * hydration; a base-rule transition animates the swap, and axe scans
-   * landing inside that window see the old background with the new (instant)
-   * text color — a transient contrast violation that made the E2E gate
-   * flaky under parallel load. Hover-only transitions never run on theme
-   * changes. */
-}
-
-.dc-button-primary {
-  background: var(--dc-color-accent);
-  color: var(--dc-color-text-on-accent);
-  border: none;
-}
-
-.dc-button-primary:hover,
-.dc-button-primary:focus-visible {
-  background: var(--dc-color-accent-strong);
-  transition: background-color var(--dc-motion-duration-fast) var(--dc-motion-ease-standard);
-}
-
-.dc-button-ghost {
-  background: transparent;
-  color: var(--dc-color-text-secondary);
-  border: 1px solid var(--dc-color-border);
-}
+/* Button primitives live in @draftcourt/ui styles.css (Phase 3F co-location):
+   .dc-button-primary / .dc-button-secondary / .dc-button-ghost. */
 
 /* ---- banners ---- */
 

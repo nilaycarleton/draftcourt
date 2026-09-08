@@ -126,9 +126,13 @@ export function HistoryCard({
           <Badge variant={typeBadgeVariant(type)}>{type}</Badge>
           <Badge variant={statusBadgeVariant(status)}>{status}</Badge>
           {gradeLabel ? (
+            // role="img": the glyph+letter badge is graphical; the name
+            // carries the grade (Phase 3F a11y — bare aria-label on
+            // role-less elements is dropped by assistive tech).
             <span
               className="dc-history-card-grade"
               data-tone={gradeTone(grade)}
+              role="img"
               aria-label={`Grade ${gradeLabel}`}
             >
               <span aria-hidden="true">

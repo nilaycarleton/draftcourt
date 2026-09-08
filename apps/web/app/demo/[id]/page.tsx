@@ -81,5 +81,12 @@ export default async function DemoDraftPage({ params }: DemoPageProps) {
     },
   };
 
-  return <DraftRoom draftId={draftId} initial={initial} />;
+  return (
+    // Landmark parity with drafts/[id]: the room must live inside <main> so
+    // the skip link, headings, and axe landmark rules hold on demo resume
+    // routes too (Phase 3F a11y).
+    <main className="dc-page">
+      <DraftRoom draftId={draftId} initial={initial} />
+    </main>
+  );
 }

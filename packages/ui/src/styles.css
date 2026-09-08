@@ -10,6 +10,65 @@
 @import "./tokens.css";
 @import "./player-components.css";
 @import "./board-components.css";
+@import "./replay-components.css";
+
+/* Shared button primitives (moved from the web app's phase1.css in Phase
+ * 3F — ui components such as ReplayTransport consume them, so they must
+ * exist in every consumer including Storybook). */
+.dc-button-primary,
+.dc-button-secondary,
+.dc-button-ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--dc-touch-target-min);
+  padding: 0 var(--dc-space-4);
+  border-radius: var(--dc-radius-md);
+  font-weight: 600;
+  font-size: var(--dc-font-size-sm);
+  cursor: pointer;
+  text-decoration: none;
+  /* NOTE: the background-color transition lives on :hover/:focus-visible,
+   * NOT here on the base rule. Astryx's <Theme> swaps data-theme after
+   * hydration; a base-rule transition animates the swap, and axe scans
+   * landing inside that window see the old background with the new (instant)
+   * text color — a transient contrast violation that made the E2E gate
+   * flaky under parallel load. Hover-only transitions never run on theme
+   * changes. */
+}
+
+.dc-button-primary {
+  background: var(--dc-color-accent);
+  color: var(--dc-color-text-on-accent);
+  border: none;
+}
+
+.dc-button-primary:hover,
+.dc-button-primary:focus-visible {
+  background: var(--dc-color-accent-strong);
+  transition: background-color var(--dc-motion-duration-fast) var(--dc-motion-ease-standard);
+}
+
+/* Default action chrome: bordered control on the surface. This variant was
+ * referenced by ReplayTransport/Demo/ShareControls but never defined (Phase
+ * 3F Impeccable) — those buttons rendered as unstyled UA controls. */
+.dc-button-secondary {
+  background: var(--dc-color-surface);
+  color: var(--dc-color-text-primary);
+  border: 1px solid var(--dc-color-border-strong);
+}
+
+.dc-button-secondary:hover,
+.dc-button-secondary:focus-visible {
+  border-color: var(--dc-color-accent);
+  transition: border-color var(--dc-motion-duration-fast) var(--dc-motion-ease-standard);
+}
+
+.dc-button-ghost {
+  background: transparent;
+  color: var(--dc-color-text-secondary);
+  border: 1px solid var(--dc-color-border);
+}
 
 /* Phase 3E1 — history + results presentation primitives (token-only). */
 .dc-visually-hidden {
@@ -568,4 +627,59 @@ body {
 :focus-visible {
   outline: 2px solid var(--dc-color-focus-ring);
   outline-offset: 2px;
+}
+
+/* ---- forced colors / Windows high contrast (Phase 3F a11y) ----
+ * System colors only; state is never carried by author colors alone here:
+ * focus, switch position, selected tab, and current/user board cells all get
+ * an explicit system-color outline, border, or fill. */
+@media (forced-colors: active) {
+  :focus-visible {
+    outline-color: Highlight;
+  }
+
+  /* Switch: bordered track + filled knob; ON state uses Highlight. */
+  .dc-mock-switch-track {
+    border: 1px solid ButtonText;
+    background: Canvas;
+  }
+  .dc-mock-switch-track::after {
+    background: ButtonText;
+  }
+  .dc-mock-switch-track[data-on] {
+    background: Highlight;
+    border-color: Highlight;
+  }
+  .dc-mock-switch-track[data-on]::after {
+    background: HighlightText;
+  }
+
+  /* Selected tab: system highlight underline (accent border alone would
+   * be remapped away). */
+  .dc-tabs-tab-selected {
+    border-bottom-color: Highlight;
+  }
+
+  /* Board states: outline survives where background tints do not. */
+  .dc-board-cell-current {
+    outline: 2px solid Highlight;
+    outline-offset: -2px;
+  }
+  .dc-board-cell-user {
+    outline: 1px dashed Highlight;
+    outline-offset: -1px;
+  }
+
+  /* Grade/score badges: letter + numeric text already carry meaning;
+   * add a text-color border so the badge boundary stays perceivable. */
+  .dc-grade-hero-letter,
+  .dc-badge-row {
+    border: 1px solid ButtonText;
+  }
+
+  /* Disabled controls must stay distinguishable without opacity alone. */
+  button:disabled,
+  [aria-disabled="true"] {
+    border: 1px solid GrayText;
+  }
 }

@@ -120,8 +120,11 @@ async function runAxe(page: Page) {
 // `chromium` project only. The root gate runs every project; behavioral
 // checks (axe, overflow, keyboard, zoom, tabs, sheet) run everywhere, while
 // toHaveScreenshot tests skip elsewhere instead of generating unchecked
-// baseline sets per project/device.
+// baseline sets per project/device. Baselines are also platform-specific:
+// Playwright resolves `-darwin` snapshots, so pixel assertions additionally
+// skip on non-darwin hosts (behavioral checks still run everywhere).
 const PIXEL_BASELINE_PROJECT = "chromium";
+const PIXEL_BASELINE_PLATFORM = "darwin";
 
 for (const [id, name] of STORIES) {
   test(`board has no serious/critical axe violations: ${name}`, async ({ page }) => {
@@ -136,8 +139,9 @@ for (const [id, name] of STORIES) {
 
   test(`visual snapshot: ${name} (desktop)`, async ({ page }) => {
     test.skip(
-      test.info().project.name !== PIXEL_BASELINE_PROJECT,
-      "pixel baselines are maintained for the chromium project only",
+      test.info().project.name !== PIXEL_BASELINE_PROJECT ||
+        process.platform !== PIXEL_BASELINE_PLATFORM,
+      "pixel baselines are maintained for the chromium project on darwin only",
     );
     await page.setViewportSize({ width: 1280, height: 720 });
     await page.goto(storyUrl(id));
@@ -160,8 +164,9 @@ for (const [id, name] of STORIES) {
 
   test(`visual snapshot: ${name} (reduced motion)`, async ({ page }) => {
     test.skip(
-      test.info().project.name !== PIXEL_BASELINE_PROJECT,
-      "pixel baselines are maintained for the chromium project only",
+      test.info().project.name !== PIXEL_BASELINE_PROJECT ||
+        process.platform !== PIXEL_BASELINE_PLATFORM,
+      "pixel baselines are maintained for the chromium project on darwin only",
     );
     await page.emulateMedia({ reducedMotion: "reduce" });
     await page.setViewportSize({ width: 900, height: 700 });
@@ -175,8 +180,9 @@ for (const [id, name] of STORIES) {
 
 test("dark theme renders an equal-quality board", async ({ page }) => {
   test.skip(
-    test.info().project.name !== PIXEL_BASELINE_PROJECT,
-    "pixel baselines are maintained for the chromium project only",
+    test.info().project.name !== PIXEL_BASELINE_PROJECT ||
+      process.platform !== PIXEL_BASELINE_PLATFORM,
+    "pixel baselines are maintained for the chromium project on darwin only",
   );
   await page.addInitScript(() => {
     window.localStorage.setItem("draftcourt-theme-preference", "dark");

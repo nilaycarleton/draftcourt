@@ -1,0 +1,970 @@
+{
+  "date": "2026-09-08T04:37:04.601Z",
+  "machine": "darwin/25.5.0 Apple M3",
+  "runtime": "node v26.8.1",
+  "commit": "3e19027119fee40903daeaa3a8512661575dbf8d",
+  "suites": {
+    "team-matrix": {
+      "date": "2026-09-08T04:33:00.821Z",
+      "machine": "darwin/25.5.0 Apple M3",
+      "runtime": "node v26.8.1",
+      "os": "darwin 25.5.0",
+      "commit": "3e19027119fee40903daeaa3a8512661575dbf8d",
+      "dataset": {
+        "teams": [8, 10, 12, 14, 16],
+        "demoPoolSize": 239,
+        "syntheticPoolSize": 600,
+        "projectionRunId": "bfa4259c-b7e9-4330-82a3-9f7541abc1a5",
+        "modelVersion": "baseline-weighted-historical@1.0.0",
+        "adpSnapshotId": "b303bfef-5140-44bd-be5b-a11bd82e14b1",
+        "engineVersion": "phase3-preferences-1.0.0",
+        "fixtureChecksum": "01477e1bd660b6cd951bb819a2340063ad71eb0eb1f73e8fc41d9dd569bdefd6"
+      },
+      "thresholds": {
+        "warmRecommendationP95UnderMs": 300,
+        "coldRecommendationP95UnderMs": 800,
+        "pickMutationP95UnderMs": 250
+      },
+      "teams": {
+        "8": {
+          "fixture": "8 teams x 16 rounds (128 picks), demo pool (239 players), seed MATRIX-8",
+          "coldRecommendationMs": {
+            "p50": 42,
+            "p95": 43,
+            "p99": 43,
+            "n": 5
+          },
+          "warmRecommendationMs": {
+            "p50": 6,
+            "p95": 7,
+            "p99": 7,
+            "n": 5
+          },
+          "pickMutationMs": {
+            "p50": 6,
+            "p95": 32,
+            "p99": 32,
+            "n": 16
+          },
+          "fullMockCompletionMs": 4580,
+          "analysisMs": {
+            "first": 2003,
+            "cached": 17
+          },
+          "historyMs": {
+            "p50": 1,
+            "p95": 3,
+            "p99": 3,
+            "n": 10
+          },
+          "eventReplayMs": {
+            "p50": 2,
+            "p95": 2,
+            "p99": 2,
+            "n": 5
+          },
+          "replayIntegrityOk": true,
+          "shareCreateMs": 7,
+          "shareLookupMs": {
+            "p50": 8,
+            "p95": 16,
+            "p99": 16,
+            "n": 5
+          },
+          "shareRevokeMs": 3
+        },
+        "10": {
+          "fixture": "10 teams x 14 rounds (140 picks), demo pool (239 players), seed MATRIX-10",
+          "coldRecommendationMs": {
+            "p50": 82,
+            "p95": 86,
+            "p99": 86,
+            "n": 5
+          },
+          "warmRecommendationMs": {
+            "p50": 7,
+            "p95": 7,
+            "p99": 7,
+            "n": 5
+          },
+          "pickMutationMs": {
+            "p50": 5,
+            "p95": 6,
+            "p99": 6,
+            "n": 14
+          },
+          "fullMockCompletionMs": 4105,
+          "analysisMs": {
+            "first": 2482,
+            "cached": 19
+          },
+          "historyMs": {
+            "p50": 1,
+            "p95": 2,
+            "p99": 2,
+            "n": 10
+          },
+          "eventReplayMs": {
+            "p50": 2,
+            "p95": 3,
+            "p99": 3,
+            "n": 5
+          },
+          "replayIntegrityOk": true,
+          "shareCreateMs": 4,
+          "shareLookupMs": {
+            "p50": 8,
+            "p95": 12,
+            "p99": 12,
+            "n": 5
+          },
+          "shareRevokeMs": 6
+        },
+        "12": {
+          "fixture": "12 teams x 12 rounds (144 picks), demo pool (239 players), seed MATRIX-12",
+          "coldRecommendationMs": {
+            "p50": 54,
+            "p95": 59,
+            "p99": 59,
+            "n": 5
+          },
+          "warmRecommendationMs": {
+            "p50": 7,
+            "p95": 10,
+            "p99": 10,
+            "n": 5
+          },
+          "pickMutationMs": {
+            "p50": 5,
+            "p95": 8,
+            "p99": 8,
+            "n": 12
+          },
+          "fullMockCompletionMs": 4266,
+          "analysisMs": {
+            "first": 2810,
+            "cached": 24
+          },
+          "historyMs": {
+            "p50": 2,
+            "p95": 3,
+            "p99": 3,
+            "n": 10
+          },
+          "eventReplayMs": {
+            "p50": 2,
+            "p95": 2,
+            "p99": 2,
+            "n": 5
+          },
+          "replayIntegrityOk": true,
+          "shareCreateMs": 4,
+          "shareLookupMs": {
+            "p50": 6,
+            "p95": 8,
+            "p99": 8,
+            "n": 5
+          },
+          "shareRevokeMs": 2
+        },
+        "14": {
+          "fixture": "14 teams x 12 rounds (168 picks), demo pool (239 players), seed MATRIX-14",
+          "coldRecommendationMs": {
+            "p50": 38,
+            "p95": 41,
+            "p99": 41,
+            "n": 5
+          },
+          "warmRecommendationMs": {
+            "p50": 6,
+            "p95": 9,
+            "p99": 9,
+            "n": 5
+          },
+          "pickMutationMs": {
+            "p50": 6,
+            "p95": 10,
+            "p99": 10,
+            "n": 12
+          },
+          "fullMockCompletionMs": 4806,
+          "analysisMs": {
+            "first": 3267,
+            "cached": 22
+          },
+          "historyMs": {
+            "p50": 1,
+            "p95": 2,
+            "p99": 2,
+            "n": 10
+          },
+          "eventReplayMs": {
+            "p50": 2,
+            "p95": 2,
+            "p99": 2,
+            "n": 5
+          },
+          "replayIntegrityOk": true,
+          "shareCreateMs": 2,
+          "shareLookupMs": {
+            "p50": 6,
+            "p95": 8,
+            "p99": 8,
+            "n": 5
+          },
+          "shareRevokeMs": 2
+        },
+        "16": {
+          "fixture": "16 teams x 10 rounds (160 picks), demo pool (239 players), seed MATRIX-16",
+          "coldRecommendationMs": {
+            "p50": 103,
+            "p95": 105,
+            "p99": 105,
+            "n": 5
+          },
+          "warmRecommendationMs": {
+            "p50": 6,
+            "p95": 6,
+            "p99": 6,
+            "n": 5
+          },
+          "pickMutationMs": {
+            "p50": 5,
+            "p95": 6,
+            "p99": 6,
+            "n": 10
+          },
+          "fullMockCompletionMs": 4553,
+          "analysisMs": {
+            "first": 3660,
+            "cached": 19
+          },
+          "historyMs": {
+            "p50": 2,
+            "p95": 26,
+            "p99": 26,
+            "n": 10
+          },
+          "eventReplayMs": {
+            "p50": 2,
+            "p95": 2,
+            "p99": 2,
+            "n": 5
+          },
+          "replayIntegrityOk": true,
+          "shareCreateMs": 3,
+          "shareLookupMs": {
+            "p50": 8,
+            "p95": 10,
+            "p99": 10,
+            "n": 5
+          },
+          "shareRevokeMs": 3
+        }
+      },
+      "synthetic600": {
+        "note": "Deterministic synthetic pool (mulberry32 20260908) — scaling signal only, not real data.",
+        "recommendMs": {
+          "p50": 211,
+          "p95": 227,
+          "p99": 227,
+          "n": 5
+        },
+        "cpuSelectMs": {
+          "p50": 18,
+          "p95": 20,
+          "p99": 20,
+          "n": 10
+        },
+        "analysisMs": {
+          "p50": 7638,
+          "p95": 7880,
+          "p99": 7880,
+          "n": 3
+        },
+        "replayFull170EventsMs": {
+          "p50": 1,
+          "p95": 1,
+          "p99": 1,
+          "n": 5
+        }
+      },
+      "ingestion": {
+        "stage": "demo:ingest (ingest + publish, demo-scale)",
+        "wallMs": 3420,
+        "records": 239,
+        "recordsPerSecond": 69.9,
+        "projectionRunId": "bfa4259c-b7e9-4330-82a3-9f7541abc1a5",
+        "note": "Local demo pipeline only — not a production ingestion-SLO claim."
+      },
+      "limitations": [
+        "Local Docker Postgres on a laptop — not production capacity evidence.",
+        "Demo pool is 239 synthetic players; 600-player figures are synthetic pure-engine scaling.",
+        "Percentile sample counts are small (n recorded per row); p99 ≈ max at these n.",
+        "Full-mock completion includes recommendation reads for user turns (orchestration cost, not pure CPU)."
+      ]
+    },
+    "recommendations": {
+      "date": "2026-09-08T03:28:47.372Z",
+      "fixture": "demo dataset, 12 teams x 16 rounds, categories (9-cat), measured at picks 12/60/120",
+      "engineVersion": "phase3-preferences-1.0.0",
+      "strategyScenario": "draftcourt-defaults (no profile selected)",
+      "poolSize": 119,
+      "cold": {
+        "p50": 97,
+        "p95": 132,
+        "p99": 179,
+        "n": 21
+      },
+      "warm": {
+        "p50": 6,
+        "p95": 9,
+        "p99": 9,
+        "n": 21
+      },
+      "targets": {
+        "coldP95UnderMs": 800,
+        "warmP95UnderMs": 300
+      }
+    },
+    "preferences": {
+      "date": "2026-09-08T03:28:52.264Z",
+      "fixture": {
+        "projectionRunId": "12b6ef1e-c499-4e5f-9f66-44594021b53d",
+        "modelVersion": "baseline-weighted-historical@1.0.0",
+        "runInputChecksum": "dd8396dec95dc62375cecc6cce4bba74a412b8d5ba762e47a48b941ca0acbc14",
+        "poolSize": 239
+      },
+      "engineVersion": "phase3-preferences-1.0.0",
+      "seedPolicy": "simulation seeds derive deterministically from draftId + projectionRunId per recommendation call",
+      "samplesPerState": 7,
+      "depthPicks": 12,
+      "environment": "local docker postgres; node v26.8.1; darwin",
+      "scenarios": [
+        {
+          "scenario": "draftcourt-defaults",
+          "description": "No profile selected — versioned DraftCourt defaults snapshot",
+          "snapshotChecksum": "82d87f52e4a44b64fcf1afd6a9f1052c88c0386f7ca4970ccf186e19af74c15f",
+          "poolSize": 227,
+          "depthPicks": 12,
+          "cold": {
+            "p50": 129,
+            "p95": 188,
+            "p99": 188,
+            "n": 7
+          },
+          "warm": {
+            "p50": 8,
+            "p95": 10,
+            "p99": 10,
+            "n": 7
+          }
+        },
+        {
+          "scenario": "balanced-preset",
+          "description": "Balanced preset applied verbatim",
+          "snapshotChecksum": "07c1a75d10585fa2c33cf702e450a59fd8fcdd9785632855d0b029669cd82f68",
+          "poolSize": 227,
+          "depthPicks": 12,
+          "cold": {
+            "p50": 119,
+            "p95": 124,
+            "p99": 124,
+            "n": 7
+          },
+          "warm": {
+            "p50": 8,
+            "p95": 8,
+            "p99": 8,
+            "n": 7
+          }
+        },
+        {
+          "scenario": "extreme-valid",
+          "description": "preference weight=1, scalars at bounds, all positions prioritized, 50 targets + 50 avoids + 8 favorite teams",
+          "snapshotChecksum": "4b7b58f27b90ea19691e0bdc1946f5f86513b501733b7bd19f8587e9973fbc68",
+          "poolSize": 227,
+          "depthPicks": 12,
+          "cold": {
+            "p50": 126,
+            "p95": 147,
+            "p99": 147,
+            "n": 7
+          },
+          "warm": {
+            "p50": 8,
+            "p95": 9,
+            "p99": 9,
+            "n": 7
+          }
+        },
+        {
+          "scenario": "large-lists",
+          "description": "150 player entries (50 favorite/50 disliked/50 avoid) + 8 disliked teams + 230 global custom ranks, EXCLUDE avoids",
+          "snapshotChecksum": "befe0cb5149af9ec08675d3bc5c8efe4d1bf0905d385bd525194a05a531b21b4",
+          "poolSize": 227,
+          "depthPicks": 12,
+          "cold": {
+            "p50": 98,
+            "p95": 101,
+            "p99": 101,
+            "n": 7
+          },
+          "warm": {
+            "p50": 7,
+            "p95": 9,
+            "p99": 9,
+            "n": 7
+          }
+        }
+      ],
+      "targets": {
+        "coldP95UnderMs": 800,
+        "warmP95UnderMs": 300
+      }
+    },
+    "cpu-mock": {
+      "date": "2026-09-08T03:29:08.551Z",
+      "fixture": {
+        "projectionRunId": "12b6ef1e-c499-4e5f-9f66-44594021b53d",
+        "modelVersion": "baseline-weighted-historical@1.0.0",
+        "runInputChecksum": "dd8396dec95dc62375cecc6cce4bba74a412b8d5ba762e47a48b941ca0acbc14",
+        "poolSize": 239
+      },
+      "versions": {
+        "engineVersion": "phase3-preferences-1.0.0",
+        "preferenceSnapshotVersion": 1,
+        "cpuPersonalityVersion": 1,
+        "cpuSeedStrategyVersion": 1
+      },
+      "seedPolicy": "per-pick decision seeds derive from simulationSeed string + personality key/version + teamSlot + nextOverallPick (seedStrategyVersion 1)",
+      "samplesPerScenario": 21,
+      "pureSelectionByPersonalityMs": {
+        "adp-follower": {
+          "p50": 7.990458999999987,
+          "p95": 17.142916000000014,
+          "p99": 20.767750000000035,
+          "n": 21
+        },
+        "projection-purist": {
+          "p50": 7.52716700000002,
+          "p95": 8.019415999999978,
+          "p99": 8.106834000000049,
+          "n": 21
+        },
+        "balanced": {
+          "p50": 7.516250000000014,
+          "p95": 8.203125,
+          "p99": 8.276499999999942,
+          "n": 21
+        },
+        "positional-drafter": {
+          "p50": 7.805292000000009,
+          "p95": 8.935208999999986,
+          "p99": 9.438916999999947,
+          "n": 21
+        },
+        "upside-hunter": {
+          "p50": 7.364459000000124,
+          "p95": 7.910916000000043,
+          "p99": 8.356625000000008,
+          "n": 21
+        },
+        "safe-veteran": {
+          "p50": 7.284249999999929,
+          "p95": 7.770916999999827,
+          "p99": 8.016583000000082,
+          "n": 21
+        },
+        "dynasty-youth": {
+          "p50": 7.422917000000098,
+          "p95": 7.753500000000031,
+          "p99": 8.004874999999856,
+          "n": 21
+        },
+        "category-specialist": {
+          "p50": 7.53454099999999,
+          "p95": 7.806209000000081,
+          "p99": 8.030666999999994,
+          "n": 21
+        }
+      },
+      "fullMocks": {
+        "twelveTeamPoints": {
+          "cold": {
+            "p50": 35.57745799999998,
+            "p95": 60.32116599999995,
+            "p99": 60.32116599999995,
+            "n": 3
+          },
+          "warm": {
+            "p50": 23.33366599999954,
+            "p95": 28.19483300000047,
+            "p99": 48.97991700000057,
+            "n": 151
+          },
+          "picks": 168
+        },
+        "twelveTeamCategories": {
+          "cold": {
+            "p50": 26.08091599999989,
+            "p95": 26.137416000000485,
+            "p99": 26.137416000000485,
+            "n": 3
+          },
+          "warm": {
+            "p50": 23.151166999999987,
+            "p95": 27.019500000000335,
+            "p99": 49.116791000000376,
+            "n": 151
+          },
+          "picks": 168
+        },
+        "twelveTeamDynasty": {
+          "cold": {
+            "p50": 23.210790999999517,
+            "p95": 23.650250000000597,
+            "p99": 23.650250000000597,
+            "n": 3
+          },
+          "warm": {
+            "p50": 23.191375000000335,
+            "p95": 31.337874999999258,
+            "p99": 47.05295800000022,
+            "n": 151
+          },
+          "picks": 168
+        }
+      },
+      "environment": "local docker postgres; node v26.8.1; darwin"
+    },
+    "demo-drafts": {
+      "date": "2026-09-08T03:29:19.751Z",
+      "commit": "unknown",
+      "environment": "local docker postgres; node v26.8.1; darwin",
+      "fixture": {
+        "projectionRunId": "12b6ef1e-c499-4e5f-9f66-44594021b53d",
+        "modelVersion": "baseline-weighted-historical@1.0.0",
+        "inputChecksum": "dd8396dec95dc62375cecc6cce4bba74a412b8d5ba762e47a48b941ca0acbc14"
+      },
+      "versions": {
+        "engineVersion": "phase3-preferences-1.0.0",
+        "preferenceSnapshotVersion": 1,
+        "cpuPersonalityVersion": 1,
+        "cpuSeedStrategyVersion": 1,
+        "capabilityVersion": "pbkdf2-100k-async"
+      },
+      "seed": "bench-demo-seed",
+      "sampleCount": 20,
+      "cacheState": "warm",
+      "timings": {
+        "demoCreation": {
+          "p50": 22.212833000000046,
+          "p95": 29.21570900000006,
+          "p99": 29.21570900000006,
+          "n": 5
+        },
+        "tokenHashSync": {
+          "p50": 9.492458000000056,
+          "p95": 9.866874999999936,
+          "p99": 9.866874999999936,
+          "n": 20
+        },
+        "tokenHashAsync": {
+          "p50": 9.576082999999926,
+          "p95": 10.591709000000037,
+          "p99": 10.591709000000037,
+          "n": 20
+        },
+        "tokenVerifySync": {
+          "p50": 9.55795900000021,
+          "p95": 10.316250000000082,
+          "p99": 10.316250000000082,
+          "n": 20
+        },
+        "tokenVerifyAsync": {
+          "p50": 9.601208000000042,
+          "p95": 10.034374999999955,
+          "p99": 10.034374999999955,
+          "n": 20
+        },
+        "resume": {
+          "p50": 14.285792000000129,
+          "p95": 15.770125000000007,
+          "p99": 15.770125000000007,
+          "n": 20
+        },
+        "userPick": {
+          "p50": 22.62491699999987,
+          "p95": 35.211915999999974,
+          "p99": 35.211915999999974,
+          "n": 5
+        },
+        "cpuPick": {
+          "p50": 64.58558300000004,
+          "p95": 95.60345800000005,
+          "p99": 95.60345800000005,
+          "n": 5
+        },
+        "fullSmallDemo": {
+          "p50": 549.7701670000001,
+          "p95": 610.6771659999999,
+          "p99": 610.6771659999999,
+          "n": 3
+        },
+        "fullRepresentative12Team": {
+          "p50": 549.7701670000001,
+          "p95": 610.6771659999999,
+          "p99": 610.6771659999999,
+          "n": 3
+        },
+        "cleanupBatch": {
+          "p50": 32.09895899999992,
+          "p95": 32.09895899999992,
+          "p99": 32.09895899999992,
+          "n": 1
+        }
+      },
+      "notes": "No raw tokens, IPs, cookies, or private identifiers included. Async token verification used on public paths to avoid event-loop blocking; rate limits (create 3/hour, resume 30/min, pick 10/30s, tokenFailure 5/5min) bound verification load."
+    },
+    "history-analysis": {
+      "date": "2026-09-08T03:29:23.639Z",
+      "commit": "unknown",
+      "environment": "local docker postgres; node v26.8.1; darwin",
+      "fixture": {
+        "season": "2026-27",
+        "projectionRunId": "12b6ef1e-c499-4e5f-9f66-44594021b53d",
+        "modelVersion": "baseline-weighted-historical@1.0.0",
+        "runInputChecksum": "dd8396dec95dc62375cecc6cce4bba74a412b8d5ba762e47a48b941ca0acbc14",
+        "poolSize": 239,
+        "largeDraft": {
+          "teamCount": 16,
+          "rounds": 14,
+          "totalPicks": 224
+        },
+        "standardDraft": {
+          "teamCount": 12,
+          "rounds": 14,
+          "totalPicks": 168
+        },
+        "historyDraftCount": 9
+      },
+      "versions": {
+        "engineVersion": "phase3-preferences-1.0.0",
+        "analysisVersion": "1.0.0",
+        "analysisVersionInt": 1
+      },
+      "simulationCount": 2000,
+      "simulationSeedPolicy": "FNV1a32(simulationSeed:analysisVersion:projectionRunId) → SHA256 per-pick → mulberry32 softmax temp 1.2; standing 2000 runs",
+      "analysisInputChecksum": "1d183fcc9257e166b48ed7804fa72412721a6bf17e7b8d6535b7b2661713ac94",
+      "dataFreshness": {
+        "projectionRunId": "12b6ef1e-c499-4e5f-9f66-44594021b53d",
+        "generatedAt": "2026-09-08T03:29:23.639Z",
+        "engineVersion": "phase3-preferences-1.0.0",
+        "analysisVersion": "1.0.0"
+      },
+      "sampleCount": {
+        "cold": 4,
+        "warm": 5,
+        "history": 7
+      },
+      "cacheState": {
+        "cold": "miss + 2000 sims + DB insert",
+        "warm": "hit — single indexed findFirst"
+      },
+      "timings": {
+        "analysisGenerationCold": {
+          "p50": 1.9230840000000171,
+          "p95": 2.265624000000116,
+          "p99": 2.265624000000116,
+          "n": 4
+        },
+        "analysisCachedRetrievalWarm": {
+          "p50": 1.015875000000051,
+          "p95": 2.0075839999999516,
+          "p99": 2.0075839999999516,
+          "n": 5
+        },
+        "historyFirstPage": {
+          "p50": 0.9952079999998205,
+          "p95": 4.423291999999947,
+          "p99": 4.423291999999947,
+          "n": 7
+        },
+        "historySubsequentPage": {
+          "p50": 0.6365000000000691,
+          "p95": 2.402082999999948,
+          "p99": 2.402082999999948,
+          "n": 7
+        },
+        "largeDraftGeneration": {
+          "p50": 1.3913750000001528,
+          "p95": 1.3913750000001528,
+          "p99": 1.3913750000001528,
+          "n": 1,
+          "checksum": "c7f65f8163c38eb7ee908fc918324d5e31f87e4b75804314adeaeb4b39eacf56"
+        },
+        "largeDraftCached": {
+          "p50": 0.40774999999985084,
+          "p95": 0.40774999999985084,
+          "p99": 0.40774999999985084,
+          "n": 1
+        }
+      },
+      "targets": {
+        "analysisColdP95UnderMs": 800,
+        "analysisWarmP95UnderMs": 50,
+        "historyP95UnderMs": 100
+      },
+      "notes": "Deterministic 2000-run standing simulation; analysis generation is append-only versioned; history uses cursor skip:1 take limit+1 stable order; demo drafts excluded from history."
+    },
+    "replay-sharing": {
+      "date": "2026-09-08T03:29:25.349Z",
+      "commit": "unknown",
+      "environment": "local docker postgres; node v26.8.1; darwin",
+      "fixture": {
+        "standard": {
+          "teamCount": 12,
+          "rounds": 14,
+          "eventCount": 170,
+          "checksum": "4ab51f93e4bd4850b277675c569b1ba5594362a6dd888c1fe2362d63fa7fe488"
+        },
+        "large": {
+          "teamCount": 20,
+          "rounds": 20,
+          "eventCount": 402,
+          "checksum": "639ae548b4d2eb5a66994ce5175a772f56952a10f89e92fa3c263c1216f966c0"
+        },
+        "pagedDraftEvents": 17,
+        "shareDraftPicks": 8
+      },
+      "versions": {
+        "replayVersion": "1.0.0",
+        "analysisVersion": "1.0.0"
+      },
+      "tokenAlgorithm": "sha256-hex-digest-of-256bit-base64url (no secrets recorded)",
+      "sampleCount": 20,
+      "cacheState": "n/a (computation + direct DB reads; no presentation timing)",
+      "timings": {
+        "pureReplayStandard": {
+          "p50": 0.8477500000000191,
+          "p95": 1.4839589999999987,
+          "p99": 1.4839589999999987,
+          "n": 20
+        },
+        "pureReplayLarge": {
+          "p50": 1.8332920000000286,
+          "p95": 4.8037499999999795,
+          "p99": 4.8037499999999795,
+          "n": 20
+        },
+        "randomSequenceSeek": {
+          "p50": 0.44549999999998136,
+          "p95": 0.8612919999999917,
+          "p99": 0.8612919999999917,
+          "n": 20
+        },
+        "sequentialPlaybackAllPrefixes": {
+          "p50": 64.37720800000005,
+          "p95": 64.37720800000005,
+          "p99": 64.37720800000005,
+          "n": 1
+        },
+        "eventPagination10": {
+          "p50": 3.6153339999999616,
+          "p95": 20.342667000000063,
+          "p99": 20.342667000000063,
+          "n": 20
+        },
+        "sharedLookupFirst": {
+          "p50": 14.848499999999945,
+          "p95": 14.848499999999945,
+          "p99": 14.848499999999945,
+          "n": 1
+        },
+        "sharedLookupWarm": {
+          "p50": 2.908292000000074,
+          "p95": 6.550291999999899,
+          "p99": 6.550291999999899,
+          "n": 20
+        },
+        "tokenDigestDerivation": {
+          "p50": 0.010584000000022797,
+          "p95": 0.055499999999995,
+          "p99": 0.055499999999995,
+          "n": 20
+        },
+        "sharedDtoConstruction": {
+          "p50": 2.7975000000000136,
+          "p95": 3.457958000000076,
+          "p99": 3.457958000000076,
+          "n": 20
+        },
+        "cleanupBatch": {
+          "p50": 0.8454169999999976,
+          "p95": 5.058499999999981,
+          "p99": 5.058499999999981,
+          "n": 3
+        },
+        "concurrentShareCreation4": {
+          "p50": 3.060707999999977,
+          "p95": 8.261124999999993,
+          "p99": 8.261124999999993,
+          "n": 5
+        }
+      },
+      "notes": "Computation measured separately from presentation timing; replay pacing uses fixed steps (fake-time friendly). No raw tokens, digests, IPs, or owner data recorded."
+    }
+  },
+  "thresholdVerdicts": [
+    {
+      "suite": "team-matrix-latest.json",
+      "metric": "team-matrix 8-team warm rec",
+      "p95": 7,
+      "targetUnderMs": 300,
+      "pass": true
+    },
+    {
+      "suite": "team-matrix-latest.json",
+      "metric": "team-matrix 8-team cold rec",
+      "p95": 43,
+      "targetUnderMs": 800,
+      "pass": true
+    },
+    {
+      "suite": "team-matrix-latest.json",
+      "metric": "team-matrix 8-team pick",
+      "p95": 32,
+      "targetUnderMs": 250,
+      "pass": true
+    },
+    {
+      "suite": "team-matrix-latest.json",
+      "metric": "team-matrix 10-team warm rec",
+      "p95": 7,
+      "targetUnderMs": 300,
+      "pass": true
+    },
+    {
+      "suite": "team-matrix-latest.json",
+      "metric": "team-matrix 10-team cold rec",
+      "p95": 86,
+      "targetUnderMs": 800,
+      "pass": true
+    },
+    {
+      "suite": "team-matrix-latest.json",
+      "metric": "team-matrix 10-team pick",
+      "p95": 6,
+      "targetUnderMs": 250,
+      "pass": true
+    },
+    {
+      "suite": "team-matrix-latest.json",
+      "metric": "team-matrix 12-team warm rec",
+      "p95": 10,
+      "targetUnderMs": 300,
+      "pass": true
+    },
+    {
+      "suite": "team-matrix-latest.json",
+      "metric": "team-matrix 12-team cold rec",
+      "p95": 59,
+      "targetUnderMs": 800,
+      "pass": true
+    },
+    {
+      "suite": "team-matrix-latest.json",
+      "metric": "team-matrix 12-team pick",
+      "p95": 8,
+      "targetUnderMs": 250,
+      "pass": true
+    },
+    {
+      "suite": "team-matrix-latest.json",
+      "metric": "team-matrix 14-team warm rec",
+      "p95": 9,
+      "targetUnderMs": 300,
+      "pass": true
+    },
+    {
+      "suite": "team-matrix-latest.json",
+      "metric": "team-matrix 14-team cold rec",
+      "p95": 41,
+      "targetUnderMs": 800,
+      "pass": true
+    },
+    {
+      "suite": "team-matrix-latest.json",
+      "metric": "team-matrix 14-team pick",
+      "p95": 10,
+      "targetUnderMs": 250,
+      "pass": true
+    },
+    {
+      "suite": "team-matrix-latest.json",
+      "metric": "team-matrix 16-team warm rec",
+      "p95": 6,
+      "targetUnderMs": 300,
+      "pass": true
+    },
+    {
+      "suite": "team-matrix-latest.json",
+      "metric": "team-matrix 16-team cold rec",
+      "p95": 105,
+      "targetUnderMs": 800,
+      "pass": true
+    },
+    {
+      "suite": "team-matrix-latest.json",
+      "metric": "team-matrix 16-team pick",
+      "p95": 6,
+      "targetUnderMs": 250,
+      "pass": true
+    },
+    {
+      "suite": "team-matrix-latest.json",
+      "metric": "synthetic-600 recommend",
+      "p95": 227,
+      "targetUnderMs": 800,
+      "pass": true
+    },
+    {
+      "suite": "recommendations-latest.json",
+      "metric": "recommendations warm",
+      "p95": 9,
+      "targetUnderMs": 300,
+      "pass": true
+    },
+    {
+      "suite": "recommendations-latest.json",
+      "metric": "recommendations cold",
+      "p95": 132,
+      "targetUnderMs": 800,
+      "pass": true
+    },
+    {
+      "suite": "preferences-latest.json",
+      "metric": "preferences warm (worst scenario)",
+      "p95": 10,
+      "targetUnderMs": 300,
+      "pass": true
+    },
+    {
+      "suite": "preferences-latest.json",
+      "metric": "preferences cold (worst scenario)",
+      "p95": 188,
+      "targetUnderMs": 800,
+      "pass": true
+    }
+  ],
+  "overallLatencyGatesPass": true,
+  "failedGates": [],
+  "limitations": [
+    "Local-machine figures only — never cited as production SLO proof.",
+    "Sample counts are small (n recorded per row); p99 ≈ max at these n.",
+    "Node runtime here is v26.8.1 (repo pins 24.18.0) — recorded honestly in runtime.",
+    "600-player figures are synthetic pure-engine scaling (labeled in source).",
+    "Ingestion row is demo-scale throughput (see team-matrix ingestion stage)."
+  ]
+}

@@ -93,6 +93,20 @@
   border: 1px solid var(--dc-color-warning);
   color: var(--dc-color-warning);
 }
+/* On-the-clock: a restrained court-line inset on the status bar reuses the
+   board's selection language so the highest-stakes second reads differently
+   from browsing (Phase 3F Impeccable). Text still carries the state. */
+.dc-status-bar.dc-on-clock {
+  box-shadow: inset 3px 0 0 var(--dc-color-accent);
+}
+/* Keyboard pool cursor: the row `D` will draft gets the same court-line
+   inset so sighted keyboard users track selectedPoolIndex (Phase 3F a11y —
+   SR users already hear it via the live region). */
+.dc-pool-results li[data-selected] {
+  box-shadow: inset 3px 0 0 var(--dc-color-accent);
+  background: var(--dc-color-surface-elevated);
+  border-radius: var(--dc-radius-sm);
+}
 .dc-recs ol {
   list-style: decimal;
   display: grid;

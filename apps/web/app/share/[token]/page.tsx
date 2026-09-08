@@ -98,7 +98,12 @@ export default async function SharedResultPage({ params }: SharePageProps) {
 
       <section aria-labelledby="shared-board-heading">
         <h2 id="shared-board-heading">Final board</h2>
-        <div className="dc-table-scroll">
+        <div
+          className="dc-table-scroll"
+          role="region"
+          aria-label="Final draft board in pick order, scrollable"
+          tabIndex={0}
+        >
           <table className="dc-replay-table">
             <caption className="dc-visually-hidden">Final draft board in pick order</caption>
             <thead>

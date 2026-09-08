@@ -7,8 +7,7 @@ runs hourly and logs a structured `console.warn("[freshness-check]", ...)`
 when the current season's published `ProjectionRun` is more than 24 hours
 old, or when none has ever been published. It only reads and logs — it
 never triggers ingestion or a republish itself (see
-`docs/adr/0008-background-jobs-and-caching.md` for why: there is no
-internal HTTP entry point into the analytics service's pipeline to call).
+`docs/adr/0008-background-jobs-and-caching.md`).
 
 You can also check freshness directly:
 
@@ -23,9 +22,12 @@ curl -s http://localhost:3100/api/v1/rankings | python3 -c \
 
 ## Fixing it
 
-Stale data in this Phase 1 deployment (demo dataset, no live external
-source) almost always means the last `publish` run is old, not that a real
-upstream feed went stale. Re-run:
+Stale data in this deployment (demo dataset, no live external source)
+almost always means the last `publish` run is old, not that a real
+upstream feed went stale. Primary path: the nightly 06:00 UTC
+`nightly-source-refresh-and-publish` Inngest function refreshes and
+publishes automatically (ADR 0008). If automation missed its window, the
+manual fallback is:
 
 ```bash
 pnpm demo:ingest
@@ -39,9 +41,8 @@ UUID and `dataCutoff` should be current.
 ## If a future live source is wired in (see ADR 0006)
 
 The freshness check's 24-hour threshold and its "read-only, log a
-warning" behavior are both meant to be replaced, not extended, once a real
-scheduled-refresh Inngest function exists (blocked on the analytics
-service's internal HTTP API — same prerequisite noted in ADR 0008): that
-function should re-run ingestion+publish automatically, and this runbook's
-manual `pnpm demo:ingest` step becomes the fallback for when _that_
-automation itself fails, rather than the primary fix.
+warning" behavior are both meant to be replaced, not extended, once live
+sources with their own cadences arrive: per-source thresholds and
+auto-remediation belong with the source adapter, and this runbook's manual
+`pnpm demo:ingest` step stays the fallback for when automation itself
+fails, rather than the primary fix.

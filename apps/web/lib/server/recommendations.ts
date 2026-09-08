@@ -1,6 +1,8 @@
 import { prisma } from "@draftcourt/db";
 import type { Prisma } from "@draftcourt/db";
 import {
+  canonicalize,
+  checksumInput,
   recommend,
   type EngineAdpEntry,
   type EngineAssignment,
@@ -54,6 +56,7 @@ export async function getRecommendationsForOwner(
       engineVersion: true,
       settingsSnapshot: true,
       preferenceSnapshot: true,
+      simulationSeed: true,
     },
   });
   if (!draft) return null;
@@ -99,8 +102,12 @@ export async function getRecommendationsForOwner(
       select: { id: true, model: { select: { modelKey: true, version: true } } },
     }),
     latestAdpEntries(season),
+    // Explicit order: engine math must not depend on Postgres row-return
+    // order, which is unspecified and varies under parallel load (Phase 3F
+    // twin-draft determinism). The engine additionally tie-breaks by id.
     prisma.draftRosterAssignment.findMany({
       where: { draftId },
+      orderBy: [{ teamSlot: "asc" }, { playerId: "asc" }],
       select: { playerId: true, teamSlot: true, slotPosition: true },
     }),
   ]);
@@ -109,6 +116,7 @@ export async function getRecommendationsForOwner(
   // The engine's universe IS the published run — never a wider player table.
   const projections = await prisma.playerProjection.findMany({
     where: { runId: currentRun.id },
+    orderBy: { playerId: "asc" },
     select: {
       playerId: true,
       games: true,
@@ -136,6 +144,7 @@ export async function getRecommendationsForOwner(
   const [players, eligibilities] = await Promise.all([
     prisma.player.findMany({
       where: { id: { in: projectedIds } },
+      orderBy: { id: "asc" },
       select: {
         id: true,
         displayName: true,
@@ -147,6 +156,7 @@ export async function getRecommendationsForOwner(
     }),
     prisma.playerEligibility.findMany({
       where: { season, playerId: { in: projectedIds } },
+      orderBy: [{ playerId: "asc" }, { position: "asc" }],
       select: { playerId: true, position: true },
     }),
   ]);
@@ -196,7 +206,13 @@ export async function getRecommendationsForOwner(
     nextOverallPick: draft.nextOverallPick,
     picksUntilUserTurn: picksUntilUserTurn(settings, draft.nextOverallPick),
     includeUnsigned: false,
-    engineSeed: seedFromIds(draftId, currentRun.id),
+    // Phase 3F determinism: the RNG seed derives from STABLE immutable draft
+    // inputs only — never the random draft UUID. Twins sharing a simulation
+    // seed (same league, pool, run, preferences) must produce identical
+    // scores per BUILD_SPEC rule 4 / §6.1. Previously seedFromIds(draftId)
+    // made every draft's availability/lookahead draws unique, flipping
+    // near-tie top-3 order at snake turnarounds under load.
+    engineSeed: seedFromStableInputs(draft.simulationSeed, settings, currentRun.id),
     preferences,
   };
 
@@ -268,7 +284,14 @@ async function latestAdpEntries(season: string): Promise<EngineAdpEntry[]> {
     orderBy: { capturedAt: "desc" },
     select: {
       id: true,
-      players: { take: 400, select: { playerId: true, consensusAdp: true, sourcesCount: true } },
+      // Explicit order: rank is assigned by position, so Postgres must return
+      // rows in consensus-ADP order (id breaks exact ties) — never in
+      // unspecified return order (Phase 3F determinism).
+      players: {
+        orderBy: [{ consensusAdp: "asc" }, { playerId: "asc" }],
+        take: 400,
+        select: { playerId: true, consensusAdp: true, sourcesCount: true },
+      },
     },
   });
   if (!snapshot) return [];
@@ -345,11 +368,28 @@ function picksUntilUserTurn(settings: EngineSettings, nextOverallPick: number): 
   return count;
 }
 
-function seedFromIds(draftId: string, runId: string): number {
-  const combined = `${draftId}:${runId}`;
+/**
+ * Deterministic RNG seed over STABLE immutable inputs (Phase 3F).
+ *
+ * MOCK drafts carry an explicit simulation seed shared by twins; REAL drafts
+ * have none, so they hash the canonical settings snapshot instead. Either
+ * way the projection run participates, so a republished run re-seeds. The
+ * random draft UUID is deliberately excluded: BUILD_SPEC §6.1 lists the
+ * reproducibility inputs and the UUID is not among them.
+ */
+function seedFromStableInputs(
+  simulationSeed: string | null,
+  settings: EngineSettings,
+  runId: string,
+): number {
+  const scope = simulationSeed ?? checksumInput(canonicalize(settings));
+  return fnv1a32(`${scope}:${runId}`);
+}
+
+function fnv1a32(input: string): number {
   let hash = 2166136261;
-  for (let i = 0; i < combined.length; i++) {
-    hash ^= combined.charCodeAt(i);
+  for (let i = 0; i < input.length; i++) {
+    hash ^= input.charCodeAt(i);
     hash = Math.imul(hash, 16777619);
   }
   return hash >>> 0;

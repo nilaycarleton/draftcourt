@@ -187,9 +187,16 @@ export function canonicalize(value: unknown): string {
   if (typeof value === "string") return JSON.stringify(value);
   if (typeof value === "number" || typeof value === "boolean") return String(value);
   if (Array.isArray(value)) {
-    // Arrays keep order EXCEPT arrays of plain objects, which are sorted by
-    // their canonical form so upstream query order cannot change the hash.
+    // Arrays of plain objects are sorted by their canonical form so upstream
+    // query order cannot change the hash (twin-draft determinism, Phase 3F).
+    // Arrays of primitives keep order — element position is meaningful there
+    // (e.g. ordered slot lists). An array is treated as a set iff every
+    // element is a plain (non-array, non-null) object.
     const items = value.map((item) => canonicalize(item));
+    const allPlainObjects = value.every(
+      (item) => typeof item === "object" && item !== null && !Array.isArray(item),
+    );
+    if (allPlainObjects) items.sort();
     return "[" + items.join(",") + "]";
   }
   const entries = Object.entries(value as Record<string, unknown>)
@@ -1022,7 +1029,17 @@ export function recommend(input: EngineInput): RecommendationOutput {
   });
 
   // ---- lookahead for the top 20 by base (shallow two-user-pick rollout) --
-  const orderedForLookahead = [...workings].sort((a, b) => b.base - a.base);
+  // Stable total order on ties (player id) so the top-20 cutoff and the
+  // shared-RNG consumption order cannot depend on upstream query order.
+  const orderedForLookahead = [...workings].sort(
+    (a, b) =>
+      b.base - a.base ||
+      (a.candidate.playerId < b.candidate.playerId
+        ? -1
+        : a.candidate.playerId > b.candidate.playerId
+          ? 1
+          : 0),
+  );
   applyLookahead(
     orderedForLookahead.slice(0, LOOKAHEAD_POOL),
     workings,
@@ -1289,7 +1306,13 @@ function normalizeByRank(map: Map<string, number>): void {
     for (const [id] of entries) map.set(id, 0.5);
     return;
   }
-  const sortedEntries = [...entries].sort((a, b) => a[1] - b[1]);
+  const sortedEntries = [...entries].sort((a, b) => {
+    // Stable total order: tied values break by player id so upstream query
+    // order cannot change rank assignment (twin-draft determinism, Phase 3F).
+    // Matches cpu-selector.ts rankNormalize.
+    if (a[1] !== b[1]) return a[1] - b[1];
+    return a[0] < b[0] ? -1 : a[0] > b[0] ? 1 : 0;
+  });
   const minValue = sortedEntries[0]?.[1] ?? 0;
   const maxValue = sortedEntries[sortedEntries.length - 1]?.[1] ?? 0;
   if (minValue === maxValue) {
@@ -1417,7 +1440,12 @@ function computeRosterNeed(
     const starters = contextInput.settings.rosterSlots.filter((slot) => slot.isStarter);
     const totals: Record<string, number> = {};
     const medians: Record<string, number> = {};
-    const sample = candidates.slice(0, 60).map((c) => c.projection);
+    // Canonical sample order (player id) before slicing so the median
+    // baseline cannot depend on upstream query order (Phase 3F).
+    const sample = [...candidates]
+      .sort((a, b) => (a.playerId < b.playerId ? -1 : a.playerId > b.playerId ? 1 : 0))
+      .slice(0, 60)
+      .map((c) => c.projection);
     for (const stat of PER_GAME_STATS) {
       medians[stat] = median(sample.map((projection) => projection[stat]));
     }
@@ -1480,7 +1508,9 @@ function simulateAvailability(
       rand,
     };
     for (let pickIndex = 0; pickIndex < input.picksUntilUserTurn; pickIndex++) {
-      context.availableIds = [...simAvailable];
+      // Sorted walk order: the softmax outcome and the shared-RNG stream
+      // must not depend on candidate insertion order (Phase 3F).
+      context.availableIds = [...simAvailable].sort();
       const chosen = softmaxSelect(context);
       if (!chosen) break;
       simAvailable.delete(chosen);
@@ -1532,7 +1562,8 @@ function applyLookahead(
       // Intervening picks between now and the user's NEXT selection.
       const removedIfDrafted = new Set<string>();
       for (let i = 0; i < interveningAfter; i++) {
-        context.availableIds = [...simAvailable];
+        // Sorted walk order (same rationale as simulateAvailability).
+        context.availableIds = [...simAvailable].sort();
         void removedIfDrafted;
         const chosen = softmaxSelect(context);
         if (!chosen) break;

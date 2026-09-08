@@ -353,6 +353,10 @@
 }
 
 /* ── replay + private sharing (Phase 3E2) ─────────────────────────── */
+/* Component-owned transport/timeline/integrity rules live in
+ * @draftcourt/ui replay-components.css (Phase 3F co-location). Page
+ * composition (sections, panels, tables, rosters, share chrome, skeletons)
+ * stays here. */
 
 .dc-replay-section,
 .dc-share-section {
@@ -360,96 +364,6 @@
   flex-direction: column;
   gap: var(--dc-space-3);
   min-width: 0;
-}
-
-.dc-replay-controls {
-  display: flex;
-  flex-direction: column;
-  gap: var(--dc-space-2);
-  min-width: 0;
-}
-
-.dc-replay-transport {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--dc-space-2);
-  align-items: center;
-  min-width: 0;
-}
-
-.dc-replay-button,
-.dc-replay-speed-button {
-  min-height: var(--dc-touch-target-min);
-  min-width: var(--dc-touch-target-min);
-}
-
-.dc-replay-speed {
-  display: inline-flex;
-  gap: var(--dc-space-1);
-  margin-left: auto;
-}
-
-.dc-replay-speed-button[aria-pressed="true"] {
-  outline: 2px solid var(--dc-color-focus-ring);
-  outline-offset: 1px;
-}
-
-.dc-replay-scrub-row {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--dc-space-2);
-  min-width: 0;
-}
-
-.dc-replay-scrub-label {
-  font-size: var(--dc-font-size-sm);
-  font-weight: 600;
-  color: var(--dc-color-text-secondary);
-  white-space: nowrap;
-}
-
-.dc-replay-scrub {
-  flex: 1 1 auto;
-  min-width: 0;
-  min-height: var(--dc-touch-target-min);
-  accent-color: var(--dc-color-accent);
-}
-
-.dc-replay-count {
-  font-size: var(--dc-font-size-sm);
-  font-variant-numeric: tabular-nums;
-  color: var(--dc-color-text-secondary);
-  white-space: nowrap;
-}
-
-.dc-integrity-badge {
-  margin: 0;
-  font-size: var(--dc-font-size-sm);
-  font-weight: 600;
-}
-
-.dc-integrity-ok {
-  color: var(--dc-color-success);
-}
-
-.dc-integrity-fail {
-  color: var(--dc-color-danger);
-}
-
-.dc-replay-error {
-  padding: var(--dc-space-3) var(--dc-space-4);
-  border: 1px solid var(--dc-color-danger);
-  border-radius: var(--dc-radius-md);
-  background: var(--dc-color-danger-surface);
-  color: var(--dc-color-danger);
-  font-size: var(--dc-font-size-sm);
-  min-width: 0;
-}
-
-.dc-replay-error p {
-  margin: 0 0 var(--dc-space-2);
-  max-width: 70ch;
 }
 
 .dc-replay-panels {
@@ -502,76 +416,6 @@
   padding-left: var(--dc-space-4);
   font-size: var(--dc-font-size-sm);
   overflow-wrap: anywhere;
-}
-
-.dc-timeline-wrap {
-  min-width: 0;
-}
-
-.dc-timeline {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: var(--dc-space-1);
-  max-height: 24rem;
-  overflow-y: auto;
-  min-width: 0;
-}
-
-.dc-timeline-row {
-  min-width: 0;
-}
-
-.dc-timeline-button {
-  display: flex;
-  gap: var(--dc-space-2);
-  align-items: baseline;
-  width: 100%;
-  min-height: var(--dc-touch-target-min);
-  padding: var(--dc-space-1) var(--dc-space-2);
-  border: 1px solid transparent;
-  border-radius: var(--dc-radius-sm);
-  background: transparent;
-  color: var(--dc-color-text-primary);
-  font: inherit;
-  font-size: var(--dc-font-size-sm);
-  text-align: left;
-  cursor: pointer;
-  min-width: 0;
-}
-
-.dc-timeline-button:hover {
-  background: var(--dc-color-surface-elevated);
-}
-
-.dc-timeline-button[aria-current="true"] {
-  border-color: var(--dc-color-accent);
-  background: var(--dc-color-surface-elevated);
-  font-weight: 600;
-}
-
-.dc-timeline-index {
-  flex: none;
-  min-width: 2.5ch;
-  font-variant-numeric: tabular-nums;
-  color: var(--dc-color-text-secondary);
-}
-
-.dc-timeline-description {
-  flex: 1 1 auto;
-  min-width: 0;
-  overflow-wrap: anywhere;
-}
-
-.dc-timeline-actor {
-  flex: none;
-  font-size: var(--dc-font-size-xs);
-  color: var(--dc-color-text-secondary);
-  border: 1px solid var(--dc-color-border);
-  border-radius: var(--dc-radius-sm);
-  padding: 0 var(--dc-space-1);
 }
 
 .dc-share-actions {

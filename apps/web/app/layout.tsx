@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { Providers } from "./providers";
+import { SkipLink } from "./skip-link";
 import "./globals.css";
 
 // The proxy issues a fresh CSP nonce per request; Next.js only applies that
@@ -19,6 +20,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en" data-theme="dark" suppressHydrationWarning>
       <body>
+        <SkipLink />
         <Providers>{children}</Providers>
       </body>
     </html>

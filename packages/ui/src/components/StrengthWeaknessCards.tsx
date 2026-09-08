@@ -50,7 +50,12 @@ function CardForItem({ item }: { item: StrengthWeaknessItem }): React.JSX.Elemen
         <span className="dc-sw-label" title={item.label}>
           {item.label}
         </span>
-        <span className="dc-sw-badge" data-tone={item.tone} aria-label={toneLabel(item.tone)}>
+        <span
+          className="dc-sw-badge"
+          data-tone={item.tone}
+          role="img"
+          aria-label={toneLabel(item.tone)}
+        >
           <span aria-hidden="true">{toneGlyph(item.tone)}</span>
           {toneLabel(item.tone)}
         </span>

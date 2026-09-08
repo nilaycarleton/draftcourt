@@ -1,9 +1,10 @@
 import { expect, test } from "@playwright/test";
 
-test("home page renders and links to the Phase 1 player experience", async ({ page }) => {
+test("home page renders and links to the product tour", async ({ page }) => {
   await page.goto("/");
   await expect(page.getByRole("heading", { name: "DraftCourt" })).toBeVisible();
-  await expect(page.getByText("Phase 1 — Player experience")).toBeVisible();
+  await expect(page.getByText("Phase 3 — Live drafts + analysis")).toBeVisible();
+  await expect(page.getByRole("link", { name: "Try a demo mock" })).toBeVisible();
   await expect(page.getByRole("link", { name: "Players" })).toBeVisible();
 });
 

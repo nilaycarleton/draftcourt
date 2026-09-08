@@ -90,6 +90,9 @@ export function Avatar({
       }}
       role={decorative ? "presentation" : "img"}
       aria-label={decorative ? undefined : `${name} (no photo available)`}
+      // Decorative initials defer to adjacent visible text: hide the text
+      // node itself so screen readers never announce it (Phase 3F a11y).
+      aria-hidden={decorative ? true : undefined}
     >
       {initials(name)}
     </span>

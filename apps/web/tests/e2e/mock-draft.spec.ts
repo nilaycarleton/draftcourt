@@ -44,6 +44,9 @@ interface EventRow {
   eventType: string;
   playerId: string | null;
   sequence: number;
+  teamSlot?: number | null;
+  round?: number | null;
+  pickInRound?: number | null;
 }
 
 function slotForOverall(overall: number): number {
@@ -61,10 +64,14 @@ async function draftedEvents(page: Page, draftId: string): Promise<EventRow[]> {
   if (response.status() !== 200) {
     throw new Error(`league create ${String(response.status())}: ${await response.text()}`);
   }
-  // The endpoint returns the event array directly as data.
+  // The endpoint returns the event array directly as data. Sort by sequence
+  // defensively: the determinism comparison must never report a false
+  // transposition from transport order (Phase 3F hardening).
   const body = (await response.json()) as { data?: EventRow[] | { events?: EventRow[] } };
   const rows = Array.isArray(body.data) ? body.data : (body.data?.events ?? []);
-  return rows.filter((event) => event.eventType === "PLAYER_DRAFTED");
+  return rows
+    .filter((event) => event.eventType === "PLAYER_DRAFTED")
+    .sort((a, b) => a.sequence - b.sequence);
 }
 
 async function readModelOn(
@@ -452,6 +459,36 @@ test("mock draft end-to-end acceptance", async ({ browser }) => {
       ),
     );
     expect(twinSequences[0]).toBeTruthy();
+    // Phase 3F: on mismatch, report the FIRST divergent event (sequence,
+    // team, pick, selected players) instead of dumping two long strings, so
+    // the failure pinpoints the ordering input that forked the twins. The
+    // assertion itself is unchanged — no retries, no set-equality.
+    if (twinSequences[0] !== twinSequences[1]) {
+      const [eventsA, eventsB] = await Promise.all(
+        twinIds.map(async (twinId) => draftedEvents(page, twinId)),
+      );
+      const rowsA = eventsA ?? [];
+      const rowsB = eventsB ?? [];
+      const maxLen = Math.max(rowsA.length, rowsB.length);
+      let firstDivergence = `length A=${String(rowsA.length)} B=${String(rowsB.length)}`;
+      for (let i = 0; i < maxLen; i++) {
+        const a = rowsA[i];
+        const b = rowsB[i];
+        if (a?.playerId !== b?.playerId || a?.sequence !== b?.sequence) {
+          firstDivergence =
+            `index ${String(i)}: ` +
+            `A={seq:${String(a?.sequence)} team:${String(a?.teamSlot)} ` +
+            `round:${String(a?.round)} pick:${String(a?.pickInRound)} player:${String(a?.playerId)}} ` +
+            `B={seq:${String(b?.sequence)} team:${String(b?.teamSlot)} ` +
+            `round:${String(b?.round)} pick:${String(b?.pickInRound)} player:${String(b?.playerId)}}`;
+          break;
+        }
+      }
+      throw new Error(
+        `same-seed twins diverged (seed TWIN-SEQ-1, ${String(TOTAL_PICKS)}-pick board). ` +
+          `First divergence: ${firstDivergence}`,
+      );
+    }
     expect(twinSequences[0]).toBe(twinSequences[1]);
 
     // 19. Unauthorized access rejection (fresh anonymous context).

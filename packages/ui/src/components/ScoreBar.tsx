@@ -12,20 +12,33 @@ export interface ScoreBarProps {
    * shown (still "0.25 injury risk", never inverted into a fake "safety"
    * score the reader has to re-derive). */
   invert?: boolean;
+  /** Explicit band override (e.g. a grade letter band) so the fill color can
+   * match a sibling indicator that bands the same value differently than the
+   * default quartile scale. Defaults to the quartile mapping. */
+  tone?: "elite" | "strong" | "solid" | "risky" | undefined;
 }
 
-export function ScoreBar({ label, value, invert = false }: ScoreBarProps) {
+const TONE_COLOR: Record<NonNullable<ScoreBarProps["tone"]>, string> = {
+  elite: "var(--dc-color-score-elite)",
+  strong: "var(--dc-color-score-strong)",
+  solid: "var(--dc-color-score-solid)",
+  risky: "var(--dc-color-score-risky)",
+};
+
+export function ScoreBar({ label, value, invert = false, tone }: ScoreBarProps) {
   const clamped = Math.max(0, Math.min(1, value));
   const percent = Math.round(clamped * 100);
   const effective = invert ? 1 - clamped : clamped;
   const color =
-    effective >= 0.75
-      ? "var(--dc-color-score-elite)"
-      : effective >= 0.5
-        ? "var(--dc-color-score-strong)"
-        : effective >= 0.25
-          ? "var(--dc-color-score-solid)"
-          : "var(--dc-color-score-risky)";
+    tone !== undefined
+      ? TONE_COLOR[tone]
+      : effective >= 0.75
+        ? "var(--dc-color-score-elite)"
+        : effective >= 0.5
+          ? "var(--dc-color-score-strong)"
+          : effective >= 0.25
+            ? "var(--dc-color-score-solid)"
+            : "var(--dc-color-score-risky)";
 
   return (
     <div className="dc-score-bar" role="group" aria-label={`${label}: ${String(percent)}%`}>

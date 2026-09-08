@@ -1,27 +1,27 @@
 {
-  "date": "2026-08-24T16:45:52.462Z",
+  "date": "2026-09-08T03:28:52.264Z",
   "fixture": {
-    "projectionRunId": "117396ce-e467-45a7-8259-e832bee24432",
+    "projectionRunId": "12b6ef1e-c499-4e5f-9f66-44594021b53d",
     "modelVersion": "baseline-weighted-historical@1.0.0",
-    "runInputChecksum": "015de961ffd4cdc8f7ee58daf0192c930cdf715b99aa94990502cc45d24af207",
-    "poolSize": 230
+    "runInputChecksum": "dd8396dec95dc62375cecc6cce4bba74a412b8d5ba762e47a48b941ca0acbc14",
+    "poolSize": 239
   },
   "engineVersion": "phase3-preferences-1.0.0",
   "seedPolicy": "simulation seeds derive deterministically from draftId + projectionRunId per recommendation call",
   "samplesPerState": 7,
   "depthPicks": 12,
-  "environment": "local docker postgres; node v24.18.0; darwin",
+  "environment": "local docker postgres; node v26.8.1; darwin",
   "scenarios": [
     {
       "scenario": "draftcourt-defaults",
       "description": "No profile selected — versioned DraftCourt defaults snapshot",
-      "snapshotChecksum": "a12fb6b1c392c81f4d3176eff22fa893e9a882d880f8de6a8ae63bb28e0d1b8a",
-      "poolSize": 218,
+      "snapshotChecksum": "82d87f52e4a44b64fcf1afd6a9f1052c88c0386f7ca4970ccf186e19af74c15f",
+      "poolSize": 227,
       "depthPicks": 12,
       "cold": {
-        "p50": 135,
-        "p95": 178,
-        "p99": 178,
+        "p50": 129,
+        "p95": 188,
+        "p99": 188,
         "n": 7
       },
       "warm": {
@@ -34,57 +34,57 @@
     {
       "scenario": "balanced-preset",
       "description": "Balanced preset applied verbatim",
-      "snapshotChecksum": "795020afce2428797e22cb7d2efd739c95293f2d3379b35fd96f080ad816d835",
-      "poolSize": 218,
+      "snapshotChecksum": "07c1a75d10585fa2c33cf702e450a59fd8fcdd9785632855d0b029669cd82f68",
+      "poolSize": 227,
       "depthPicks": 12,
       "cold": {
-        "p50": 118,
-        "p95": 127,
-        "p99": 127,
+        "p50": 119,
+        "p95": 124,
+        "p99": 124,
         "n": 7
       },
       "warm": {
         "p50": 8,
-        "p95": 11,
-        "p99": 11,
+        "p95": 8,
+        "p99": 8,
         "n": 7
       }
     },
     {
       "scenario": "extreme-valid",
       "description": "preference weight=1, scalars at bounds, all positions prioritized, 50 targets + 50 avoids + 8 favorite teams",
-      "snapshotChecksum": "62539e89ec71312a20587fff14298244dd11e6e2f6af243d0fc45565666b1342",
-      "poolSize": 218,
+      "snapshotChecksum": "4b7b58f27b90ea19691e0bdc1946f5f86513b501733b7bd19f8587e9973fbc68",
+      "poolSize": 227,
       "depthPicks": 12,
       "cold": {
-        "p50": 149,
-        "p95": 158,
-        "p99": 158,
+        "p50": 126,
+        "p95": 147,
+        "p99": 147,
         "n": 7
       },
       "warm": {
-        "p50": 9,
-        "p95": 34,
-        "p99": 34,
+        "p50": 8,
+        "p95": 9,
+        "p99": 9,
         "n": 7
       }
     },
     {
       "scenario": "large-lists",
       "description": "150 player entries (50 favorite/50 disliked/50 avoid) + 8 disliked teams + 230 global custom ranks, EXCLUDE avoids",
-      "snapshotChecksum": "94e149175c551cb77b4c82c2bf3b38c601878e25b7253a566bb2acab17efc55c",
-      "poolSize": 218,
+      "snapshotChecksum": "befe0cb5149af9ec08675d3bc5c8efe4d1bf0905d385bd525194a05a531b21b4",
+      "poolSize": 227,
       "depthPicks": 12,
       "cold": {
         "p50": 98,
-        "p95": 127,
-        "p99": 127,
+        "p95": 101,
+        "p99": 101,
         "n": 7
       },
       "warm": {
-        "p50": 6,
-        "p95": 7,
-        "p99": 7,
+        "p50": 7,
+        "p95": 9,
+        "p99": 9,
         "n": 7
       }
     }

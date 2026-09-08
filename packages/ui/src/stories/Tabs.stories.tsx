@@ -29,7 +29,27 @@ const TABS = [
 function TabsHarness(): React.ReactElement {
   const [value, setValue] = useState("recommendations");
   return (
-    <Tabs value={value} onChange={setValue} accessibleLabel="Draft room sections" tabs={TABS} />
+    <div>
+      <Tabs value={value} onChange={setValue} accessibleLabel="Draft room sections" tabs={TABS} />
+      {/* Matching tabpanels: without these, the tabs' aria-controls dangle
+       * (axe aria-valid-attr-value, critical) and the story is not a faithful
+       * WAI-ARIA tabs pattern. Mirrors the DraftRoom panel contract. */}
+      {TABS.map((tab) =>
+        tab.value === value ? (
+          <div
+            key={tab.value}
+            role="tabpanel"
+            id={`dc-panel-${tab.value}`}
+            aria-labelledby={`dc-tab-${tab.value}`}
+            // Programmatic-focus only (-1): matches the DraftRoom tabpanel
+            // contract; panels are not in the Tab order.
+            tabIndex={-1}
+          >
+            {tab.label} panel content
+          </div>
+        ) : null,
+      )}
+    </div>
   );
 }
 

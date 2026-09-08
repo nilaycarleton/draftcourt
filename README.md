@@ -16,6 +16,33 @@ The initial target is the 2026–27 NBA season. This repository is currently at 
 - offer guest demo mocks and private authenticated real drafts;
 - later add a trained projection ensemble, premium grounded OpenAI assistant, and in-season trade/waiver tools.
 
+## Product tour
+
+Two minute-long paths cover the whole product:
+
+**Guest evaluator (no account).** Browse `/players` (searchable pool with
+baseline projections, internal rank, demo ADP), open a profile
+(`/players/[slug]`), compare 2–4 players at `/compare`, then run a
+disposable CPU mock at `/demo` — pick a preset, slot, personality, and an
+optional simulation seed (`Same seed = same draft`), drive picks, and
+abandon or complete it. Demo drafts expire after 24 hours, never appear in
+history, and are never shareable. Every number is synthetic (see
+`/data-sources` and `/methodology` in the app).
+
+**Signed-in manager.** Sign in, build a strategy once at `/preferences`
+(13 presets, factor sliders, favorites/targets/avoids, custom ranks), create
+a points or category league with the wizard (`/leagues/new`, keeper/dynasty
+supported), start a real or seeded CPU mock draft (`/drafts/new`), and draft
+in the live room (`/drafts/[id]`): visual snake board, top-3 explainable
+recommendations, permanent roster, undo/pause/resume, reload-safe event
+replay. Completed drafts land in `/history` with a deterministic `A–F`
+grade, strengths/weaknesses, and a 2000-run synthetic standing at
+`/drafts/[id]/results` — including a step-through event replay and an
+owner-created, revocable, 90-day read-only share link (`/share/<token>`).
+Admins manage projection overrides and injury/trade/role signals under
+`/admin` (admin-gated; no ingestion triggers or raw job errors there by
+design).
+
 ## Product principles
 
 1. **Fit over generic rank.** The best pick depends on the active roster and league.
@@ -59,7 +86,7 @@ The future AI assistant may convert natural-language goals into bounded, visible
 
 ## Implemented so far
 
-Phases 0–2 (data pipeline, league wizard, event-sourced live drafts, deterministic recommendations) and the preference foundation plus its integration are working locally: signed-in managers build strategy profiles at `/preferences`, select one per league or override it before starting a draft, and every started draft captures an immutable, checksummed snapshot of that strategy which drives bounded, explainable personalization in the live recommendations. Editing a profile affects only future drafts. History and deterministic post-draft analysis are also working: after completing a mock or real draft, open `/history` to filter by type/status/league/date and load more via cursor, then `/drafts/[id]/results` for the `A–F` grade (`90/80/70/60`), 5 component bars, round-by-round value with `DeltaChip` reach, strengths/weaknesses, and `2000`-run synthetic standing (`P50`/`P90`) vs a replacement-built opponent; disclosure `This analysis is a projection, not a guarantee` and `analysisVersion 1.0.0` + `inputChecksum` are shown, with `HIGH` only when `projection ≤48h && adp ≤7d && sources≥2 ≥80%` else `LOW`. Demo drafts never appear in history. The results page also carries a deterministic event replay (First/Previous/Play/Pause/Next/Last, 1×/2×, scrubber, keyboard: Space/←/→/Home/End, integrity badge, board + rosters at every event — reload returns to the final state) and private result sharing: owners of completed drafts can create a read-only link (shown once, 90-day expiry, revocable) that opens a redacted result at `/share/<token>` with grade, board, rosters, replay, and disclosures — no emails, ids, preferences, or other drafts. See [BUILD_SPEC.md](./BUILD_SPEC.md) §24 for the phase checklist and [docs/architecture/preferences.md](./docs/architecture/preferences.md) for the design.
+Phases 0–2 (data pipeline, league wizard, event-sourced live drafts, deterministic recommendations) and the preference foundation plus its integration are working locally: signed-in managers build strategy profiles at `/preferences`, select one per league or override it before starting a draft, and every started draft captures an immutable, checksummed snapshot of that strategy which drives bounded, explainable personalization in the live recommendations. Editing a profile affects only future drafts. History and deterministic post-draft analysis are also working: after completing a mock or real draft, open `/history` to filter by type/status/league/date and load more via cursor, then `/drafts/[id]/results` for the `A–F` grade (`90/80/70/60`), 5 component bars, round-by-round value with `DeltaChip` reach, strengths/weaknesses, and `2000`-run synthetic standing (`P50`/`P90`) vs a replacement-built opponent; disclosure `This analysis is a projection, not a guarantee` and `analysisVersion 1.0.0` + `inputChecksum` are shown, with `HIGH` only when `projection ≤48h && adp ≤7d && sources≥2 ≥80%` else `LOW`. Demo drafts never appear in history. The results page also carries a deterministic event replay (First/Previous/Play/Pause/Next/Last, 1×/2×, scrubber, keyboard: Space/←/→/Home/End, integrity badge, board + rosters at every event — reload returns to the final state) and private result sharing: owners of completed drafts can create a read-only link (shown once, 90-day expiry, revocable) that opens a redacted result at `/share/<token>` with grade, board, rosters, replay, and disclosures — no emails, ids, preferences, or other drafts. Phase 3F hardened the experience layer: same-seed twin drafts are provably deterministic (stable engine seeds, ordered engine inputs, id tie-breaking — 10 serial + 10 parallel Playwright twin passes), the motion system is token-complete with reduced-motion/transparency/contrast contracts (ADR 0017), all public routes carry axe/keyboard/overflow/theme gates plus forced-colors coverage, 19 visual baselines are inspected and accepted, and benchmarks cover the 8/10/12/14/16-team matrix with a consolidated acceptance result (`docs/benchmarks/phase3-acceptance-latest.json`, 20/20 latency gates green locally). See [BUILD_SPEC.md](./BUILD_SPEC.md) §24 for the phase checklist and [docs/architecture/preferences.md](./docs/architecture/preferences.md) for the design.
 
 ## Frontend direction
 
@@ -211,18 +238,69 @@ uv run pytest                                         # unit tests + coverage
   with other local projects. Override with `PORT=<port>`.
 - **Prisma client not found**: run `pnpm --filter @draftcourt/db run generate`
   — it's gitignored and regenerated from `packages/db/prisma/schema.prisma`.
+- **Redis down**: the app degrades honestly — uncached reads recompute,
+  rate limits fall back to Postgres audit counts, and draft writes stay
+  database-authoritative. Restart with `docker compose up -d redis`.
+- **Analytics down (`:8000`)**: the web app serves the last published
+  projection run and shows freshness; ingestion/publish/refresh fail with
+  actionable errors. Restart with `docker compose up -d analytics` or run
+  the service standalone (see Python commands above).
+- **Migration failure**: never hand-edit applied migrations. Inspect with
+  `pnpm --filter @draftcourt/db exec prisma migrate status`, fix the
+  schema, and create a forward migration. Production never runs
+  destructive/down migrations automatically (see
+  `docs/operations/02-database-backup-restore.md`).
+- **Seed failure**: `pnpm db:seed` is idempotent — re-run it. If the demo
+  admin user already exists it reports the existing id.
+- **`demo:ingest` failure**: ingestion dedupes by checksum, so re-running
+  is safe. Check analytics health (`/health/ready`), then see
+  `docs/runbooks/stale-data.md` and
+  `docs/runbooks/failed-publish-rollback.md`.
+- **Inngest dev server**: local workflows run via the Inngest dev server;
+  without it, scheduled refresh falls back to GitHub Actions
+  (`scheduled-data.yml` where configured) or manual `pnpm demo:ingest`.
 - **Clerk/Sentry pages look inert**: expected without real credentials.
   `/sign-in`/`/sign-up` render an explanatory message, and Sentry silently
   no-ops with an empty `SENTRY_DSN`. Add real keys to `.env.local` to
   enable either.
 
+### Honest limitations
+
+Local benchmarks are laptop figures, not production SLO proof
+(`docs/benchmarks/phase3-acceptance-latest.json`, methodology in
+`docs/benchmarks/METHODOLOGY.md`). Free-tier deployments inherit cold
+starts, suspendable databases, and limited scheduled jobs — upgrade when
+cold-start p95 exceeds the recommendation SLO or usage nears provider
+limits (see `docs/architecture/05-deployment-topology.md`). All demo
+numbers are fabricated; intervals are heuristic, not calibrated; ADP comes
+from two synthetic demo feeds, not a multi-platform consensus. The single
+consolidated list lives in [`docs/limitations.md`](./docs/limitations.md).
+
 ## Documentation map
 
 - [BUILD_SPEC.md](./BUILD_SPEC.md): complete product and engineering contract.
-- `docs/architecture/`: context, service, component, ERD, and event-replay diagrams.
-- `docs/recommendation-engine.md`: formulas and worked examples.
+- `docs/architecture/`: system context, containers, components, data flows,
+  deployment topology, trust boundaries, plus ERD, preferences, and
+  replay/sharing diagrams.
+- `docs/api/`: route inventory (spec vs implemented), conventions (envelope,
+  errors, pagination, idempotency, rate limits, versioning), and contract
+  verification instructions.
+- `docs/methodology/`: recommendation worked examples (scarcity, ADP value,
+  preference caps), ingestion/publishing, analysis/replay method.
+- `docs/recommendation-engine.md`: formulas and worked points/category examples.
 - `docs/data-sources.md`: provenance, permissions, attribution, freshness, limitations.
-- `docs/adr/`: architecture decisions.
+- `docs/security/01-threat-model.md`: system-wide threat model with evidence.
+- `docs/operations/`: runbook template, database backup/restore, secret
+  rotation, incident response, Redis/analytics outage playbooks.
+- `docs/benchmarks/`: per-suite results, `METHODOLOGY.md`, and the
+  consolidated `phase3-acceptance-latest.json` (20/20 latency gates green
+  locally — laptop figures, not production proof).
+- `docs/limitations.md`: the single honest-claims page (synthetic data,
+  heuristic intervals, demo ADP, free-tier, no-guarantee, licensing).
+- `docs/adr/`: architecture decisions (see 0017 for the motion-system
+  reconciliation).
+- `docs/design/phase3f-product-experience-*.md`: Impeccable shape +
+  critique/audit for the integrated product.
 - `models/`: model cards and evaluation summaries.
 - `docs/runbooks/`: deploy, rollback, restore, stale-data, source-disable, and incident procedures.
 

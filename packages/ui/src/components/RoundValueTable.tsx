@@ -59,7 +59,12 @@ export function RoundValueTable({
       <h2 id="dc-round-value-heading" className="dc-round-value-heading">
         Round-by-round value
       </h2>
-      <div className="dc-round-value-scroll">
+      <div
+        className="dc-round-value-scroll"
+        role="region"
+        aria-label="Round-by-round value table, scrollable"
+        tabIndex={0}
+      >
         <table className="dc-round-value-table">
           <caption>{caption}</caption>
           <thead>
@@ -93,6 +98,7 @@ export function RoundValueTable({
                     <span
                       className="dc-round-value-marker"
                       data-kind="best"
+                      role="img"
                       aria-label="Best value pick"
                     >
                       <span aria-hidden="true">★</span> Best value
@@ -102,6 +108,7 @@ export function RoundValueTable({
                     <span
                       className="dc-round-value-marker"
                       data-kind="reach"
+                      role="img"
                       aria-label="Biggest reach"
                     >
                       <span aria-hidden="true">●</span> Biggest reach

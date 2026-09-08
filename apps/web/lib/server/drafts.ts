@@ -1011,6 +1011,9 @@ export async function makePick(params: {
     if (params.cpu !== undefined) {
       const assignments = await tx.draftRosterAssignment.findMany({
         where: { draftId: params.draftId },
+        // Explicit order (Phase 3F determinism): the decision input must not
+        // depend on unspecified row-return order inside the transaction.
+        orderBy: [{ teamSlot: "asc" }, { playerId: "asc" }],
         select: { playerId: true, teamSlot: true, slotPosition: true },
       });
       const decision = params.cpu.decide({

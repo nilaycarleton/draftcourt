@@ -146,7 +146,9 @@
 
 /* Sticky save bar */
 .dc-save-bar {
-  backdrop-filter: blur(6px);
+  /* Token-driven blur so prefers-reduced-transparency collapses the glass
+   * layer to opaque (Phase 3F a11y). */
+  backdrop-filter: blur(var(--dc-blur-glass, 6px));
   background: var(--dc-color-surface, rgba(12, 14, 18, 0.92));
   border-top: 1px solid var(--dc-color-line, color-mix(in srgb, currentColor 20%, transparent));
   bottom: 0;

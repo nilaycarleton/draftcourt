@@ -246,6 +246,11 @@ export function DraftBoard({
         tabIndex={0}
         role="grid"
         aria-labelledby={labelId}
+        // Fallback name when no caller-supplied label exists: an unnamed
+        // grid leaves screen-reader users without context (Phase 3F a11y).
+        // aria-colcount stays teamCount: the round gutter is aria-hidden, so
+        // the semantic columns are exactly the team columns (1..N).
+        aria-label={labelId ? undefined : "Draft board"}
         aria-rowcount={totalRounds + 1}
         aria-colcount={teamCount}
         aria-activedescendant={`dc-board-cell-${String(cursor.row)}-${String(cursor.column)}`}
@@ -340,7 +345,7 @@ export function DraftBoard({
                       <>
                         <span className="dc-board-player">{cell.pick.playerName}</span>
                         {cell.pick.isKeeper && (
-                          <span className="dc-board-keeper" aria-label="keeper">
+                          <span className="dc-board-keeper" role="img" aria-label="keeper">
                             K
                           </span>
                         )}

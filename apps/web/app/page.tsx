@@ -15,12 +15,13 @@ export default function HomePage() {
       <Card padding="lg">
         <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
           <h1 style={{ margin: 0, fontSize: "var(--dc-font-size-xl)" }}>DraftCourt</h1>
-          <Badge variant="info">Phase 1 — Player experience</Badge>
+          <Badge variant="info">Phase 3 — Live drafts + analysis</Badge>
         </div>
         <p style={{ color: "var(--dc-color-text-secondary)", maxWidth: "32rem" }}>
           Player pool, baseline projections, and comparison tools are live, built on a deterministic
-          demo dataset. League setup, live drafts, and roster-aware recommendations ship in later
-          phases — see <code>BUILD_SPEC.md</code>.
+          demo dataset — along with the league wizard, live and CPU mock drafts with explainable
+          recommendations, draft history, grades, replay, and private result sharing. Guests start
+          with a disposable demo mock; managers sign in for real drafts.
         </p>
         <nav
           style={{
@@ -30,11 +31,17 @@ export default function HomePage() {
             marginTop: "var(--dc-space-2)",
           }}
         >
+          <Link href="/demo" style={{ color: "var(--dc-color-accent)" }}>
+            Try a demo mock
+          </Link>
           <Link href="/players" style={{ color: "var(--dc-color-accent)" }}>
             Players
           </Link>
           <Link href="/compare" style={{ color: "var(--dc-color-accent)" }}>
             Compare
+          </Link>
+          <Link href="/dashboard" style={{ color: "var(--dc-color-accent)" }}>
+            Dashboard
           </Link>
           <Link href="/data-sources" style={{ color: "var(--dc-color-accent)" }}>
             Data sources

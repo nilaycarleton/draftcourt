@@ -1,0 +1,300 @@
+{
+  "date": "2026-09-08T04:33:00.821Z",
+  "machine": "darwin/25.5.0 Apple M3",
+  "runtime": "node v26.8.1",
+  "os": "darwin 25.5.0",
+  "commit": "3e19027119fee40903daeaa3a8512661575dbf8d",
+  "dataset": {
+    "teams": [8, 10, 12, 14, 16],
+    "demoPoolSize": 239,
+    "syntheticPoolSize": 600,
+    "projectionRunId": "bfa4259c-b7e9-4330-82a3-9f7541abc1a5",
+    "modelVersion": "baseline-weighted-historical@1.0.0",
+    "adpSnapshotId": "b303bfef-5140-44bd-be5b-a11bd82e14b1",
+    "engineVersion": "phase3-preferences-1.0.0",
+    "fixtureChecksum": "01477e1bd660b6cd951bb819a2340063ad71eb0eb1f73e8fc41d9dd569bdefd6"
+  },
+  "thresholds": {
+    "warmRecommendationP95UnderMs": 300,
+    "coldRecommendationP95UnderMs": 800,
+    "pickMutationP95UnderMs": 250
+  },
+  "teams": {
+    "8": {
+      "fixture": "8 teams x 16 rounds (128 picks), demo pool (239 players), seed MATRIX-8",
+      "coldRecommendationMs": {
+        "p50": 42,
+        "p95": 43,
+        "p99": 43,
+        "n": 5
+      },
+      "warmRecommendationMs": {
+        "p50": 6,
+        "p95": 7,
+        "p99": 7,
+        "n": 5
+      },
+      "pickMutationMs": {
+        "p50": 6,
+        "p95": 32,
+        "p99": 32,
+        "n": 16
+      },
+      "fullMockCompletionMs": 4580,
+      "analysisMs": {
+        "first": 2003,
+        "cached": 17
+      },
+      "historyMs": {
+        "p50": 1,
+        "p95": 3,
+        "p99": 3,
+        "n": 10
+      },
+      "eventReplayMs": {
+        "p50": 2,
+        "p95": 2,
+        "p99": 2,
+        "n": 5
+      },
+      "replayIntegrityOk": true,
+      "shareCreateMs": 7,
+      "shareLookupMs": {
+        "p50": 8,
+        "p95": 16,
+        "p99": 16,
+        "n": 5
+      },
+      "shareRevokeMs": 3
+    },
+    "10": {
+      "fixture": "10 teams x 14 rounds (140 picks), demo pool (239 players), seed MATRIX-10",
+      "coldRecommendationMs": {
+        "p50": 82,
+        "p95": 86,
+        "p99": 86,
+        "n": 5
+      },
+      "warmRecommendationMs": {
+        "p50": 7,
+        "p95": 7,
+        "p99": 7,
+        "n": 5
+      },
+      "pickMutationMs": {
+        "p50": 5,
+        "p95": 6,
+        "p99": 6,
+        "n": 14
+      },
+      "fullMockCompletionMs": 4105,
+      "analysisMs": {
+        "first": 2482,
+        "cached": 19
+      },
+      "historyMs": {
+        "p50": 1,
+        "p95": 2,
+        "p99": 2,
+        "n": 10
+      },
+      "eventReplayMs": {
+        "p50": 2,
+        "p95": 3,
+        "p99": 3,
+        "n": 5
+      },
+      "replayIntegrityOk": true,
+      "shareCreateMs": 4,
+      "shareLookupMs": {
+        "p50": 8,
+        "p95": 12,
+        "p99": 12,
+        "n": 5
+      },
+      "shareRevokeMs": 6
+    },
+    "12": {
+      "fixture": "12 teams x 12 rounds (144 picks), demo pool (239 players), seed MATRIX-12",
+      "coldRecommendationMs": {
+        "p50": 54,
+        "p95": 59,
+        "p99": 59,
+        "n": 5
+      },
+      "warmRecommendationMs": {
+        "p50": 7,
+        "p95": 10,
+        "p99": 10,
+        "n": 5
+      },
+      "pickMutationMs": {
+        "p50": 5,
+        "p95": 8,
+        "p99": 8,
+        "n": 12
+      },
+      "fullMockCompletionMs": 4266,
+      "analysisMs": {
+        "first": 2810,
+        "cached": 24
+      },
+      "historyMs": {
+        "p50": 2,
+        "p95": 3,
+        "p99": 3,
+        "n": 10
+      },
+      "eventReplayMs": {
+        "p50": 2,
+        "p95": 2,
+        "p99": 2,
+        "n": 5
+      },
+      "replayIntegrityOk": true,
+      "shareCreateMs": 4,
+      "shareLookupMs": {
+        "p50": 6,
+        "p95": 8,
+        "p99": 8,
+        "n": 5
+      },
+      "shareRevokeMs": 2
+    },
+    "14": {
+      "fixture": "14 teams x 12 rounds (168 picks), demo pool (239 players), seed MATRIX-14",
+      "coldRecommendationMs": {
+        "p50": 38,
+        "p95": 41,
+        "p99": 41,
+        "n": 5
+      },
+      "warmRecommendationMs": {
+        "p50": 6,
+        "p95": 9,
+        "p99": 9,
+        "n": 5
+      },
+      "pickMutationMs": {
+        "p50": 6,
+        "p95": 10,
+        "p99": 10,
+        "n": 12
+      },
+      "fullMockCompletionMs": 4806,
+      "analysisMs": {
+        "first": 3267,
+        "cached": 22
+      },
+      "historyMs": {
+        "p50": 1,
+        "p95": 2,
+        "p99": 2,
+        "n": 10
+      },
+      "eventReplayMs": {
+        "p50": 2,
+        "p95": 2,
+        "p99": 2,
+        "n": 5
+      },
+      "replayIntegrityOk": true,
+      "shareCreateMs": 2,
+      "shareLookupMs": {
+        "p50": 6,
+        "p95": 8,
+        "p99": 8,
+        "n": 5
+      },
+      "shareRevokeMs": 2
+    },
+    "16": {
+      "fixture": "16 teams x 10 rounds (160 picks), demo pool (239 players), seed MATRIX-16",
+      "coldRecommendationMs": {
+        "p50": 103,
+        "p95": 105,
+        "p99": 105,
+        "n": 5
+      },
+      "warmRecommendationMs": {
+        "p50": 6,
+        "p95": 6,
+        "p99": 6,
+        "n": 5
+      },
+      "pickMutationMs": {
+        "p50": 5,
+        "p95": 6,
+        "p99": 6,
+        "n": 10
+      },
+      "fullMockCompletionMs": 4553,
+      "analysisMs": {
+        "first": 3660,
+        "cached": 19
+      },
+      "historyMs": {
+        "p50": 2,
+        "p95": 26,
+        "p99": 26,
+        "n": 10
+      },
+      "eventReplayMs": {
+        "p50": 2,
+        "p95": 2,
+        "p99": 2,
+        "n": 5
+      },
+      "replayIntegrityOk": true,
+      "shareCreateMs": 3,
+      "shareLookupMs": {
+        "p50": 8,
+        "p95": 10,
+        "p99": 10,
+        "n": 5
+      },
+      "shareRevokeMs": 3
+    }
+  },
+  "synthetic600": {
+    "note": "Deterministic synthetic pool (mulberry32 20260908) — scaling signal only, not real data.",
+    "recommendMs": {
+      "p50": 211,
+      "p95": 227,
+      "p99": 227,
+      "n": 5
+    },
+    "cpuSelectMs": {
+      "p50": 18,
+      "p95": 20,
+      "p99": 20,
+      "n": 10
+    },
+    "analysisMs": {
+      "p50": 7638,
+      "p95": 7880,
+      "p99": 7880,
+      "n": 3
+    },
+    "replayFull170EventsMs": {
+      "p50": 1,
+      "p95": 1,
+      "p99": 1,
+      "n": 5
+    }
+  },
+  "ingestion": {
+    "stage": "demo:ingest (ingest + publish, demo-scale)",
+    "wallMs": 3420,
+    "records": 239,
+    "recordsPerSecond": 69.9,
+    "projectionRunId": "bfa4259c-b7e9-4330-82a3-9f7541abc1a5",
+    "note": "Local demo pipeline only — not a production ingestion-SLO claim."
+  },
+  "limitations": [
+    "Local Docker Postgres on a laptop — not production capacity evidence.",
+    "Demo pool is 239 synthetic players; 600-player figures are synthetic pure-engine scaling.",
+    "Percentile sample counts are small (n recorded per row); p99 ≈ max at these n.",
+    "Full-mock completion includes recommendation reads for user turns (orchestration cost, not pure CPU)."
+  ]
+}

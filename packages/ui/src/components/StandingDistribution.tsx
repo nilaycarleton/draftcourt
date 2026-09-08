@@ -91,7 +91,12 @@ export function StandingDistribution({
           />
         </div>
 
-        <div className="dc-data-table-scroll">
+        <div
+          className="dc-data-table-scroll"
+          role="region"
+          aria-label="Projected standing distribution table, scrollable"
+          tabIndex={0}
+        >
           <table className="dc-data-table">
             <caption>{caption}</caption>
             <thead>

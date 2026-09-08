@@ -14,7 +14,7 @@ jobs:
     if: github.event_name == 'pull_request'
     steps:
       - uses: actions/checkout@v7
-      - uses: actions/dependency-review-action@v4
+      - uses: actions/dependency-review-action@v4.9.0
 
   secret-scan:
     name: Secret scan
@@ -38,7 +38,7 @@ jobs:
         run: docker build -t draftcourt-analytics:security-scan .
 
       - name: Scan for HIGH/CRITICAL vulnerabilities
-        uses: aquasecurity/trivy-action@0.28.0
+        uses: aquasecurity/trivy-action@v0.36.0
         with:
           image-ref: draftcourt-analytics:security-scan
           format: table

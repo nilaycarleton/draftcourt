@@ -1094,6 +1094,9 @@ async function loadDemoSelectionInputs(
 
   const projections = await prisma.playerProjection.findMany({
     where: { runId: currentRun.id },
+    // Explicit order (Phase 3F determinism): CPU inputs must not depend on
+    // unspecified Postgres row-return order.
+    orderBy: { playerId: "asc" },
     select: {
       playerId: true,
       games: true,
@@ -1121,6 +1124,7 @@ async function loadDemoSelectionInputs(
   const [players, eligibilities] = await Promise.all([
     prisma.player.findMany({
       where: { id: { in: projectedIds } },
+      orderBy: { id: "asc" },
       select: {
         id: true,
         displayName: true,
@@ -1132,6 +1136,7 @@ async function loadDemoSelectionInputs(
     }),
     prisma.playerEligibility.findMany({
       where: { season: settings.season, playerId: { in: projectedIds } },
+      orderBy: [{ playerId: "asc" }, { position: "asc" }],
       select: { playerId: true, position: true },
     }),
   ]);
@@ -1195,7 +1200,12 @@ async function adpEntriesForSnapshot(snapshotId: string): Promise<EngineAdpEntry
     where: { id: snapshotId },
     select: {
       id: true,
-      players: { take: 400, select: { playerId: true, consensusAdp: true, sourcesCount: true } },
+      // Rank is assigned by position: return consensus-ADP order explicitly.
+      players: {
+        orderBy: [{ consensusAdp: "asc" }, { playerId: "asc" }],
+        take: 400,
+        select: { playerId: true, consensusAdp: true, sourcesCount: true },
+      },
     },
   });
   if (!snapshot) return [];

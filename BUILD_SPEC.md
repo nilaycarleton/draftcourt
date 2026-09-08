@@ -1084,9 +1084,45 @@ The first release is accepted only when all are true:
       Phase 3C (ADR 0013): 8 versioned personalities (balanced default, T 0.7–1.4), deterministic seeded softmax (seedStrategyVersion 1), immutable snapshots on DraftTeam, single authoritative `makePick` transaction, owner-paced orchestration, 4×3 full completion with legal rosters. Phase 3D (ADR 0014): isolated guest `/demo` with 256-bit capability tokens (PBKDF2-HMAC-SHA256 100k async, hashed IP rate-limit keys, HttpOnly Secure SameSite=Lax cookie + one-time recovery code), 24-hour expiration with hourly advisory-lock cleanup (batch 100, demo-only), strict format/iteration/hex validation and constant-time verification, Redis + Postgres fallback rate limits (create 3/h, resume 30/m, pick 10/30s, tokenFailure 5/5m), no PII/token/IP leakage, full isolation from REAL/MOCK/authenticated data. Verified by domain token tests, DB-backed demo integration/security tests (59 new assertions), guest Playwright (21-step journey, axe 0 serious/critical, keyboard, focus, live-region, 320px, 200% zoom, themes, reduced motion), benchmark `bench-demo-drafts.ts` (creation p50 28ms, verify p50 9ms, resume 15ms, user pick 22ms, CPU 60ms, full 12-team 790ms, cleanup 40ms), lint 0 errors, typecheck 0, 259 web tests, 3 migrations, next build.
 - [x] Add saved history, analysis/grade, strengths/weaknesses, replay, private result sharing/revocation.
       Phase 3E1 (ADR 0015, 2026-09-06): `DraftAnalysis` `id uuid7` `draftId FK cascade` `analysisVersion 1.0.0` `analysisVersionInt` `inputChecksum sha256` `engineVersion` `projectionRunId`/`adpSnapshotId`/`preferenceSnapshotChecksum`/`simulationSeed` `grade/gradeScore 0–100` `gradeComponents`/`assumptions`/`categoryStrengths`/`positionStrengths`/`roundByRound`/`bestValuePick`/`biggestReach`/`projectedStanding`/`categoryWinProbs`/`dataFreshness` `@@unique([draftId,analysisVersion,inputChecksum])`+`@@unique([draftId,analysisVersion])` `CHECK 0–100`+`semver`, `canonicalize`→`sha256` stable (sorted keys, `null` for `undefined`, `generatedAt` excluded) regression-tested, `2000`-run seeded `FNV1a32:SHA256:mulberry32 temp1.2` synthetic `replacementTeamTotals` median-starter×starters, 5 components `valueCaptured 0.25`/`projectedStrength 0.30`/`rosterBalance 0.15`/`risk 0.15`/`scoringFit 0.15` `largestRemainder 6dp sum1` `A≥90,B≥80,C≥70,D≥60,F<60` `clamp01`/`Number.isFinite` guards, `GET /api/v1/me/history` `cursor skip:1 take limit+1` `orderBy updatedAt desc+id asc` owner-scoped `type!=DEMO` `leagueId` 404 no-oracle `hasAnalysis take:1` no N+1 `@@index([ownerId,updatedAt])`, `GET /api/v1/drafts/:id/analysis` `COMPLETED` else 409 `owner 404` `anonymous 401` `P2002` single-winner, `/history` filters+`HistoryCard`+pagination+empty/loading/error `demo` excluded `axe 0`, `/drafts/[id]/results` grade hero `A-F`+`ScoreBar`+`DeltaChip` round table `scope=col`+strengths+standing `Sparkline`+table `P50/P90`+`role=note` disclosure `vs replacement-built` `HIGH` only if `projection≤48h && adp≤7d && sources≥2 ≥80%` else `LOW`, verified by domain 13 (determinism/checksum/weights/NaN/standing), web 280/1 skipped (history 8+analysis 9), `history-results` 2 passed (3×) with `mock-draft` 5×, `bench-analysis` cold `p50 4.2ms p95 5.49` warm `0.53` history `1.09` large `1.34` all `<800/50/100`, `next build` + `storybook` 1958 modules. **Replay event timeline/UI and private share tokens/revocation/public page remain Phase 3E2** — do not check this box until 3E2. Phase 3E2 (ADR 0016, 2026-09-07): pure replay reducer `replayToSequence/replayFull/replayChecksum` v1.0.0 (sequence slicing, snake numbering, keeper/CPU/undo-alternate-history, typed ReplayError, 5000-event bound, checksum stable; final-state differential-equal to replayFromEvents), owner timeline `GET events?cursor=&limit=` (array shape preserved; cursor pages 1..100 ascending no gaps/dups, actorType/description/undo-link/CPU-key/integrity, no internal ids), results-page replay (First/Prev/Play/Pause/Next/Last, 1x/2x 800/400ms, scrubber, Space/arrows/Home/End, focus-stable, stepping-only live announcements, FAIL-closed corruption UI, bounded timeline window), `draft_share_capabilities` (draftId UNIQUE/tokenDigest UNIQUE sha256-hex-of-256bit, version, 90-day TTL, revokedAt, FK cascade; legacy shareTokenHash untouched), `POST/DELETE /drafts/:id/share` (owner COMPLETED-only, rotate-on-recreate, P2002 single-winner, idempotent revoke, per-user limits, raw URL once), public `/share/:token` (path-only, hashed-IP limits, identical 404s, no-referrer/noindex-noarchive/private-no-store, redacted DTO: title/settings/board/rosters/grade+approved breakdowns/replay/integrity/disclosures; no emails/ids/preferences/audit/internals), advisory-locked bounded cleanup (expired + 7d-revoked, share rows only), runbook + threat model + ERD + replay/sharing benchmarks (pure replay p50 <1ms, warm lookup ~8ms). Phase 3E2 release audit (2026-09-08) passed every gate: replay domain 19 + timeline 7 + controls 11 + share 12 tests, replay-sharing Playwright 3x, history/mock/demo regression, fresh+upgrade migration 20260907000000, advisory-locked cleanup, benchmarks, axe/visual/Storybook, full test:all 186 passed / 30 policy skips / 0 failed.
-- [ ] Complete motion, themes, mobile, accessibility and visual regression.
-- [ ] Add benchmarks and portfolio-ready architecture/methodology docs.
+- [x] Complete motion, themes, mobile, accessibility and visual regression.
+      Phase 3F (2026-09-08, ADR 0017, docs/design/phase3f-product-experience-shape.md,
+      docs/design/phase3f-product-experience-critique-audit.md — health 27/40 Good):
+      twin determinism fixed at three layers (stable engine seeds, ordered engine
+      inputs incl. ADP rank order, id tie-breaking + sorted simulation walks;
+      old engine proven order-dependent 3/4 on the new order-stability suite,
+      fixed engine 122/122 domain green) with 10/10 serial + 10/10 parallel
+      Playwright twin passes, zero drift, source frozen; motion completed as a
+      token-driven CSS system (MotionConfig reducedMotion=user; springs deferred
+      with trigger); axe zero serious/critical on 9 public routes x3 projects +
+      forced-colors suites + story gates; skip link first-stop everywhere;
+      scroll regions keyboard-focusable; forced-colors stylesheet + Avatar
+      pairing fix; token/contrast unit tests 9/9 both themes; demo token drift
+      + undefined secondary button + replay co-location + grade-band fixes (all
+      with inspected baselines); 10 new curated pixels (chromium-only) + 9
+      existing = 19 inspected/accepted; authenticated route pixels deferred
+      with reason (components via story pixels, behavior via gated specs).
+- [x] Add benchmarks and portfolio-ready architecture/methodology docs.
+      Phase 3F (2026-09-08): bench-team-matrix.ts (8/10/12/14/16-team server
+      matrix on the demo pool + synthetic 600-player pure-engine scaling +
+      optional timed demo:ingest) + compose-acceptance-benchmarks.ts produce
+      docs/benchmarks/team-matrix-latest.json and
+      docs/benchmarks/phase3-acceptance-latest.json — 20/20 latency gates pass
+      (warm p95<=10ms<300, cold p95<=160ms<800, pick p95<=23ms<250, all team
+      sizes; local laptop figures, never production proof) with machine,
+      runtime, commit, fixture checksums, n, and limitations recorded; all 6
+      prior bench suites re-run on current code. Portfolio docs: C4
+      context/container/component + flows + topology + trust boundaries,
+      API inventory/conventions/contract-verification, methodology worked
+      examples (scarcity/ADP/preference) + ingestion/publishing +
+      analysis/replay, system threat model, 5 operations runbooks + template,
+      benchmark METHODOLOGY, limitations page; README tour/troubleshooting/
+      honesty/docs-map updated. Evidence-flagged claims (capacity, calibrated
+      intervals, consensus ADP, scan outputs) stay unpublished per
+      docs/limitations.md.
 - [ ] Phase acceptance: seeded CPU drafts, persistence/isolation, post-draft and guest flows pass all gates.
+      (Phase 3F is implementation-complete and commit-ready; the final
+      checkbox awaits the independent release audit of the exact
+      staged/committed contents — see docs/acceptance/phase3-acceptance-matrix.md.)
 
 ### Phase 4 — trained ensemble and market intelligence
 

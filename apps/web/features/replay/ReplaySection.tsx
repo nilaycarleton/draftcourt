@@ -393,7 +393,12 @@ export function ReplaySection({ draftId }: { draftId: string }): React.JSX.Eleme
           {picks.length === 0 ? (
             <p className="dc-hint">No picks yet at this point in the draft.</p>
           ) : (
-            <div className="dc-table-scroll">
+            <div
+              className="dc-table-scroll"
+              role="region"
+              aria-label="Drafted players in pick order at the current replay position, scrollable"
+              tabIndex={0}
+            >
               <table className="dc-replay-table">
                 <caption className="dc-visually-hidden">
                   Drafted players in pick order at the current replay position

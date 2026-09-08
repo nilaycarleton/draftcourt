@@ -633,6 +633,7 @@ export function DraftRoom({ draftId, initial }: DraftRoomProps) {
         <span data-status={status}>{statusLabel[status] ?? status}</span>
         <button
           type="button"
+          className="dc-button-ghost"
           disabled={readOnly}
           data-armed={armedAction === "undo" || undefined}
           onClick={armOrUndo}
@@ -655,6 +656,7 @@ export function DraftRoom({ draftId, initial }: DraftRoomProps) {
           {conflictMessage}
           <button
             type="button"
+            className="dc-button-ghost"
             onClick={() => {
               setConflictMessage(null);
             }}
@@ -767,6 +769,7 @@ export function DraftRoom({ draftId, initial }: DraftRoomProps) {
               {!readOnly && (
                 <button
                   type="button"
+                  className="dc-button-primary"
                   disabled={draftedIds.has(entry.playerId) || optimisticIds.has(entry.playerId)}
                   onClick={() => {
                     void makePickRequest(entry.playerId);
@@ -890,6 +893,7 @@ export function DraftRoom({ draftId, initial }: DraftRoomProps) {
               </span>
               <button
                 type="button"
+                className="dc-button-primary"
                 disabled={
                   readOnly ||
                   draftedIds.has(player.playerId) ||

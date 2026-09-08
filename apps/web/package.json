@@ -15,7 +15,11 @@
     "bench:recommendations": "tsx scripts/bench-recommendations.ts",
     "bench:preferences": "tsx scripts/bench-preferences.ts",
     "bench:cpu-mock": "tsx scripts/bench-cpu-mock.ts",
-    "bench:demo": "tsx scripts/bench-demo-drafts.ts"
+    "bench:demo": "tsx scripts/bench-demo-drafts.ts",
+    "bench:analysis": "tsx scripts/bench-analysis.ts",
+    "bench:replay-sharing": "tsx scripts/bench-replay-sharing.ts",
+    "bench:team-matrix": "tsx scripts/bench-team-matrix.ts",
+    "bench:acceptance-compose": "tsx scripts/compose-acceptance-benchmarks.ts"
   },
   "dependencies": {
     "@clerk/nextjs": "7.7.9",

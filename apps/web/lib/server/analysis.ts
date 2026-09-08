@@ -178,6 +178,9 @@ export async function getOrGenerateAnalysisForOwner(
       };
       const projRows = await prisma.playerProjection.findMany({
         where: { runId: run.id },
+        // Explicit order (Phase 3F determinism): analysis inputs must not
+        // depend on unspecified Postgres row-return order.
+        orderBy: { playerId: "asc" },
         select: {
           playerId: true,
           games: true,
@@ -204,6 +207,7 @@ export async function getOrGenerateAnalysisForOwner(
       const playerIds = projRows.map((r) => r.playerId);
       const playerRows = await prisma.player.findMany({
         where: { id: { in: playerIds } },
+        orderBy: { id: "asc" },
         select: {
           id: true,
           displayName: true,
@@ -215,6 +219,7 @@ export async function getOrGenerateAnalysisForOwner(
       });
       const eligibilities = await prisma.playerEligibility.findMany({
         where: { season: snapshot.season, playerId: { in: playerIds } },
+        orderBy: [{ playerId: "asc" }, { position: "asc" }],
         select: { playerId: true, position: true },
       });
       const eligByPlayer = new Map<string, string[]>();

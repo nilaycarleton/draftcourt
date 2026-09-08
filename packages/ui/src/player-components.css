@@ -27,6 +27,12 @@
   font-weight: 600;
   flex-shrink: 0;
   line-height: 1;
+  /* The background/foreground pair is contrast-computed in Avatar.tsx
+   * (WCAG AA for hex team pairs, token-balanced otherwise), so it must stay
+   * together under forced colors: the UA remapping only the background to
+   * Canvas while keeping author gold text is exactly the 1.7:1 failure
+   * axe reports in forced-colors emulation (Phase 3F a11y). */
+  forced-color-adjust: none;
 }
 
 .dc-delta-chip {

@@ -57,6 +57,18 @@ export function GradeHero({
   const clampedScore = Math.max(0, Math.min(100, gradeScore));
   const normalized = clampedScore / 100;
   const gradeKey = grade.toUpperCase();
+  // Bar band follows the LETTER band (A elite, B strong, C/D solid, F risky)
+  // so the fill never contradicts the letter color; the default quartile
+  // scale would paint an F distinctly brown (Phase 3F Impeccable).
+  const firstLetter = gradeKey.slice(0, 1);
+  const tone =
+    firstLetter === "A"
+      ? ("elite" as const)
+      : firstLetter === "B"
+        ? ("strong" as const)
+        : firstLetter === "F"
+          ? ("risky" as const)
+          : ("solid" as const);
   const confidenceLabel =
     confidence === "HIGH"
       ? "High confidence"
@@ -76,6 +88,10 @@ export function GradeHero({
         <div
           className="dc-grade-hero-letter"
           data-grade={gradeKey}
+          // role="img": the letter is a graphical badge whose accessible name
+          // is the grade (Phase 3F a11y — bare aria-label on role-less
+          // elements is dropped by assistive tech).
+          role="img"
           aria-label={`Grade ${grade}`}
           title={`Grade ${grade} — ${clampedScore.toFixed(1)} out of 100`}
         >
@@ -87,11 +103,9 @@ export function GradeHero({
             <span className="dc-tabular dc-grade-hero-number">{clampedScore.toFixed(1)}</span>
             <span className="dc-grade-hero-outof">/ 100</span>
             {confidenceLabel && (
-              <span
-                className="dc-badge-row"
-                style={{ marginLeft: "var(--dc-space-2)" }}
-                aria-label={confidenceLabel}
-              >
+              // No aria-label here: the visible text already carries the
+              // confidence so AT announces it once (Phase 3F a11y).
+              <span className="dc-badge-row" style={{ marginLeft: "var(--dc-space-2)" }}>
                 <span
                   className="dc-tabular"
                   style={{
@@ -104,7 +118,7 @@ export function GradeHero({
               </span>
             )}
           </div>
-          <ScoreBar label="Overall grade" value={normalized} />
+          <ScoreBar label="Overall grade" value={normalized} tone={tone} />
         </div>
       </div>
 
@@ -117,9 +131,9 @@ export function GradeHero({
         <p className="dc-grade-hero-meta">
           {analysisVersion && <span>Analysis v{analysisVersion}</span>}
           {inputChecksum && (
-            <code title={inputChecksum} aria-label={`Input checksum ${inputChecksum}`}>
-              {truncateChecksum(inputChecksum)}
-            </code>
+            // title carries the full value for hover/AT description; the
+            // visible truncated text is the accessible name (Phase 3F a11y).
+            <code title={inputChecksum}>{truncateChecksum(inputChecksum)}</code>
           )}
           {generatedAt && formatGeneratedAt(generatedAt) && (
             <time dateTime={generatedAt}>{formatGeneratedAt(generatedAt)}</time>

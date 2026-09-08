@@ -443,6 +443,75 @@ describe("CPU mock orchestration", () => {
     expect(view?.mock?.simSeed).toBe(simSeed);
   });
 
+  it("produces identical event sequences for same-seed twins (Phase 3F determinism)", async () => {
+    // Server-level twin-draft regression test: two MOCK drafts sharing league,
+    // seed, personality, and engine versions must complete with byte-identical
+    // PLAYER_DRAFTED sequences (BUILD_SPEC rule 4 / §6.1). User turns are
+    // driven by the live top recommendation — the same driver pattern as the
+    // Playwright twin assertion — so this fails if per-draft UUID seeding or
+    // unordered engine inputs ever return.
+    const twins: string[] = [];
+    for (let twin = 0; twin < 2; twin += 1) {
+      const { id } = await createStartedMock({
+        seed: "TWIN-UNIT-1",
+        personalityKey: "adp-follower",
+      });
+      twins.push(id);
+      let guard = 0;
+      while (guard < 24) {
+        guard += 1;
+        const draft = await prisma.draft.findUniqueOrThrow({
+          where: { id },
+          select: { nextOverallPick: true, version: true, status: true },
+        });
+        if (draft.status !== "ACTIVE") break;
+        const slot = overallPickToSlot(draft.nextOverallPick, 4);
+        if (slot === 1) {
+          const recs = await fetchRecommendations(id, ownerA);
+          const top = recs[0];
+          if (!top) break;
+          await makePick({
+            draftId: id,
+            ownerId: ownerA,
+            playerId: top.playerId,
+            idempotencyKey: [`twin-unit-${String(twin)}`, String(guard), crypto.randomUUID()].join(
+              "-",
+            ),
+            ifMatchVersion: draft.version,
+          });
+        } else {
+          await makeCpuPickForOwner(
+            id,
+            ownerA,
+            [`twin-unit-cpu-${String(twin)}`, String(guard), crypto.randomUUID()].join("-"),
+            draft.version,
+          );
+        }
+        if (draft.nextOverallPick >= 12) break;
+      }
+    }
+    const [eventsA, eventsB] = await Promise.all(
+      twins.map(async (id) =>
+        prisma.draftEvent.findMany({
+          where: { draftId: id, eventType: "PLAYER_DRAFTED" },
+          orderBy: { sequence: "asc" },
+          select: { sequence: true, teamSlot: true, playerId: true },
+        }),
+      ),
+    );
+    if (!eventsA || !eventsB) throw new Error("twin event reads missing");
+    expect(eventsA.length).toBe(12);
+    expect(eventsB.length).toBe(12);
+    for (let i = 0; i < 12; i++) {
+      const a = eventsA[i];
+      const b = eventsB[i];
+      // First-divergence evidence (sequence/team/players), not a blind diff.
+      expect(`${String(a?.sequence)}:${String(a?.teamSlot)}:${String(a?.playerId)}`).toBe(
+        `${String(b?.sequence)}:${String(b?.teamSlot)}:${String(b?.playerId)}`,
+      );
+    }
+  });
+
   it("rate-limits excessive CPU pick activity per user", async () => {
     // Drive the counter to the limit with synthetic audit rows.
     for (let i = 0; i < 5; i++) {
